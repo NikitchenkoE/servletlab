@@ -6,7 +6,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import javax.sql.DataSource;
 
 public class DataConnectionPull {
-    private String url = "jdbc:postgresql://localhost:5432/shopLab";
+    private String url = "jdbc:h2:mem:productsDb";
     private String user = "userPg";
     private String password = "userPg";
 

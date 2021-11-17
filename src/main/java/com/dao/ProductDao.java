@@ -1,5 +1,6 @@
 package com.dao;
 
+import com.constants.ProductsConstants;
 import com.entity.ProductEntity;
 
 import javax.sql.DataSource;
@@ -18,9 +19,8 @@ public class ProductDao implements Dao<ProductEntity> {
 
     @Override
     public Optional<ProductEntity> get(long id) {
-        String sql = "SELECT * FROM products WHERE productId=?";
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(ProductsConstants.SELECT_BY_ID)) {
                 preparedStatement.setLong(1, id);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
@@ -42,10 +42,9 @@ public class ProductDao implements Dao<ProductEntity> {
 
     @Override
     public List<ProductEntity> getAll() {
-        String sql = "SELECT * FROM products";
         List<ProductEntity> productEntities = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             PreparedStatement preparedStatement = connection.prepareStatement(ProductsConstants.SELECT_ALL);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 ProductEntity productEntity = ProductEntity.builder()
@@ -66,9 +65,7 @@ public class ProductDao implements Dao<ProductEntity> {
     @Override
     public void save(ProductEntity productEntity) {
         try (Connection connection = dataSource.getConnection()) {
-
-            String sql = "INSERT INTO products(productID, name, price, createDate, updateData) VALUES (?,?,?,?,?)";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(ProductsConstants.INSERT_INTO_TABLE)) {
                 preparedStatement.setLong(1, productEntity.getId());
                 preparedStatement.setString(2, productEntity.getName());
                 preparedStatement.setDouble(3, productEntity.getPrice());
@@ -84,9 +81,8 @@ public class ProductDao implements Dao<ProductEntity> {
 
     @Override
     public void update(ProductEntity productEntity) {
-        String sql = "UPDATE products SET productId=?, name=?, price=?, createDate=?, updateData=? WHERE productId=?";
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(ProductsConstants.UPDATE_BY_ID)) {
             preparedStatement.setLong(1, productEntity.getId());
             preparedStatement.setString(2, productEntity.getName());
             preparedStatement.setDouble(3, productEntity.getPrice());
@@ -102,8 +98,7 @@ public class ProductDao implements Dao<ProductEntity> {
     @Override
     public void delete(long id) {
         try (Connection connection = dataSource.getConnection()) {
-            String sql = "DELETE FROM products WHERE productId=?";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(ProductsConstants.DELETE_BY_ID)) {
                 preparedStatement.setLong(1, id);
                 preparedStatement.executeUpdate();
             }

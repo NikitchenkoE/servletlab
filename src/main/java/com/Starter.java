@@ -1,6 +1,7 @@
 package com;
 
 import com.db.DataConnectionPull;
+import com.db.TableCreator;
 import com.servlets.AddProductPageServlet;
 import com.servlets.MainPageServlet;
 import com.servlets.UpdateProductServlet;
@@ -11,6 +12,8 @@ import org.eclipse.jetty.servlet.ServletHolder;
 public class Starter {
     public static void main(String[] args) throws Exception {
         DataConnectionPull dataConnectionPull = new DataConnectionPull();
+        TableCreator tableCreator = new TableCreator(dataConnectionPull.getDataSource());
+        tableCreator.createTableProducts();
 
         MainPageServlet mainPageServlet = new MainPageServlet(dataConnectionPull.getDataSource());
         AddProductPageServlet addProductPageServlet = new AddProductPageServlet(dataConnectionPull.getDataSource());
