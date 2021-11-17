@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Product</title>
+</head>
+<body>
+<form action="/products/add" method="POST">
+    <p> Name: <input type="text" minlength="1" maxlength="25" name="productName"/></p>
+    <p> Price: <input type="number" step="0.01" min="0.01" name="productPrice"/></p>
+    <p><input type="submit" value="Add"></p>
+</form>
+<a href="http://localhost:8080/products">To main Page</a>
+</body>
+</html>
