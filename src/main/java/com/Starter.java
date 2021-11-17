@@ -1,4 +1,4 @@
-package com.main;
+package com;
 
 import com.db.DataConnectionPull;
 import com.servlets.AddProductPageServlet;
@@ -8,7 +8,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-public class Main {
+public class Starter {
     public static void main(String[] args) throws Exception {
         DataConnectionPull dataConnectionPull = new DataConnectionPull();
 
