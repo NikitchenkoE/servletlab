@@ -1,6 +1,6 @@
 package com.services;
 
-import com.entity.ProductEntity;
+import com.entity.Product;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -9,10 +9,10 @@ import java.util.StringJoiner;
 @Slf4j
 public class ProductTableRender {
 
-    public String getProductRows(List<ProductEntity> productEntities) {
+    public String getProductRows(List<Product> productEntities) {
         log.info("Created table with products {}", productEntities.toString());
         StringJoiner stringJoiner = new StringJoiner("\n");
-        for (ProductEntity productEntity : productEntities) {
+        for (Product productEntity : productEntities) {
             stringJoiner.add("<tr>");
             stringJoiner.add(String.format("<td>%s</td>", productEntity.getId()));
             stringJoiner.add(String.format("<td>%s</td>", productEntity.getName()));

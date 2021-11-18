@@ -1,42 +1,42 @@
 package com.dao;
 
-import com.constants.ProductsConstants;
-import com.entity.ProductEntity;
+import com.dao.interfaces.ProductDaoInterface;
+import com.dao.interfaces.ProductMapper;
+import com.entity.Product;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-public class ProductDao implements Dao<ProductEntity> {
+public class ProductDao implements ProductDaoInterface {
+    String SELECT_BY_ID = "SELECT productID, name, price, createDate, updateData FROM products WHERE productId=?";
+    String SELECT_ALL = "SELECT productID, name, price, createDate, updateData FROM products";
+    String INSERT_INTO_TABLE = "INSERT INTO products(name, price, createDate, updateData) VALUES (?,?,?,?)";
+    String UPDATE_BY_ID = "UPDATE products SET productId=?, name=?, price=?, createDate=?, updateData=? WHERE productId=?";
+    String DELETE_BY_ID = "DELETE FROM products WHERE productId=?";
+
     private final DataSource dataSource;
+    private final ProductMapper productMapper = new ProductMapper();
 
     public ProductDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @Override
-    public Optional<ProductEntity> get(long id) {
+    public Optional<Product> get(long id) {
         log.info("get product by {}", id);
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(ProductsConstants.SELECT_BY_ID)) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID)) {
                 preparedStatement.setLong(1, id);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                if (resultSet.next()) {
-                    ProductEntity productEntity = ProductEntity.builder()
-                            .id(resultSet.getLong(1))
-                            .name(resultSet.getString(2))
-                            .price(resultSet.getDouble(3))
-                            .create(new Date(resultSet.getTimestamp(4).getTime()))
-                            .update(new Date(resultSet.getTimestamp(5).getTime()))
-                            .build();
-                    return Optional.ofNullable(productEntity);
-                } else return Optional.empty();
-
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return Optional.ofNullable(productMapper.mapProduct(resultSet));
+                    } else return Optional.empty();
+                }
             }
         } catch (SQLException throwables) {
             log.error("Error by getting product by id {}", id);
@@ -45,21 +45,14 @@ public class ProductDao implements Dao<ProductEntity> {
     }
 
     @Override
-    public List<ProductEntity> getAll() {
+    public List<Product> getAll() {
         log.info("get all products");
-        List<ProductEntity> productEntities = new ArrayList<>();
+        List<Product> productEntities = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(ProductsConstants.SELECT_ALL);
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
-                ProductEntity productEntity = ProductEntity.builder()
-                        .id(resultSet.getLong(1))
-                        .name(resultSet.getString(2))
-                        .price(resultSet.getDouble(3))
-                        .create(new Date(resultSet.getTimestamp(4).getTime()))
-                        .update(new Date(resultSet.getTimestamp(5).getTime()))
-                        .build();
-                productEntities.add(productEntity);
+                productEntities.add(productMapper.mapProduct(resultSet));
             }
         } catch (SQLException throwables) {
             log.error("Problem to find all products");
@@ -69,15 +62,14 @@ public class ProductDao implements Dao<ProductEntity> {
     }
 
     @Override
-    public void save(ProductEntity productEntity) {
+    public void save(Product productEntity) {
         log.info("Saving product {}", productEntity.toString());
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(ProductsConstants.INSERT_INTO_TABLE)) {
-                preparedStatement.setLong(1, productEntity.getId());
-                preparedStatement.setString(2, productEntity.getName());
-                preparedStatement.setDouble(3, productEntity.getPrice());
-                preparedStatement.setTimestamp(4, new Timestamp(productEntity.getCreate().getTime()));
-                preparedStatement.setTimestamp(5, new Timestamp(productEntity.getUpdate().getTime()));
+            try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO_TABLE)) {
+                preparedStatement.setString(1, productEntity.getName());
+                preparedStatement.setDouble(2, productEntity.getPrice());
+                preparedStatement.setTimestamp(3, new Timestamp(productEntity.getCreate().getTime()));
+                preparedStatement.setTimestamp(4, new Timestamp(productEntity.getUpdate().getTime()));
 
                 preparedStatement.executeUpdate();
             }
@@ -88,10 +80,10 @@ public class ProductDao implements Dao<ProductEntity> {
     }
 
     @Override
-    public void update(ProductEntity productEntity) {
+    public void update(Product productEntity) {
         log.info("Updating product {}", productEntity.toString());
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(ProductsConstants.UPDATE_BY_ID)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BY_ID)) {
             preparedStatement.setLong(1, productEntity.getId());
             preparedStatement.setString(2, productEntity.getName());
             preparedStatement.setDouble(3, productEntity.getPrice());
@@ -109,7 +101,7 @@ public class ProductDao implements Dao<ProductEntity> {
     public void delete(long id) {
         log.info("delete product by {}", id);
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(ProductsConstants.DELETE_BY_ID)) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID)) {
                 preparedStatement.setLong(1, id);
                 preparedStatement.executeUpdate();
             }

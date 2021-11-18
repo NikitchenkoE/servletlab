@@ -1,6 +1,6 @@
 package com.services;
 
-import com.entity.ProductEntity;
+import com.entity.Product;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,13 +12,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductTableRenderTest {
     ProductTableRender productTableRender = new ProductTableRender();
     Date date = new Date();
-    ProductEntity productEntity1 = new ProductEntity(1L, "first", 15.0, date, date);
-    ProductEntity productEntity2 = new ProductEntity(2L, "second", 25.0, date, date);
+    Product productEntity1 = new Product(1L, "first", 15.0, date, date);
+    Product productEntity2 = new Product(2L, "second", 25.0, date, date);
 
 
     @Test
     void TestGetProductRowsShouldReturnPartOfTable() {
-        List<ProductEntity> productEntityList = new ArrayList<>();
+        List<Product> productEntityList = new ArrayList<>();
         productEntityList.add(productEntity1);
         productEntityList.add(productEntity2);
         String content = productTableRender.getProductRows(productEntityList);

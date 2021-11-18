@@ -1,7 +1,7 @@
 package com.servlets;
 
 import com.dao.ProductDao;
-import com.entity.ProductEntity;
+import com.entity.Product;
 import com.services.PageGenerator;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class UpdateProductServlet extends HttpServlet {
     private final ProductDao productDao;
-    private ProductEntity productToBeUpdated;
+    private Product productToBeUpdated;
 
     public UpdateProductServlet(DataSource dataSource) {
         this.productDao = new ProductDao(dataSource);
@@ -36,7 +36,7 @@ public class UpdateProductServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ProductEntity newProduct = createProductAfterUpdate(req);
+        Product newProduct = createProductAfterUpdate(req);
         productDao.update(newProduct);
 
         resp.setContentType("text/html;charset=utf-8");
@@ -44,9 +44,9 @@ public class UpdateProductServlet extends HttpServlet {
         resp.sendRedirect("/products");
     }
 
-    private ProductEntity createProductAfterUpdate(HttpServletRequest req) {
+    private Product createProductAfterUpdate(HttpServletRequest req) {
         Date date = new Date();
-        return ProductEntity.builder()
+        return Product.builder()
                 .id(productToBeUpdated.getId())
                 .name(req.getParameter("productName"))
                 .price(Double.parseDouble(req.getParameter("productPrice")))

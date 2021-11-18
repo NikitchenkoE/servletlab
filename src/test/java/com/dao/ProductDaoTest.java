@@ -1,7 +1,7 @@
 package com.dao;
 
-import com.db.DataConnectionPull;
-import com.entity.ProductEntity;
+import com.db.DataSourceFactory;
+import com.entity.Product;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,23 +14,17 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProductDaoTest {
-    DataConnectionPull dataConnectionPull = new DataConnectionPull("jdbc:h2:mem:testdb", "user", "user");
+    DataSourceFactory dataConnectionPull = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     ProductDao productDao = new ProductDao(dataConnectionPull.getDataSource());
-    ProductEntity productEntity1 = new ProductEntity(1L, "first", 15.0, new Date(), new Date());
-    ProductEntity productEntity2 = new ProductEntity(2L, "second", 25.0, new Date(), new Date());
-    ProductEntity productEntity3 = new ProductEntity(3L, "third", 35.0, new Date(), new Date());
+    Product productEntity1 = new Product(1L, "first", 15.0, new Date(), new Date());
+    Product productEntity2 = new Product(2L, "second", 25.0, new Date(), new Date());
+    Product productEntity3 = new Product(3L, "third", 35.0, new Date(), new Date());
 
     @BeforeEach
-    void createTable() {
-        try (Connection connection = dataConnectionPull.getDataSource().getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.executeUpdate(SqlQueries.CREATE_TABLE_PRODUCTS);
+    void init() {
             productDao.save(productEntity1);
             productDao.save(productEntity2);
             productDao.save(productEntity3);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
     }
 
     @AfterEach
@@ -45,10 +39,10 @@ class ProductDaoTest {
 
     @Test
     void getFromDbShouldReturnThreeRealResultAndOneNull() {
-        ProductEntity productEntity1FromDb = productDao.get(1).orElse(null);
-        ProductEntity productEntity2FromDb = productDao.get(2).orElse(null);
-        ProductEntity productEntity3FromDb = productDao.get(3).orElse(null);
-        ProductEntity productEntity4FromDb = productDao.get(4).orElse(null);
+        Product productEntity1FromDb = productDao.get(1).orElse(null);
+        Product productEntity2FromDb = productDao.get(2).orElse(null);
+        Product productEntity3FromDb = productDao.get(3).orElse(null);
+        Product productEntity4FromDb = productDao.get(4).orElse(null);
         assertEquals(productEntity1.toString(), Objects.requireNonNull(productEntity1FromDb).toString());
         assertEquals(productEntity2.toString(), Objects.requireNonNull(productEntity2FromDb).toString());
         assertEquals(productEntity3.toString(), Objects.requireNonNull(productEntity3FromDb).toString());
@@ -57,7 +51,7 @@ class ProductDaoTest {
 
     @Test
     void getAllProductsByBD() {
-        ArrayList<ProductEntity> expected = new ArrayList<>();
+        ArrayList<Product> expected = new ArrayList<>();
         expected.add(productEntity1);
         expected.add(productEntity2);
         expected.add(productEntity3);
@@ -68,15 +62,15 @@ class ProductDaoTest {
 
     @Test
     void saveToBdShouldSave() throws SQLException {
-        ProductEntity productEntityToSave = new ProductEntity(25L, "first", 15.0, new Date(), new Date());
-        String sql = "SELECT * FROM products WHERE productId=25";
+        Product productEntityToSave = new Product(4L, "first", 15.0, new Date(), new Date());
+        String sql = "SELECT * FROM products WHERE productId=4";
         productDao.save(productEntityToSave);
-        ProductEntity productEntity;
+        Product productEntity;
         try (Connection connection = dataConnectionPull.getDataSource().getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 ResultSet resultSet = preparedStatement.executeQuery();
                 resultSet.next();
-                productEntity = ProductEntity.builder()
+                productEntity = Product.builder()
                         .id(resultSet.getLong(1))
                         .name(resultSet.getString(2))
                         .price(resultSet.getDouble(3))
@@ -91,11 +85,11 @@ class ProductDaoTest {
 
     @Test
     void updateProductInBD() {
-        ProductEntity beforeUpdate = productDao.get(2).orElse(null);
-        ProductEntity productEntityToUpdate = new ProductEntity(2L, "updated", 20.0, new Date(), new Date());
+        Product beforeUpdate = productDao.get(2).orElse(null);
+        Product productEntityToUpdate = new Product(2L, "updated", 20.0, new Date(), new Date());
         productDao.update(productEntityToUpdate);
 
-        ProductEntity updatedProductEntity = productDao.get(2).orElse(null);
+        Product updatedProductEntity = productDao.get(2).orElse(null);
         assertEquals(productEntity2.toString(), Objects.requireNonNull(beforeUpdate).toString());
         assertEquals(productEntityToUpdate.toString(), Objects.requireNonNull(updatedProductEntity).toString());
     }
