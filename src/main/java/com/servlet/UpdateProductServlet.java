@@ -40,7 +40,6 @@ public class UpdateProductServlet extends HttpServlet {
         productDao.update(newProduct);
 
         resp.setContentType("text/html;charset=utf-8");
-        resp.setStatus(HttpServletResponse.SC_OK);
         resp.sendRedirect("/products");
     }
 

@@ -13,7 +13,25 @@
         <th>Created</th>
         <th>Last time updated</th>
     </tr>
-    ${rows}
+
+    <#list products as product>
+    <tr>
+        <td>${product.id}</td>
+        <td>${product.name}</td>
+        <td>${product.price}</td>
+        <td>${product.create}</td>
+        <td>${product.update}</td>
+        <td>
+            <form action="/products/delete?idToDelete=${product.id}" method="post">
+                <button type="submit" value="Delete Product">Delete</button>
+            </form>
+        </td>
+        <td>
+            <button onclick="location.href='http://localhost:8080/products/update?idToUpdate=${product.id}'" type="button">Update</button>
+        </td>
+    </tr>
+    </#list>
+
 </table>
 <a href="http://localhost:8080/products/add">Add new product</a>
 </body>

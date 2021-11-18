@@ -1,7 +1,6 @@
 package com.dao;
 
 import com.dao.interfaces.ProductDaoInterface;
-import com.dao.interfaces.ProductMapper;
 import com.entity.Product;
 import lombok.extern.slf4j.Slf4j;
 
