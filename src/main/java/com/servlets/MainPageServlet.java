@@ -13,16 +13,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainPageServlet extends HttpServlet {
-    private final DataSource dataSource;
     private final ProductTableRender productTableRender = new ProductTableRender();
-
+    private final ProductDao productDao;
     public MainPageServlet(DataSource dataSource) {
-        this.dataSource = dataSource;
+        this.productDao = new ProductDao(dataSource);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ProductDao productDao = new ProductDao(dataSource);
+
         Map<String, Object> data = new HashMap<>();
         var parameter = req.getParameter("idToDelete");
         if (parameter != null) {

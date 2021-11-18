@@ -14,16 +14,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UpdateProductServlet extends HttpServlet {
-    private final DataSource dataSource;
+    private final ProductDao productDao;
     private ProductEntity productToBeUpdated;
 
     public UpdateProductServlet(DataSource dataSource) {
-        this.dataSource = dataSource;
+        this.productDao = new ProductDao(dataSource);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ProductDao productDao = new ProductDao(dataSource);
         Map<String, Object> data = new HashMap<>();
         long productId = Long.parseLong(req.getParameter("idToUpdate"));
         productToBeUpdated = productDao.get(productId).orElseThrow(() -> new RuntimeException("Impossible to update without id"));
@@ -37,7 +36,6 @@ public class UpdateProductServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ProductDao productDao = new ProductDao(dataSource);
         ProductEntity newProduct = createProductAfterUpdate(req);
         productDao.update(newProduct);
 

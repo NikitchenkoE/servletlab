@@ -12,10 +12,10 @@ import java.io.IOException;
 import java.util.Date;
 
 public class AddProductPageServlet extends HttpServlet {
-    private final DataSource dataSource;
+    private final ProductDao productDao;
 
     public AddProductPageServlet(DataSource dataSource) {
-        this.dataSource = dataSource;
+        this.productDao = new ProductDao(dataSource);
     }
 
     @Override
@@ -27,8 +27,6 @@ public class AddProductPageServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ProductDao productDao = new ProductDao(dataSource);
-
         productDao.save(createNewProduct(req, productDao));
         resp.setContentType("text/html;charset=utf-8");
         resp.setStatus(HttpServletResponse.SC_OK);
