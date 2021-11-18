@@ -1,4 +1,4 @@
-package com.services;
+package com.service;
 
 import com.entity.Product;
 import lombok.extern.slf4j.Slf4j;

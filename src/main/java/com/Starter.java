@@ -1,7 +1,7 @@
 package com;
 
 import com.db.DataSourceFactory;
-import com.servlets.ServletsHandler;
+import com.servlet.ServletsHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.server.Server;
 

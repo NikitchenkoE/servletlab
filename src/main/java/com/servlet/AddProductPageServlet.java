@@ -1,8 +1,8 @@
-package com.servlets;
+package com.servlet;
 
 import com.dao.ProductDao;
 import com.entity.Product;
-import com.services.PageGenerator;
+import com.service.PageGenerator;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

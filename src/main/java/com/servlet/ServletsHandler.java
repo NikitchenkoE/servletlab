@@ -1,4 +1,4 @@
-package com.servlets;
+package com.servlet;
 
 import com.db.DataSourceFactory;
 import org.eclipse.jetty.servlet.ServletContextHandler;

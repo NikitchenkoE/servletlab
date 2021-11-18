@@ -1,4 +1,4 @@
-package com.services;
+package com.service;
 
 import com.entity.Product;
 import org.junit.jupiter.api.Test;
