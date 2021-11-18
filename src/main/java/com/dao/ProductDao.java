@@ -2,6 +2,7 @@ package com.dao;
 
 import com.constants.ProductsConstants;
 import com.entity.ProductEntity;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -10,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 public class ProductDao implements Dao<ProductEntity> {
     private final DataSource dataSource;
 
@@ -19,6 +21,7 @@ public class ProductDao implements Dao<ProductEntity> {
 
     @Override
     public Optional<ProductEntity> get(long id) {
+        log.info("get product by {}", id);
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(ProductsConstants.SELECT_BY_ID)) {
                 preparedStatement.setLong(1, id);
@@ -36,12 +39,14 @@ public class ProductDao implements Dao<ProductEntity> {
 
             }
         } catch (SQLException throwables) {
+            log.error("Error by getting product by id {}", id);
             throw new RuntimeException(throwables);
         }
     }
 
     @Override
     public List<ProductEntity> getAll() {
+        log.info("get all products");
         List<ProductEntity> productEntities = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ProductsConstants.SELECT_ALL);
@@ -57,6 +62,7 @@ public class ProductDao implements Dao<ProductEntity> {
                 productEntities.add(productEntity);
             }
         } catch (SQLException throwables) {
+            log.error("Problem to find all products");
             throw new RuntimeException(throwables);
         }
         return productEntities;
@@ -64,6 +70,7 @@ public class ProductDao implements Dao<ProductEntity> {
 
     @Override
     public void save(ProductEntity productEntity) {
+        log.info("Saving product {}", productEntity.toString());
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(ProductsConstants.INSERT_INTO_TABLE)) {
                 preparedStatement.setLong(1, productEntity.getId());
@@ -75,12 +82,14 @@ public class ProductDao implements Dao<ProductEntity> {
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException throwables) {
+            log.error("Problem when saving {}", productEntity);
             throw new RuntimeException(throwables);
         }
     }
 
     @Override
     public void update(ProductEntity productEntity) {
+        log.info("Updating product {}", productEntity.toString());
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ProductsConstants.UPDATE_BY_ID)) {
             preparedStatement.setLong(1, productEntity.getId());
@@ -91,18 +100,21 @@ public class ProductDao implements Dao<ProductEntity> {
             preparedStatement.setLong(6, productEntity.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
+            log.error("Problem when updating {}", productEntity);
             throw new RuntimeException(throwables);
         }
     }
 
     @Override
     public void delete(long id) {
+        log.info("delete product by {}", id);
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(ProductsConstants.DELETE_BY_ID)) {
                 preparedStatement.setLong(1, id);
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException throwables) {
+            log.error("Error by deleting product by id {}", id);
             throw new RuntimeException(throwables);
         }
     }

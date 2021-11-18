@@ -3,6 +3,7 @@ package com.services;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
 
+@Slf4j
 public class PageGenerator {
     private final static String PATH_TO_PAGE = "src/main/resources/html";
 
@@ -27,6 +29,7 @@ public class PageGenerator {
     }
 
     public String getPage(String fileName, Map<String, Object> data) {
+        log.info("find file whit name {}", fileName);
         Writer writer = new StringWriter();
         try {
             configuration.setDirectoryForTemplateLoading(new File(PATH_TO_PAGE));

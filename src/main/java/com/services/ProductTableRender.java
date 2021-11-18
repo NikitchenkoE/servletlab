@@ -1,13 +1,16 @@
 package com.services;
 
 import com.entity.ProductEntity;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.StringJoiner;
 
+@Slf4j
 public class ProductTableRender {
 
     public String getProductRows(List<ProductEntity> productEntities) {
+        log.info("Created table with products {}", productEntities.toString());
         StringJoiner stringJoiner = new StringJoiner("\n");
         for (ProductEntity productEntity : productEntities) {
             stringJoiner.add("<tr>");
