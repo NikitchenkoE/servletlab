@@ -13,6 +13,7 @@
         <maven.compiler.target>16</maven.compiler.target>
     </properties>
 
+
     <dependencies>
         <!-- DB |-->
         <dependency>
@@ -69,7 +70,13 @@
             <version>5.4.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version>
+        </dependency>
     </dependencies>
+
 
 
     <build>
