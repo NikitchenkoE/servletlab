@@ -3,6 +3,7 @@ package com.service;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -22,6 +23,11 @@ public class PageGenerator {
 
     private PageGenerator() {
         this.configuration = new Configuration(Configuration.VERSION_2_3_31);
+        configuration.setDefaultEncoding("UTF-8");
+        configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+        configuration.setLogTemplateExceptions(false);
+        configuration.setWrapUncheckedExceptions(true);
+        configuration.setFallbackOnNullLoopVariable(false);
     }
 
     public static PageGenerator init() {
@@ -30,7 +36,7 @@ public class PageGenerator {
         return pageGenerator;
     }
 
-    public String getPage(String fileName){
+    public String getPage(String fileName) {
         log.info("find file whit name {}", fileName);
         Writer writer = new StringWriter();
         try {

@@ -2,6 +2,7 @@ package com.dao;
 
 import com.dao.interfaces.ProductDaoInterface;
 import com.entity.Product;
+import com.maper.ProductMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
@@ -12,10 +13,10 @@ import java.util.Optional;
 
 @Slf4j
 public class ProductDao implements ProductDaoInterface {
-    String SELECT_BY_ID = "SELECT productID, name, price, createDate, updateData FROM products WHERE productId=?";
-    String SELECT_ALL = "SELECT productID, name, price, createDate, updateData FROM products";
-    String INSERT_INTO_TABLE = "INSERT INTO products(name, price, createDate, updateData) VALUES (?,?,?,?)";
-    String UPDATE_BY_ID = "UPDATE products SET productId=?, name=?, price=?, createDate=?, updateData=? WHERE productId=?";
+    String SELECT_BY_ID = "SELECT productID, name, price, createDate, updateDate FROM products WHERE productId=?";
+    String SELECT_ALL = "SELECT productID, name, price, createDate, updateDate FROM products";
+    String INSERT_INTO_TABLE = "INSERT INTO products(name, price, createDate, updateDate) VALUES (?,?,?,?)";
+    String UPDATE_BY_ID = "UPDATE products SET productId=?, name=?, price=?, createDate=?, updateDate=? WHERE productId=?";
     String DELETE_BY_ID = "DELETE FROM products WHERE productId=?";
 
     private final DataSource dataSource;

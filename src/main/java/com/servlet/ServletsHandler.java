@@ -20,6 +20,7 @@ public class ServletsHandler {
 
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         servletContextHandler.addServlet(new ServletHolder(mainPageServlet), "/products");
+        servletContextHandler.addServlet(new ServletHolder(mainPageServlet), "/");
         servletContextHandler.addServlet(new ServletHolder(addProductPageServlet), "/products/add");
         servletContextHandler.addServlet(new ServletHolder(updateProductServlet), "/products/update");
         servletContextHandler.addServlet(new ServletHolder(deleteServlet), "/products/delete");

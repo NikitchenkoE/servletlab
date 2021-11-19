@@ -1,4 +1,4 @@
-package com.dao;
+package com.maper;
 
 import com.entity.Product;
 
@@ -14,7 +14,7 @@ public class ProductMapper {
                 .name(resultSet.getString("name"))
                 .price(resultSet.getDouble("price"))
                 .create(new Date(resultSet.getTimestamp("createDate").getTime()))
-                .update(new Date(resultSet.getTimestamp("updateData").getTime()))
+                .update(new Date(resultSet.getTimestamp("updateDate").getTime()))
                 .build();
     }
 }
