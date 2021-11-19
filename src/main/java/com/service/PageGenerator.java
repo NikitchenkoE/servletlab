@@ -4,6 +4,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -15,7 +16,6 @@ import java.util.Map;
 
 @Slf4j
 public class PageGenerator {
-    private final static String PATH_TO_PAGE = "src/main/resources/html";
     private final Map<String, Object> emptyMap = Collections.emptyMap();
 
     private static PageGenerator pageGenerator;
@@ -23,6 +23,7 @@ public class PageGenerator {
 
     private PageGenerator() {
         this.configuration = new Configuration(Configuration.VERSION_2_3_31);
+        configuration.setClassForTemplateLoading(this.getClass(),"/templates");
         configuration.setDefaultEncoding("UTF-8");
         configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
         configuration.setLogTemplateExceptions(false);
@@ -36,29 +37,21 @@ public class PageGenerator {
         return pageGenerator;
     }
 
+    @SneakyThrows
     public String getPage(String fileName) {
         log.info("find file whit name {}", fileName);
         Writer writer = new StringWriter();
-        try {
-            configuration.setDirectoryForTemplateLoading(new File(PATH_TO_PAGE));
             Template template = configuration.getTemplate(fileName);
             template.process(emptyMap, writer);
-        } catch (IOException | TemplateException exception) {
-            throw new RuntimeException(exception);
-        }
         return writer.toString();
     }
 
+    @SneakyThrows
     public String getPage(String fileName, Map<String, Object> data) {
         log.info("find file whit name {}", fileName);
         Writer writer = new StringWriter();
-        try {
-            configuration.setDirectoryForTemplateLoading(new File(PATH_TO_PAGE));
             Template template = configuration.getTemplate(fileName);
             template.process(data, writer);
-        } catch (IOException | TemplateException exception) {
-            throw new RuntimeException(exception);
-        }
         return writer.toString();
     }
 
