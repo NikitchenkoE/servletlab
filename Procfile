@@ -1,2 +1,1 @@
-web: java -jar target/servletlab-1.0-SNAPSHOT.jar
--Dserver.port=8080
+web: java -Dserver.port=$PORT -jar target/project-name-1.0.jar
