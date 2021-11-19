@@ -12,7 +12,7 @@ public class Starter {
         DataSourceFactory dataConnectionPull = new DataSourceFactory();
         ServletsHandler servletHandler = new ServletsHandler(dataConnectionPull);
 
-        Server server = new Server(8080);
+        Server server = new Server(5000);
         server.setHandler(servletHandler.getServletContextHandler());
         server.start();
     }
