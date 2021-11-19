@@ -23,7 +23,7 @@ public class PageGenerator {
 
     private PageGenerator() {
         this.configuration = new Configuration(Configuration.VERSION_2_3_31);
-        configuration.setClassForTemplateLoading(this.getClass(),"/templates");
+        configuration.setClassForTemplateLoading(this.getClass(), "/templates");
         configuration.setDefaultEncoding("UTF-8");
         configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
         configuration.setLogTemplateExceptions(false);
@@ -41,8 +41,8 @@ public class PageGenerator {
     public String getPage(String fileName) {
         log.info("find file whit name {}", fileName);
         Writer writer = new StringWriter();
-            Template template = configuration.getTemplate(fileName);
-            template.process(emptyMap, writer);
+        Template template = configuration.getTemplate(fileName);
+        template.process(emptyMap, writer);
         return writer.toString();
     }
 
@@ -50,8 +50,8 @@ public class PageGenerator {
     public String getPage(String fileName, Map<String, Object> data) {
         log.info("find file whit name {}", fileName);
         Writer writer = new StringWriter();
-            Template template = configuration.getTemplate(fileName);
-            template.process(data, writer);
+        Template template = configuration.getTemplate(fileName);
+        template.process(data, writer);
         return writer.toString();
     }
 
