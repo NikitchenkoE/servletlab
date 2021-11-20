@@ -59,7 +59,7 @@
                 </td>
                 <td>
                     <button class="btn btn-outline-success"
-                            onclick="location.href='http://localhost:8080/products/update?idToUpdate=${product.id}'"
+                            onclick="location.href='/products/update?idToUpdate=${product.id}'"
                             type="button">Update
                     </button>
                 </td>

@@ -29,7 +29,7 @@ public class UpdateProductServlet extends HttpServlet {
         data.put("productName", productToBeUpdated.getName());
         data.put("productPrice", productToBeUpdated.getPrice());
 
-        resp.getWriter().println(PageGenerator.init().getPage("updateProductPage.html", data));
+        resp.getWriter().println(PageGenerator.init().getPage("updateProductPage.ftlh", data));
         resp.setContentType("text/html;charset=utf-8");
         resp.setStatus(HttpServletResponse.SC_OK);
     }
