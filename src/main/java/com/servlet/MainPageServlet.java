@@ -30,7 +30,7 @@ public class MainPageServlet extends HttpServlet {
         var productsDto = mapToProductDtoList(products);
 
         data.put("products", productsDto);
-        resp.getWriter().println(PageGenerator.init().getPage("mainPage.html", data));
+        resp.getWriter().println(PageGenerator.init().getPage("mainPage.ftlh", data));
         resp.setContentType("text/html;charset=utf-8");
         resp.setStatus(HttpServletResponse.SC_OK);
     }
