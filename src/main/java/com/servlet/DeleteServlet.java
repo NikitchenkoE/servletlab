@@ -17,7 +17,7 @@ public class DeleteServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         var parameter = req.getParameter("idToDelete");
         if (parameter != null) {
             productDao.delete(Long.parseLong(parameter));

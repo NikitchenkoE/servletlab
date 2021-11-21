@@ -2,7 +2,6 @@ package com.maper;
 
 import com.dto.ProductDto;
 import com.entity.Product;
-import freemarker.core.JSONOutputFormat;
 import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
@@ -11,10 +10,11 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MapToProductDtoTest {
     MapToProductDto mapToProductDto = new MapToProductDto();
+
     @Test
     void testMapToProductDto() throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy hh:mm:ss a", Locale.ENGLISH);
@@ -27,7 +27,7 @@ class MapToProductDtoTest {
         String expectedDate = "2015-01-22 15:15:55";
         String actualCreated = productDto.getCreate();
         String actualUpdated = productDto.getUpdate();
-        assertEquals(expectedDate,actualCreated);
-        assertEquals(expectedDate,actualUpdated);
+        assertEquals(expectedDate, actualCreated);
+        assertEquals(expectedDate, actualUpdated);
     }
 }
