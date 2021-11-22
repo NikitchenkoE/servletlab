@@ -1,4 +1,4 @@
-package com.maper;
+package com.mapper;
 
 import com.dto.ProductDto;
 import com.entity.Product;

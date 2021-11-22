@@ -1,21 +1,20 @@
 package com.servlet;
 
-import com.dao.ProductDao;
 import com.entity.Product;
-import com.service.PageGenerator;
+import com.service.ProductService;
+import com.util.PageGenerator;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.Date;
 
 public class AddProductPageServlet extends HttpServlet {
-    private final ProductDao productDao;
+    ProductService productService;
 
-    public AddProductPageServlet(DataSource dataSource) {
-        this.productDao = new ProductDao(dataSource);
+    public AddProductPageServlet(ProductService productService) {
+        this.productService = productService;
     }
 
     @Override
@@ -31,7 +30,7 @@ public class AddProductPageServlet extends HttpServlet {
             resp.setContentType("text/html;charset=utf-8");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
-            productDao.save(createNewProduct(req));
+            productService.save(createNewProduct(req));
             resp.setContentType("text/html;charset=utf-8");
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.sendRedirect("/products");
@@ -41,7 +40,6 @@ public class AddProductPageServlet extends HttpServlet {
     private Product createNewProduct(HttpServletRequest req) {
         Date date = new Date();
         return Product.builder()
-                .id(null)
                 .name(req.getParameter("productName"))
                 .price(Double.parseDouble(req.getParameter("productPrice")))
                 .create(date)

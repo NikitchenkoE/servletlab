@@ -37,14 +37,14 @@
             <div class="form-group row">
                 <label class="col-4 col-form-label">Product Name </label>
                 <div class="col-4">
-                    <input type="text" class="form-control" name="productName" size="15"/>
+                    <input type="text" class="form-control" name="productName" size="15" value="${productName}"/>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-4 col-form-label">Product Price </label>
                 <div class="col-4">
-                    <input type="number" step="0.01" min="0.01" class="form-control" name="productPrice" size="15"/>
+                    <input type="number" step="0.01" min="0.01" class="form-control" name="productPrice" size="15" value="${productPrice}"/>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary" style="margin-top: 1%">Update</button>

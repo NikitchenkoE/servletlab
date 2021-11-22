@@ -1,9 +1,15 @@
 package com;
 
 import com.db.DataSourceFactory;
-import com.servlet.ServletsHandler;
+import com.service.ProductService;
+import com.servlet.AddProductPageServlet;
+import com.servlet.DeleteServlet;
+import com.servlet.MainPageServlet;
+import com.servlet.UpdateProductServlet;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 
 @Slf4j
 public class Starter {
@@ -11,8 +17,21 @@ public class Starter {
         int port = 8080;
         var portString = System.getenv("PORT");
 
-        DataSourceFactory dataConnectionPull = new DataSourceFactory();
-        ServletsHandler servletHandler = new ServletsHandler(dataConnectionPull);
+        DataSourceFactory dataSourceFactory = new DataSourceFactory();
+        ProductService productService = new ProductService(dataSourceFactory);
+
+        MainPageServlet mainPageServlet = new MainPageServlet(productService);
+        AddProductPageServlet addProductPageServlet = new AddProductPageServlet(productService);
+        UpdateProductServlet updateProductServlet = new UpdateProductServlet(productService);
+        DeleteServlet deleteServlet = new DeleteServlet(productService);
+
+
+        ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        servletContextHandler.addServlet(new ServletHolder(mainPageServlet), "/products");
+        servletContextHandler.addServlet(new ServletHolder(mainPageServlet), "/");
+        servletContextHandler.addServlet(new ServletHolder(addProductPageServlet), "/products/add");
+        servletContextHandler.addServlet(new ServletHolder(updateProductServlet), "/products/update");
+        servletContextHandler.addServlet(new ServletHolder(deleteServlet), "/products/delete");
 
         try {
             port = Integer.parseInt(portString);
@@ -21,7 +40,7 @@ public class Starter {
         }
 
         Server server = new Server(port);
-        server.setHandler(servletHandler.getServletContextHandler());
+        server.setHandler(servletContextHandler);
         server.start();
         server.join();
         log.info("Server started");

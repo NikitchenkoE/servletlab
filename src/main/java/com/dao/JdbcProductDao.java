@@ -1,8 +1,8 @@
 package com.dao;
 
-import com.dao.interfaces.ProductDaoInterface;
+import com.dao.interfaces.ProductDao;
 import com.entity.Product;
-import com.maper.ProductMapper;
+import com.mapper.ProductMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-public class ProductDao implements ProductDaoInterface {
+public class JdbcProductDao implements ProductDao {
     String SELECT_BY_ID = "SELECT productID, name, price, createDate, updateDate FROM products WHERE productId=?";
     String SELECT_ALL = "SELECT productID, name, price, createDate, updateDate FROM products";
     String INSERT_INTO_TABLE = "INSERT INTO products(name, price, createDate, updateDate) VALUES (?,?,?,?)";
@@ -22,7 +22,7 @@ public class ProductDao implements ProductDaoInterface {
     private final DataSource dataSource;
     private final ProductMapper productMapper = new ProductMapper();
 
-    public ProductDao(DataSource dataSource) {
+    public JdbcProductDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -38,9 +38,9 @@ public class ProductDao implements ProductDaoInterface {
                     } else return Optional.empty();
                 }
             }
-        } catch (SQLException throwables) {
-            log.error("Error by getting product by id {}", id);
-            throw new RuntimeException(throwables);
+        } catch (SQLException exception) {
+            log.error("Error by getting product by id {}", id, exception);
+            throw new RuntimeException(exception);
         }
     }
 
@@ -54,9 +54,9 @@ public class ProductDao implements ProductDaoInterface {
             while (resultSet.next()) {
                 productEntities.add(productMapper.mapProduct(resultSet));
             }
-        } catch (SQLException throwables) {
-            log.error("Problem to find all products");
-            throw new RuntimeException(throwables);
+        } catch (SQLException exception) {
+            log.error("Problem to find all products",exception);
+            throw new RuntimeException(exception);
         }
         return productEntities;
     }
@@ -73,9 +73,9 @@ public class ProductDao implements ProductDaoInterface {
 
                 preparedStatement.executeUpdate();
             }
-        } catch (SQLException throwables) {
-            log.error("Problem when saving {}", productEntity);
-            throw new RuntimeException(throwables);
+        } catch (SQLException exception) {
+            log.error("Problem when saving {}", productEntity, exception);
+            throw new RuntimeException(exception);
         }
     }
 
@@ -91,9 +91,9 @@ public class ProductDao implements ProductDaoInterface {
             preparedStatement.setTimestamp(5, new Timestamp(productEntity.getUpdate().getTime()));
             preparedStatement.setLong(6, productEntity.getId());
             preparedStatement.executeUpdate();
-        } catch (SQLException throwables) {
-            log.error("Problem when updating {}", productEntity);
-            throw new RuntimeException(throwables);
+        } catch (SQLException exception) {
+            log.error("Problem when updating {}", productEntity, exception);
+            throw new RuntimeException(exception);
         }
     }
 
@@ -105,9 +105,9 @@ public class ProductDao implements ProductDaoInterface {
                 preparedStatement.setLong(1, id);
                 preparedStatement.executeUpdate();
             }
-        } catch (SQLException throwables) {
-            log.error("Error by deleting product by id {}", id);
-            throw new RuntimeException(throwables);
+        } catch (SQLException exception) {
+            log.error("Error by deleting product by id {}", id, exception);
+            throw new RuntimeException(exception);
         }
     }
 }

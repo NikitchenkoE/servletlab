@@ -53,15 +53,13 @@
                 <td>${product.create}</td>
                 <td>${product.update}</td>
                 <td>
+                    <a class="btn btn-outline-success" href='/products/update?idToUpdate=${product.id}' >Update
+                    </a>
+                </td>
+                <td>
                     <form action="/products/delete?idToDelete=${product.id}" method="post">
                         <button class="btn btn-outline-danger" type="submit" value="Delete Product">Delete</button>
                     </form>
-                </td>
-                <td>
-                    <button class="btn btn-outline-success"
-                            onclick="location.href='/products/update?idToUpdate=${product.id}'"
-                            type="button">Update
-                    </button>
                 </td>
             </tr>
         </#list>

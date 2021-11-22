@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ProductDaoTest {
     DataSourceFactory dataConnectionPull = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
-    ProductDao productDao = new ProductDao(dataConnectionPull.getDataSource());
+    JdbcProductDao productDao = new JdbcProductDao(dataConnectionPull.getDataSource());
     Product productEntity1 = new Product(1L, "first", 15.0, new Date(), new Date());
     Product productEntity2 = new Product(2L, "second", 25.0, new Date(), new Date());
     Product productEntity3 = new Product(3L, "third", 35.0, new Date(), new Date());

@@ -1,4 +1,4 @@
-package com.maper;
+package com.mapper;
 
 import com.entity.Product;
 import org.junit.jupiter.api.AfterEach;

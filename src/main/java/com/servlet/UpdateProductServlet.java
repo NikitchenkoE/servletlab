@@ -1,31 +1,30 @@
 package com.servlet;
 
-import com.dao.ProductDao;
 import com.entity.Product;
-import com.service.PageGenerator;
+import com.service.ProductService;
+import com.util.PageGenerator;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UpdateProductServlet extends HttpServlet {
-    private final ProductDao productDao;
+    private final ProductService productService;
     private Product productToBeUpdated;
 
-    public UpdateProductServlet(DataSource dataSource) {
-        this.productDao = new ProductDao(dataSource);
+    public UpdateProductServlet(ProductService productService) {
+        this.productService = productService;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Map<String, Object> data = new HashMap<>();
         long productId = Long.parseLong(req.getParameter("idToUpdate"));
-        productToBeUpdated = productDao.get(productId).orElseThrow(() -> new RuntimeException("Impossible to update without id"));
+        productToBeUpdated = productService.get(productId).orElseThrow(() -> new RuntimeException("Impossible to update without id"));
         data.put("productName", productToBeUpdated.getName());
         data.put("productPrice", productToBeUpdated.getPrice());
 
@@ -41,7 +40,7 @@ public class UpdateProductServlet extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
             Product newProduct = createProductAfterUpdate(req);
-            productDao.update(newProduct);
+            productService.update(newProduct);
             resp.setContentType("text/html;charset=utf-8");
             resp.setStatus(HttpServletResponse.SC_ACCEPTED);
             resp.sendRedirect("/products");
