@@ -11,6 +11,14 @@
         table tr td:nth-child(3) {
             word-break: break-all;
         }
+
+        .searchInputsPositions {
+            position: absolute;
+            right: 5px;
+            width: 20%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
@@ -34,10 +42,25 @@
     </div>
 </nav>
 
-<div class="container text-center" size="1000px">
-
+<div class="searchInputsPositions">
+    <div class="input-group mb-3">
+        <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search by Id" aria-label="Search"
+                   name="productId">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+    <div class="input-group mb-3">
+        <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search by description" aria-label="Search"
+                   name="productDescription">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</div>
+</div>
+<div class="container text-center" style="margin-top: 3%">
     <h3 style="color: #6c757d; margin-top: 3%; margin-bottom: 3%" class="align-self-center">Table products</h3>
-
 
     <table class="table table-bordered">
         <tr style="text-align:center; vertical-align: middle">

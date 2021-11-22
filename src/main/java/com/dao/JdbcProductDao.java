@@ -18,6 +18,7 @@ public class JdbcProductDao implements ProductDao {
     String INSERT_INTO_TABLE = "INSERT INTO products(name, price, description, createDate, updateDate) VALUES (?,?,?,?,?)";
     String UPDATE_BY_ID = "UPDATE products SET productId=?, name=?, price=?, description=?, createDate=?, updateDate=? WHERE productId=?";
     String DELETE_BY_ID = "DELETE FROM products WHERE productId=?";
+    String SELECT_BY_DESCRIPTION = "SELECT productID, name, price, description, createDate, updateDate FROM products WHERE description LIKE ?";
 
     private final DataSource dataSource;
     private final ProductMapper productMapper = new ProductMapper();
@@ -55,7 +56,7 @@ public class JdbcProductDao implements ProductDao {
                 productEntities.add(productMapper.mapProduct(resultSet));
             }
         } catch (SQLException exception) {
-            log.error("Problem to find all products",exception);
+            log.error("Problem to find all products", exception);
             throw new RuntimeException(exception);
         }
         return productEntities;
@@ -111,5 +112,24 @@ public class JdbcProductDao implements ProductDao {
             log.error("Error by deleting product by id {}", id, exception);
             throw new RuntimeException(exception);
         }
+    }
+
+    @Override
+    public List<Product> getByDescription(String description) {
+        log.info("Select by description {}", description);
+        List<Product> productEntities = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_DESCRIPTION)) {
+            preparedStatement.setString(1, "%".concat(description).concat("%"));
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    productEntities.add(productMapper.mapProduct(resultSet));
+                }
+            }
+        }
+    catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return productEntities;
     }
 }

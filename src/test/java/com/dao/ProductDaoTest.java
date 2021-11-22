@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -106,5 +107,27 @@ class ProductDaoTest {
         assertNull(productDao.get(1).orElse(null));
         assertNull(productDao.get(2).orElse(null));
         assertNull(productDao.get(3).orElse(null));
+    }
+
+    @Test
+    void testFindByDescription(){
+        List<Product> expected = new ArrayList<>();
+        expected.add(productEntity1);
+        expected.add(productEntity2);
+        expected.add(productEntity3);
+
+        List<Product> actual = productDao.getByDescription("description");
+        assertEquals(expected.toString(),actual.toString());
+    }
+
+    @Test
+    void testFindByPartOfDescription(){
+        List<Product> expected = new ArrayList<>();
+        expected.add(productEntity1);
+        expected.add(productEntity2);
+        expected.add(productEntity3);
+
+        List<Product> actual = productDao.getByDescription("desc");
+        assertEquals(expected.toString(),actual.toString());
     }
 }

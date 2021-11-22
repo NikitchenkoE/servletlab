@@ -2,5 +2,9 @@ package com.dao.interfaces;
 
 import com.entity.Product;
 
-public interface ProductDao extends Dao<Product>{
+import java.util.List;
+
+public interface ProductDao extends Dao<Product> {
+
+    List<Product> getByDescription(String description);
 }

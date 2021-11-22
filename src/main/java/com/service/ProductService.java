@@ -33,4 +33,8 @@ public class ProductService {
     public void update(Product newProduct) {
         jdbcProductDao.update(newProduct);
     }
+
+    public List<Product> getByDescription(String description) {
+        return jdbcProductDao.getByDescription(description);
+    }
 }
