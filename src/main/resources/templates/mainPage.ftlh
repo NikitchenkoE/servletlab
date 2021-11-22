@@ -14,10 +14,10 @@
 
         .searchInputsPositions {
             position: absolute;
-            right: 5px;
+            right: 3%;
             width: 20%;
-            margin-top: 15px;
-            margin-bottom: 15px;
+            margin-top: 2%;
+            margin-bottom: 2%;
         }
     </style>
 </head>
@@ -59,7 +59,7 @@
     </div>
 </div>
 </div>
-<div class="container text-center" style="margin-top: 3%">
+<div class="container text-center" style="margin-top: 5%">
     <h3 style="color: #6c757d; margin-top: 3%; margin-bottom: 3%" class="align-self-center">Table products</h3>
 
     <table class="table table-bordered">
