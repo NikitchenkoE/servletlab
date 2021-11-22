@@ -27,10 +27,15 @@ public class AddProductPageServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        productDao.save(createNewProduct(req));
-        resp.setContentType("text/html;charset=utf-8");
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.sendRedirect("/products");
+        if (req.getParameter("productName").isEmpty() || req.getParameter("productPrice").isEmpty()) {
+            resp.setContentType("text/html;charset=utf-8");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } else {
+            productDao.save(createNewProduct(req));
+            resp.setContentType("text/html;charset=utf-8");
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.sendRedirect("/products");
+        }
     }
 
     private Product createNewProduct(HttpServletRequest req) {

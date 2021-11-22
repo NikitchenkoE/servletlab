@@ -36,11 +36,16 @@ public class UpdateProductServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Product newProduct = createProductAfterUpdate(req);
-        productDao.update(newProduct);
-
-        resp.setContentType("text/html;charset=utf-8");
-        resp.sendRedirect("/products");
+        if (req.getParameter("productName").isEmpty() || req.getParameter("productPrice").isEmpty()) {
+            resp.setContentType("text/html;charset=utf-8");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } else {
+            Product newProduct = createProductAfterUpdate(req);
+            productDao.update(newProduct);
+            resp.setContentType("text/html;charset=utf-8");
+            resp.setStatus(HttpServletResponse.SC_ACCEPTED);
+            resp.sendRedirect("/products");
+        }
     }
 
     private Product createProductAfterUpdate(HttpServletRequest req) {

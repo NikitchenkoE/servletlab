@@ -21,8 +21,10 @@ public class DeleteServlet extends HttpServlet {
         var parameter = req.getParameter("idToDelete");
         if (parameter != null) {
             productDao.delete(Long.parseLong(parameter));
+            resp.setContentType("text/html;charset=utf-8");
+            resp.sendRedirect("/products");
+        }else {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
-        resp.setContentType("text/html;charset=utf-8");
-        resp.sendRedirect("/products");
     }
 }
