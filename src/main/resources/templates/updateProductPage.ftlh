@@ -21,7 +21,7 @@
                     <a class="nav-link active" aria-current="page" href="/products">All products</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/products/add">Add Product</a>
+                    <a class="nav-link active" href="/products/add">Add Product</a>
                 </li>
             </ul>
         </div>
@@ -34,19 +34,27 @@
     </div>
     <form action="/products/update" method="POST">
         <div class="m-3">
-            <div class="form-group row">
-                <label class="col-4 col-form-label">Product Name </label>
+            <div class="input-group mb-3">
+                <label class="col-4 col-form-label" style="color: #6c757d">Product Name </label>
                 <div class="col-4">
                     <input type="text" class="form-control" name="productName" size="15" value="${productName}"/>
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label class="col-4 col-form-label">Product Price </label>
+            <div class="input-group mb-3">
+                <label class="col-4 col-form-label" style="color: #6c757d">Product Price </label>
                 <div class="col-4">
                     <input type="number" step="0.01" min="0.01" class="form-control" name="productPrice" size="15" value="${productPrice}"/>
                 </div>
             </div>
+
+            <div class="input-group mb-3">
+                <label class="col-4 col-form-label" style="color: #6c757d">Product Description </label>
+                <div class="col-4">
+                    <textarea class="form-control" name="productDescription" maxlength="150">${productDescription}</textarea>
+                </div>
+            </div>
+
             <button type="submit" class="btn btn-primary" style="margin-top: 1%">Update</button>
         </div>
     </form>

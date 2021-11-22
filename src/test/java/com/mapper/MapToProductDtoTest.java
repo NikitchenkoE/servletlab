@@ -22,7 +22,7 @@ class MapToProductDtoTest {
 
         String dateInString = "22-01-2015 10:15:55 AM";
         Date date = formatter.parse(dateInString);
-        Product productEntity1 = new Product(1L, "first", 15.0, date, date);
+        Product productEntity1 = new Product(1L, "first", 15.0,"description", date, date);
         ProductDto productDto = mapToProductDto.mapToDto(productEntity1);
         String expectedDate = "2015-01-22 15:15:55";
         String actualCreated = productDto.getCreate();

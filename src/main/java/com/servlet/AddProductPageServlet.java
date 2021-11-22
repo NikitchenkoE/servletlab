@@ -26,7 +26,7 @@ public class AddProductPageServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (req.getParameter("productName").isEmpty() || req.getParameter("productPrice").isEmpty()) {
+        if (req.getParameter("productName").isEmpty() || req.getParameter("productPrice").isEmpty() || req.getParameter("productDescription").isEmpty()) {
             resp.setContentType("text/html;charset=utf-8");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
@@ -42,6 +42,7 @@ public class AddProductPageServlet extends HttpServlet {
         return Product.builder()
                 .name(req.getParameter("productName"))
                 .price(Double.parseDouble(req.getParameter("productPrice")))
+                .description(req.getParameter("productDescription"))
                 .create(date)
                 .update(date)
                 .build();

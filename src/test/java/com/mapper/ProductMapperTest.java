@@ -39,10 +39,11 @@ class ProductMapperTest {
         Mockito.when(resultSetMock.getLong("productID")).thenReturn(1L);
         Mockito.when(resultSetMock.getString("name")).thenReturn("test");
         Mockito.when(resultSetMock.getDouble("price")).thenReturn(100.00);
+        Mockito.when(resultSetMock.getString("description")).thenReturn("description");
         Mockito.when(resultSetMock.getTimestamp("createDate")).thenReturn(new Timestamp(dateForTest.getTime()));
         Mockito.when(resultSetMock.getTimestamp("updateDate")).thenReturn(new Timestamp(dateForTest.getTime()));
 
-        Product productExpected = new Product(1L, "test", 100.00, dateForTest, dateForTest);
+        Product productExpected = new Product(1L, "test", 100.00, "description", dateForTest, dateForTest);
         Product productActual = productMapper.mapProduct(resultSetMock);
         assertEquals(productExpected.toString(), productActual.toString());
     }
@@ -55,7 +56,7 @@ class ProductMapperTest {
         Mockito.when(resultSetMock.getTimestamp("createDate")).thenReturn(new Timestamp(dateForTest.getTime()));
         Mockito.when(resultSetMock.getTimestamp("updateDate")).thenReturn(new Timestamp(dateForTest.getTime()));
 
-        Product productExpected = new Product(100L, "bedTest", 1000.00, dateForTest, dateForTest);
+        Product productExpected = new Product(100L, "bedTest", 1000.00,"description", dateForTest, dateForTest);
         Product productActual = productMapper.mapProduct(resultSetMock);
         assertNotEquals(productExpected.toString(), productActual.toString());
     }

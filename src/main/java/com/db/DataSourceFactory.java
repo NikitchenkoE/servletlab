@@ -11,7 +11,7 @@ import java.sql.Statement;
 
 @Slf4j
 public class DataSourceFactory {
-    String CREATE_TABLE = "CREATE TABLE products (productID IDENTITY NOT NULL PRIMARY KEY, name varchar, price double precision, createDate timestamp, updateDate timestamp)";
+    String CREATE_TABLE = "CREATE TABLE products (productID IDENTITY NOT NULL PRIMARY KEY, name varchar, price double precision, description varchar, createDate timestamp, updateDate timestamp)";
     private String url = "jdbc:h2:mem:productsDb";
     private String user = "userPg";
     private String password = "userPg";

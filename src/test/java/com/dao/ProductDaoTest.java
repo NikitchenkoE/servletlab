@@ -16,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductDaoTest {
     DataSourceFactory dataConnectionPull = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     JdbcProductDao productDao = new JdbcProductDao(dataConnectionPull.getDataSource());
-    Product productEntity1 = new Product(1L, "first", 15.0, new Date(), new Date());
-    Product productEntity2 = new Product(2L, "second", 25.0, new Date(), new Date());
-    Product productEntity3 = new Product(3L, "third", 35.0, new Date(), new Date());
+    Product productEntity1 = new Product(1L, "first", 15.0,"description", new Date(), new Date());
+    Product productEntity2 = new Product(2L, "second", 25.0,"description", new Date(), new Date());
+    Product productEntity3 = new Product(3L, "third", 35.0,"description", new Date(), new Date());
 
     @BeforeEach
     void init() {
@@ -62,7 +62,7 @@ class ProductDaoTest {
 
     @Test
     void saveToBdShouldSave() throws SQLException {
-        Product productEntityToSave = new Product(4L, "first", 15.0, new Date(), new Date());
+        Product productEntityToSave = new Product(4L, "first", 15.0,"description", new Date(), new Date());
         String sql = "SELECT * FROM products WHERE productId=4";
         productDao.save(productEntityToSave);
         Product productEntity;
@@ -74,8 +74,9 @@ class ProductDaoTest {
                         .id(resultSet.getLong(1))
                         .name(resultSet.getString(2))
                         .price(resultSet.getDouble(3))
-                        .create(new Date(resultSet.getTimestamp(4).getTime()))
-                        .update(new Date(resultSet.getTimestamp(5).getTime()))
+                        .description(resultSet.getString(4))
+                        .create(new Date(resultSet.getTimestamp(5).getTime()))
+                        .update(new Date(resultSet.getTimestamp(6).getTime()))
                         .build();
 
             }
@@ -86,7 +87,7 @@ class ProductDaoTest {
     @Test
     void updateProductInBD() {
         Product beforeUpdate = productDao.get(2).orElse(null);
-        Product productEntityToUpdate = new Product(2L, "updated", 20.0, new Date(), new Date());
+        Product productEntityToUpdate = new Product(2L, "updated", 20.0,"description", new Date(), new Date());
         productDao.update(productEntityToUpdate);
 
         Product updatedProductEntity = productDao.get(2).orElse(null);

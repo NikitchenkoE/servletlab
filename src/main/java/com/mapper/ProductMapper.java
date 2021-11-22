@@ -13,6 +13,7 @@ public class ProductMapper {
                 .id(resultSet.getLong("productID"))
                 .name(resultSet.getString("name"))
                 .price(resultSet.getDouble("price"))
+                .description(resultSet.getString("description"))
                 .create(new Date(resultSet.getTimestamp("createDate").getTime()))
                 .update(new Date(resultSet.getTimestamp("updateDate").getTime()))
                 .build();

@@ -6,6 +6,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <title>Main Page</title>
+
+    <style>
+        table tr td:nth-child(3) {
+            word-break: break-all;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -21,7 +27,7 @@
                     <a class="nav-link active" aria-current="page" href="/products">All products</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/products/add">Add Product</a>
+                    <a class="nav-link active" href="/products/add">Add Product</a>
                 </li>
             </ul>
         </div>
@@ -29,31 +35,32 @@
 </nav>
 
 <div class="container text-center" size="1000px">
-    <h3 style="color: #6c757d" class="align-self-center">Table products</h3>
+
+    <h3 style="color: #6c757d; margin-top: 3%; margin-bottom: 3%" class="align-self-center">Table products</h3>
 
 
     <table class="table table-bordered">
-        <thead>
-        <tr>
+        <tr style="text-align:center; vertical-align: middle">
             <th scope="col">Product id</th>
             <th scope="col">Product name</th>
+            <th scope="col">Product description</th>
             <th scope="col">Price</th>
             <th scope="col">Created</th>
             <th scope="col">Last time updated</th>
             <th scope="col" colspan="2">Action</th>
         </tr>
-        </thead>
-        <tbody>
+
 
         <#list products as product>
-            <tr>
+            <tr style="text-align:center; vertical-align: middle">
                 <th scope="row">${product.id}</th>
                 <td>${product.name}</td>
+                <td>${product.description}</td>
                 <td>${product.price}</td>
                 <td>${product.create}</td>
                 <td>${product.update}</td>
                 <td>
-                    <a class="btn btn-outline-success" href='/products/update?idToUpdate=${product.id}' >Update
+                    <a class="btn btn-outline-success" href='/products/update?idToUpdate=${product.id}'>Update
                     </a>
                 </td>
                 <td>
@@ -63,7 +70,6 @@
                 </td>
             </tr>
         </#list>
-        </tbody>
     </table>
 </div>
 

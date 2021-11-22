@@ -20,6 +20,7 @@ public class MapToProductDto {
                 .id(product.getId())
                 .name(product.getName())
                 .price(product.getPrice())
+                .description(product.getDescription())
                 .create(formattedCreate)
                 .update(formattedUpdate)
                 .build();
