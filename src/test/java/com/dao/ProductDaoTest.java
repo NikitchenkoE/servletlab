@@ -34,6 +34,7 @@ class ProductDaoTest {
         try (Connection connection = dataConnectionPull.getDataSource().getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(SqlQueries.DROP_TABLE_PRODUCTS);
+            statement.executeUpdate(SqlQueries.DROP_TABLE_USERS);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
