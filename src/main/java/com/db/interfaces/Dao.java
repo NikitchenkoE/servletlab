@@ -1,4 +1,4 @@
-package com.dao.interfaces;
+package com.db.interfaces;
 
 import java.util.List;
 import java.util.Optional;

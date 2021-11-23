@@ -1,6 +1,7 @@
 package com.dao;
 
 import com.db.DataSourceFactory;
+import com.db.JdbcProductDao;
 import com.entity.Product;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

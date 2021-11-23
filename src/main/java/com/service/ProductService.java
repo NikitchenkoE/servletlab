@@ -1,6 +1,6 @@
 package com.service;
 
-import com.dao.JdbcProductDao;
+import com.db.JdbcProductDao;
 import com.db.DataSourceFactory;
 import com.entity.Product;
 

@@ -1,4 +1,4 @@
-package com.dao.interfaces;
+package com.db.interfaces;
 
 import com.entity.Product;
 
