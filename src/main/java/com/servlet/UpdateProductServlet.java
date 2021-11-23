@@ -43,7 +43,6 @@ public class UpdateProductServlet extends HttpServlet {
             Product newProduct = createProductAfterUpdate(req);
             productService.update(newProduct);
             resp.setContentType("text/html;charset=utf-8");
-            resp.setStatus(HttpServletResponse.SC_ACCEPTED);
             resp.sendRedirect("/products");
         }
     }
