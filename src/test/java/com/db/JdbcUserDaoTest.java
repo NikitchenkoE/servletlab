@@ -1,7 +1,5 @@
 package com.db;
 
-import com.dao.SqlQueries;
-import com.entity.Product;
 import com.entity.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +9,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,6 +33,7 @@ class JdbcUserDaoTest {
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(SqlQueries.DROP_TABLE_USERS);
             statement.executeUpdate(SqlQueries.DROP_TABLE_PRODUCTS);
+            statement.executeUpdate(SqlQueries.DROP_TABLE_COOKIES);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -64,10 +62,6 @@ class JdbcUserDaoTest {
     }
 
     @Test
-    void save() {
-    }
-
-    @Test
     void update() {
         User beforeUpdate = jdbcUserDao.get(2).orElse(null);
         User toUpdate = new User(2L,"newName","newPassword","newSole");
@@ -89,5 +83,11 @@ class JdbcUserDaoTest {
         assertNull(jdbcUserDao.get(1).orElse(null));
         assertNull(jdbcUserDao.get(2).orElse(null));
         assertNull(jdbcUserDao.get(3).orElse(null));
+    }
+    @Test
+    void findByUsername(){
+        assertEquals(user1.toString(),jdbcUserDao.findByUsername("user1").get().toString());
+        assertEquals(user2.toString(),jdbcUserDao.findByUsername("user2").get().toString());
+        assertEquals(user3.toString(),jdbcUserDao.findByUsername("user3").get().toString());
     }
 }

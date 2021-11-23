@@ -1,7 +1,5 @@
-package com.dao;
+package com.db;
 
-import com.db.DataSourceFactory;
-import com.db.JdbcProductDao;
 import com.entity.Product;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +33,7 @@ class ProductDaoTest {
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(SqlQueries.DROP_TABLE_PRODUCTS);
             statement.executeUpdate(SqlQueries.DROP_TABLE_USERS);
+            statement.executeUpdate(SqlQueries.DROP_TABLE_COOKIES);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

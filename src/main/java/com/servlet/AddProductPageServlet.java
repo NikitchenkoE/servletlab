@@ -1,8 +1,10 @@
 package com.servlet;
 
 import com.entity.Product;
+import com.service.LoginService;
 import com.service.ProductService;
 import com.service.utilPageGenerator.PageGenerator;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,16 +14,23 @@ import java.util.Date;
 
 public class AddProductPageServlet extends HttpServlet {
     ProductService productService;
+    LoginService loginService;
 
-    public AddProductPageServlet(ProductService productService) {
+    public AddProductPageServlet(ProductService productService, LoginService loginService) {
         this.productService = productService;
+        this.loginService = loginService;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        if (loginService.isLogged(req)){
         resp.getWriter().println(PageGenerator.init().getPage("addProductPage.html"));
         resp.setContentType("text/html;charset=utf-8");
-        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.setStatus(HttpServletResponse.SC_OK);}
+        else {
+            resp.setContentType("text/html;charset=utf-8");
+            resp.sendRedirect("/login");
+        }
     }
 
     @Override
@@ -46,4 +55,5 @@ public class AddProductPageServlet extends HttpServlet {
                 .update(date)
                 .build();
     }
+
 }

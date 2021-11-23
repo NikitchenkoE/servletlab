@@ -14,6 +14,7 @@ import java.util.Optional;
 @Slf4j
 public class JdbcUserDao implements UserDao {
     String SELECT_USER_BY_ID = "SELECT userID, username, password, sole FROM users WHERE userID=?";
+    String SELECT_USER_BY_NAME = "SELECT userID, username, password, sole FROM users WHERE username=?";
     String INSERT_INTO_TABLE = "INSERT INTO users(username, password, sole) VALUES (?,?,?)";
     String SELECT_ALL_FROM_USERS = "SELECT userID, username, password, sole FROM users";
     String UPDATE_BY_ID = "UPDATE users SET userID=?, username=?, password=?, sole=? WHERE userID=?";
@@ -99,6 +100,24 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
             throw new RuntimeException(throwables);
+        }
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        log.info("get user by {}", username);
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_NAME)) {
+                preparedStatement.setString(1, username);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return Optional.ofNullable(userMapper.mapProduct(resultSet));
+                    } else return Optional.empty();
+                }
+            }
+        } catch (SQLException exception) {
+            log.error("Error by getting product by id {}", username, exception);
+            throw new RuntimeException(exception);
         }
     }
 }

@@ -1,7 +1,9 @@
 package com;
 
 import com.db.DataSourceFactory;
+import com.service.LoginService;
 import com.service.ProductService;
+import com.service.RegistrationService;
 import com.servlet.*;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.server.Server;
@@ -13,13 +15,17 @@ public class Starter {
     public static void main(String[] args) throws Exception {
         DataSourceFactory dataSourceFactory = new DataSourceFactory();
         ProductService productService = new ProductService(dataSourceFactory);
+        RegistrationService registrationService = new RegistrationService(dataSourceFactory);
+        LoginService loginService = new LoginService(dataSourceFactory);
 
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         servletContextHandler.addServlet(new ServletHolder(new MainPageServlet(productService)), "/products");
         servletContextHandler.addServlet(new ServletHolder(new MainPageServlet(productService)), "/");
-        servletContextHandler.addServlet(new ServletHolder(new AddProductPageServlet(productService)), "/products/add");
-        servletContextHandler.addServlet(new ServletHolder(new UpdateProductServlet(productService)), "/products/update");
-        servletContextHandler.addServlet(new ServletHolder(new UpdateProductServlet(productService)), "/products/delete");
+        servletContextHandler.addServlet(new ServletHolder(new AddProductPageServlet(productService,loginService)), "/products/add");
+        servletContextHandler.addServlet(new ServletHolder(new UpdateProductServlet(productService,loginService)), "/products/update");
+        servletContextHandler.addServlet(new ServletHolder(new DeleteServlet(productService,loginService)), "/products/delete");
+        servletContextHandler.addServlet(new ServletHolder(new RegistrationServlet(registrationService)),"/registration");
+        servletContextHandler.addServlet(new ServletHolder(new LoginServlet(loginService)),"/login");
 
         int port = 8080;
         var portString = System.getenv("PORT");

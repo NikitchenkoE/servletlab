@@ -1,6 +1,7 @@
 package com.servlet;
 
 import com.entity.Product;
+import com.service.LoginService;
 import com.service.ProductService;
 import com.service.utilPageGenerator.PageGenerator;
 import jakarta.servlet.http.HttpServlet;
@@ -14,24 +15,31 @@ import java.util.Map;
 
 public class UpdateProductServlet extends HttpServlet {
     private final ProductService productService;
+    private final LoginService loginService;
     private Product productToBeUpdated;
 
-    public UpdateProductServlet(ProductService productService) {
+    public UpdateProductServlet(ProductService productService, LoginService loginService) {
         this.productService = productService;
+        this.loginService = loginService;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Map<String, Object> data = new HashMap<>();
-        long productId = Long.parseLong(req.getParameter("idToUpdate"));
-        productToBeUpdated = productService.get(productId).orElseThrow(() -> new RuntimeException("Impossible to update without id"));
-        data.put("productName", productToBeUpdated.getName());
-        data.put("productPrice", productToBeUpdated.getPrice());
-        data.put("productDescription", productToBeUpdated.getDescription());
+        if (loginService.isLogged(req)) {
+            Map<String, Object> data = new HashMap<>();
+            long productId = Long.parseLong(req.getParameter("idToUpdate"));
+            productToBeUpdated = productService.get(productId).orElseThrow(() -> new RuntimeException("Impossible to update without id"));
+            data.put("productName", productToBeUpdated.getName());
+            data.put("productPrice", productToBeUpdated.getPrice());
+            data.put("productDescription", productToBeUpdated.getDescription());
 
-        resp.getWriter().println(PageGenerator.init().getPage("updateProductPage.ftlh", data));
-        resp.setContentType("text/html;charset=utf-8");
-        resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().println(PageGenerator.init().getPage("updateProductPage.ftlh", data));
+            resp.setContentType("text/html;charset=utf-8");
+            resp.setStatus(HttpServletResponse.SC_OK);
+        }else {
+            resp.setContentType("text/html;charset=utf-8");
+            resp.sendRedirect("/login");
+        }
     }
 
     @Override
