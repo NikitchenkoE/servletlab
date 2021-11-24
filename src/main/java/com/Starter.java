@@ -19,20 +19,21 @@ public class Starter {
         LoginService loginService = new LoginService(dataSourceFactory);
 
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        servletContextHandler.addServlet(new ServletHolder(new MainPageServlet(productService)), "/products");
-        servletContextHandler.addServlet(new ServletHolder(new MainPageServlet(productService)), "/");
-        servletContextHandler.addServlet(new ServletHolder(new AddProductPageServlet(productService,loginService)), "/products/add");
-        servletContextHandler.addServlet(new ServletHolder(new UpdateProductServlet(productService,loginService)), "/products/update");
-        servletContextHandler.addServlet(new ServletHolder(new DeleteServlet(productService,loginService)), "/products/delete");
-        servletContextHandler.addServlet(new ServletHolder(new RegistrationServlet(registrationService)),"/registration");
-        servletContextHandler.addServlet(new ServletHolder(new LoginServlet(loginService)),"/login");
+        servletContextHandler.addServlet(new ServletHolder(new MainPageServlet(productService, loginService)), "/products");
+        servletContextHandler.addServlet(new ServletHolder(new MainPageServlet(productService, loginService)), "/");
+        servletContextHandler.addServlet(new ServletHolder(new AddProductPageServlet(productService, loginService)), "/products/add");
+        servletContextHandler.addServlet(new ServletHolder(new UpdateProductServlet(productService, loginService)), "/products/update");
+        servletContextHandler.addServlet(new ServletHolder(new DeleteServlet(productService, loginService)), "/products/delete");
+        servletContextHandler.addServlet(new ServletHolder(new RegistrationServlet(registrationService, loginService)), "/registration");
+        servletContextHandler.addServlet(new ServletHolder(new LoginServlet(loginService)), "/login");
+        servletContextHandler.addServlet(new ServletHolder(new LogoutServlet(loginService)), "/logout");
 
         int port = 8080;
         var portString = System.getenv("PORT");
         try {
             port = Integer.parseInt(portString);
         } catch (NumberFormatException e) {
-            log.error("Can't see port from env. Will use {}",port);
+            log.error("Can't see port from env. Will use {}", port);
         }
 
         Server server = new Server(port);

@@ -14,7 +14,7 @@ import java.util.Optional;
 @Slf4j
 public class JdbcCookieDao implements CookieDao {
     String INSERT_INTO_TABLE = "INSERT INTO cookies (cookie) VALUES (?)";
-    String DELETE_BY_ID = "DELETE FROM cookies WHERE cookiesID=?";
+    String DELETE_BY_VALUE = "DELETE FROM cookies WHERE cookie=?";
     String SELECT_BY_COOKIE = "SELECT cookiesID, cookie FROM cookies WHERE cookie=?";
 
     private final DataSource dataSource;
@@ -35,10 +35,10 @@ public class JdbcCookieDao implements CookieDao {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(String value) {
         try(Connection connection = dataSource.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID)){
-            preparedStatement.setLong(1,id);
+        PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_VALUE)){
+            preparedStatement.setString(1,value);
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
             throw new RuntimeException(throwables);

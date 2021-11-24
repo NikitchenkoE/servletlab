@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface CookieDao {
     void save(CookieEntity cookie);
-    void delete(long id);
+    void delete(String value);
     Optional<CookieEntity> get(String cookie);
 }

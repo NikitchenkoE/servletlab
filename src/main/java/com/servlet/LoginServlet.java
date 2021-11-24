@@ -19,9 +19,14 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.getWriter().println(PageGenerator.init().getPage("login.html"));
-        resp.setContentType("text/html;charset=utf-8");
-        resp.setStatus(HttpServletResponse.SC_OK);
+        if (loginService.isLogged(req)) {
+            resp.setContentType("text/html;charset=utf-8");
+            resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        } else {
+            resp.getWriter().println(PageGenerator.init().getPage("login.html"));
+            resp.setContentType("text/html;charset=utf-8");
+            resp.setStatus(HttpServletResponse.SC_OK);
+        }
     }
 
     @Override
@@ -35,9 +40,10 @@ public class LoginServlet extends HttpServlet {
                 resp.addCookie(cookie);
                 resp.setContentType("text/html;charset=utf-8");
                 resp.sendRedirect("/products");
-            }else {
+            } else {
                 resp.setContentType("text/html;charset=utf-8");
                 resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                resp.sendRedirect("/login");
             }
         }
     }

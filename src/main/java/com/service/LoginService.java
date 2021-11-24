@@ -44,11 +44,23 @@ public class LoginService {
     public boolean isLogged(HttpServletRequest req) {
         boolean auth = false;
         var cookies = req.getCookies();
-        if (cookies!=null) {
+        if (cookies != null) {
             for (Cookie cookie : cookies) {
                 auth = jdbcCookieDao.get(cookie.getValue()).orElse(null) != null;
             }
         }
         return auth;
+    }
+
+    public Cookie logout(HttpServletRequest req) {
+        Cookie readCookie = null;
+        Cookie[] cookies = req.getCookies();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equalsIgnoreCase("user-token")) {
+                cookie.setMaxAge(0);
+                readCookie = cookie;
+            }
+        }
+        return readCookie;
     }
 }

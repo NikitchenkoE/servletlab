@@ -6,8 +6,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <title>Add Product Page</title>
+
+    <style>
+        .loginAndLogoutPosition{
+            position: absolute;
+            right: 3%;
+            padding-top: 0.25%;
+        }
+    </style>
 </head>
 <body>
+<p hidden>${logged}</p>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Shop</a>
@@ -20,9 +29,13 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/products">All products</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="/products/add">Add Product</a>
-                </li>
+                <div class="loginAndLogoutPosition">
+                <#if logged == "true">
+                    <li class="nav-item">
+                        <a class="btn btn-outline-danger my-2 my-sm-0 btn-sm" href="/logout">logout</a>
+                    </li>
+                </#if>
+                </div>
             </ul>
         </div>
     </div>

@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AddProductPageServlet extends HttpServlet {
     ProductService productService;
@@ -23,11 +25,13 @@ public class AddProductPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (loginService.isLogged(req)){
-        resp.getWriter().println(PageGenerator.init().getPage("addProductPage.html"));
-        resp.setContentType("text/html;charset=utf-8");
-        resp.setStatus(HttpServletResponse.SC_OK);}
-        else {
+        if (loginService.isLogged(req)) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("logged", String.valueOf(loginService.isLogged(req)));
+            resp.getWriter().println(PageGenerator.init().getPage("addProductPage.ftlh", data));
+            resp.setContentType("text/html;charset=utf-8");
+            resp.setStatus(HttpServletResponse.SC_OK);
+        } else {
             resp.setContentType("text/html;charset=utf-8");
             resp.sendRedirect("/login");
         }

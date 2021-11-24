@@ -19,9 +19,15 @@
             margin-top: 2%;
             margin-bottom: 2%;
         }
+        .loginAndLogoutPosition{
+            position: absolute;
+            right: 3%;
+            padding-top: 0.25%;
+        }
     </style>
 </head>
 <body>
+<p hidden>${logged}</p>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Shop</a>
@@ -37,6 +43,18 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="/products/add">Add Product</a>
                 </li>
+                <div class="loginAndLogoutPosition">
+                <#if logged == "false">
+                    <li class="nav-item">
+                        <a class="btn btn-outline-success btn-sm" href="/login">login</a>
+                    </li>
+                </#if>
+                <#if logged == "true">
+                    <li class="nav-item">
+                        <a class="btn btn-outline-danger my-2 my-sm-0 btn-sm" href="/logout">logout</a>
+                    </li>
+                </#if>
+                </div>
             </ul>
         </div>
     </div>
@@ -45,14 +63,14 @@
 <div class="searchInputsPositions">
     <div class="input-group mb-3">
         <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search by Id" aria-label="Search"
+            <input class="form-control me-2" type="number" placeholder="Search by Id" aria-label="Search"
                    name="productId">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
     </div>
     <div class="input-group mb-3">
         <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search by description" aria-label="Search"
+            <input class="form-control me-2" type="text" placeholder="Search by description" aria-label="Search"
                    name="productDescription">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
@@ -70,7 +88,9 @@
             <th scope="col">Price</th>
             <th scope="col">Created</th>
             <th scope="col">Last time updated</th>
-            <th scope="col" colspan="2">Action</th>
+            <#if logged == "true">
+                <th scope="col" colspan="2">Action</th>
+            </#if>
         </tr>
 
 
@@ -82,6 +102,7 @@
                 <td>${product.price}</td>
                 <td>${product.create}</td>
                 <td>${product.update}</td>
+                <#if logged == "true">
                 <td>
                     <a class="btn btn-outline-success" href='/products/update?idToUpdate=${product.id}'>Update
                     </a>
@@ -91,10 +112,10 @@
                         <button class="btn btn-outline-danger" type="submit" value="Delete Product">Delete</button>
                     </form>
                 </td>
+                </#if>
             </tr>
         </#list>
     </table>
 </div>
-
 </body>
 </html>

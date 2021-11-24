@@ -43,9 +43,9 @@ class JdbcCookieDaoTest {
         assertNotNull(jdbcCookieDao.get("cookie1").orElse(null));
         assertNotNull(jdbcCookieDao.get("cookie2").orElse(null));
         assertNotNull(jdbcCookieDao.get("cookie3").orElse(null));
-        jdbcCookieDao.delete(1);
-        jdbcCookieDao.delete(2);
-        jdbcCookieDao.delete(3);
+        jdbcCookieDao.delete("cookie1");
+        jdbcCookieDao.delete("cookie2");
+        jdbcCookieDao.delete("cookie3");
         assertNull(jdbcCookieDao.get("cookie1").orElse(null));
         assertNull(jdbcCookieDao.get("cookie2").orElse(null));
         assertNull(jdbcCookieDao.get("cookie3").orElse(null));

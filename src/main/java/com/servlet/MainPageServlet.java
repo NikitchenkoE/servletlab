@@ -3,6 +3,7 @@ package com.servlet;
 import com.dto.ProductDto;
 import com.entity.Product;
 import com.mapper.MapToProductDto;
+import com.service.LoginService;
 import com.service.ProductService;
 import com.service.utilPageGenerator.PageGenerator;
 import jakarta.servlet.http.HttpServlet;
@@ -18,15 +19,18 @@ import java.util.stream.Collectors;
 
 public class MainPageServlet extends HttpServlet {
     private final ProductService productService;
+    private final LoginService loginService;
 
-    public MainPageServlet(ProductService productService) {
+    public MainPageServlet(ProductService productService, LoginService loginService) {
         this.productService = productService;
+        this.loginService = loginService;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Map<String, Object> data = new HashMap<>();
         data.put("products", new ArrayList<Product>());
+        data.put("logged", String.valueOf(loginService.isLogged(req)));
         String description = req.getParameter("productDescription");
 
         if (req.getParameter("productDescription") == null && req.getParameter("productId") == null) {
@@ -38,10 +42,12 @@ public class MainPageServlet extends HttpServlet {
             if (!req.getParameter("productId").isEmpty()) {
                 long id = Long.parseLong(req.getParameter("productId"));
                 data = getDataById(id);
+                data.put("logged", String.valueOf(loginService.isLogged(req)));
                 resp.setStatus(HttpServletResponse.SC_OK);
             }
         } else if (description != null && !description.isEmpty()) {
             data = getDataByDescription(description);
+            data.put("logged", String.valueOf(loginService.isLogged(req)));
         } else {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
