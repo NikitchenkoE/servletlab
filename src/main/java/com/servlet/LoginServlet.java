@@ -2,7 +2,6 @@ package com.servlet;
 
 import com.service.LoginService;
 import com.service.utilPageGenerator.PageGenerator;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,16 +1,13 @@
 package com.servlet;
 
-import com.entity.Product;
 import com.service.LoginService;
 import com.service.ProductService;
 import com.service.utilPageGenerator.PageGenerator;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,21 +40,9 @@ public class AddProductPageServlet extends HttpServlet {
             resp.setContentType("text/html;charset=utf-8");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
-            productService.save(createNewProduct(req));
+            productService.save(req);
             resp.setContentType("text/html;charset=utf-8");
             resp.sendRedirect("/products");
         }
     }
-
-    private Product createNewProduct(HttpServletRequest req) {
-        Date date = new Date();
-        return Product.builder()
-                .name(req.getParameter("productName"))
-                .price(Double.parseDouble(req.getParameter("productPrice")))
-                .description(req.getParameter("productDescription"))
-                .create(date)
-                .update(date)
-                .build();
-    }
-
 }

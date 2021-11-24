@@ -25,23 +25,27 @@ public class JdbcCookieDao implements CookieDao {
 
     @Override
     public void save(CookieEntity cookie) {
-    try(Connection connection = dataSource.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO_TABLE)){
-        preparedStatement.setString(1, cookie.getCookie());
-        preparedStatement.executeUpdate();
-    } catch (SQLException throwables) {
-        throw new RuntimeException(throwables);
-    }
+        log.info("Saved {}", cookie);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO_TABLE)) {
+            preparedStatement.setString(1, cookie.getCookie());
+            preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            log.error("Exception when saved {}", cookie, exception);
+            throw new RuntimeException(exception);
+        }
     }
 
     @Override
     public void delete(String value) {
-        try(Connection connection = dataSource.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_VALUE)){
-            preparedStatement.setString(1,value);
+        log.info("Delete cookie with value {}", value);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_VALUE)) {
+            preparedStatement.setString(1, value);
             preparedStatement.executeUpdate();
-        } catch (SQLException throwables) {
-            throw new RuntimeException(throwables);
+        } catch (SQLException exception) {
+            log.error("Exception when deleting {}", value, exception);
+            throw new RuntimeException(exception);
         }
     }
 

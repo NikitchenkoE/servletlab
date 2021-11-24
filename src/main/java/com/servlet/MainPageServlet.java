@@ -1,9 +1,8 @@
 package com.servlet;
 
-import com.dto.ProductDto;
 import com.entity.Product;
-import com.mapper.MapToProductDto;
 import com.service.LoginService;
+import com.service.MainPageService;
 import com.service.ProductService;
 import com.service.utilPageGenerator.PageGenerator;
 import jakarta.servlet.http.HttpServlet;
@@ -13,17 +12,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class MainPageServlet extends HttpServlet {
     private final ProductService productService;
     private final LoginService loginService;
+    private final MainPageService mainPageService;
 
     public MainPageServlet(ProductService productService, LoginService loginService) {
         this.productService = productService;
         this.loginService = loginService;
+        this.mainPageService = new MainPageService(productService);
     }
 
     @Override
@@ -35,55 +34,26 @@ public class MainPageServlet extends HttpServlet {
 
         if (req.getParameter("productDescription") == null && req.getParameter("productId") == null) {
             var products = productService.getAll();
-            var productDtoList = mapToProductDtoList(products);
+            var productDtoList = mainPageService.mapToProductDtoList(products);
             data.put("products", productDtoList);
             resp.setStatus(HttpServletResponse.SC_OK);
+
         } else if (req.getParameter("productId") != null) {
             if (!req.getParameter("productId").isEmpty()) {
                 long id = Long.parseLong(req.getParameter("productId"));
-                data = getDataById(id);
+                data = mainPageService.getDataById(id);
                 data.put("logged", String.valueOf(loginService.isLogged(req)));
                 resp.setStatus(HttpServletResponse.SC_OK);
             }
+
         } else if (description != null && !description.isEmpty()) {
-            data = getDataByDescription(description);
+            data = mainPageService.getDataByDescription(description);
             data.put("logged", String.valueOf(loginService.isLogged(req)));
+
         } else {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
         resp.getWriter().println(PageGenerator.init().getPage("mainPage.ftlh", data));
         resp.setContentType("text/html;charset=utf-8");
     }
-
-    private List<ProductDto> mapToProductDtoList(List<Product> productList) {
-        MapToProductDto mapToProductDto = new MapToProductDto();
-        return productList.stream()
-                .map(mapToProductDto::mapToDto)
-                .collect(Collectors.toList());
-    }
-
-    private Map<String, Object> getDataById(long id) {
-        Map<String, Object> data = new HashMap<>();
-        List<Product> productList = new ArrayList<>();
-        List<ProductDto> productDtoList = new ArrayList<>();
-        var product = productService.get(id).orElse(null);
-        if (product != null) {
-            productList.add(product);
-            productDtoList = mapToProductDtoList(productList);
-            data.put("products", productDtoList);
-        } else {
-            data.put("products", productDtoList);
-        }
-        return data;
-    }
-
-    private Map<String, Object> getDataByDescription(String description) {
-        Map<String, Object> data = new HashMap<>();
-        var products = productService.getByDescription(description);
-        var productsDto = mapToProductDtoList(products);
-        data.put("products", productsDto);
-        return data;
-    }
-
-
 }

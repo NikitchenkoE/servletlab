@@ -126,8 +126,7 @@ public class JdbcProductDao implements ProductDao {
                     productEntities.add(productMapper.mapProduct(resultSet));
                 }
             }
-        }
-    catch (SQLException throwables) {
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return productEntities;

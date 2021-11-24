@@ -28,7 +28,7 @@ public class DeleteServlet extends HttpServlet {
             } else {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
-        }else {
+        } else {
             resp.setContentType("text/html;charset=utf-8");
             resp.sendRedirect("/login");
         }

@@ -20,7 +20,7 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (loginService.isLogged(req)){
+        if (loginService.isLogged(req)) {
             resp.setContentType("text/html;charset=utf-8");
             resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }

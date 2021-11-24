@@ -46,6 +46,7 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public List<User> getAll() {
+        log.info("Get all users");
         List<User> userList = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_FROM_USERS);
@@ -53,8 +54,9 @@ public class JdbcUserDao implements UserDao {
             while (resultSet.next()) {
                 userList.add(userMapper.mapProduct(resultSet));
             }
-        } catch (SQLException throwables) {
-            throw new RuntimeException(throwables);
+        } catch (SQLException exception) {
+            log.error("Exception when get all users", exception);
+            throw new RuntimeException(exception);
         }
         return userList;
     }
@@ -78,6 +80,7 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void update(User user) {
+        log.info("Update user {}", user);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BY_ID)) {
             preparedStatement.setLong(1, user.getId());
@@ -87,19 +90,22 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setLong(5, user.getId());
 
             preparedStatement.executeUpdate();
-        } catch (SQLException throwables) {
-            throw new RuntimeException(throwables);
+        } catch (SQLException exception) {
+            log.error("Exception when update {}", user, exception);
+            throw new RuntimeException(exception);
         }
     }
 
     @Override
     public void delete(long id) {
+        log.info("Delete user by id {}", id);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
-        } catch (SQLException throwables) {
-            throw new RuntimeException(throwables);
+        } catch (SQLException exception) {
+            log.error("Exception when delete user by id {}", id, exception);
+            throw new RuntimeException(exception);
         }
     }
 

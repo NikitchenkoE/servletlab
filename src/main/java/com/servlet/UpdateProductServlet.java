@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +36,7 @@ public class UpdateProductServlet extends HttpServlet {
             resp.getWriter().println(PageGenerator.init().getPage("updateProductPage.ftlh", data));
             resp.setContentType("text/html;charset=utf-8");
             resp.setStatus(HttpServletResponse.SC_OK);
-        }else {
+        } else {
             resp.setContentType("text/html;charset=utf-8");
             resp.sendRedirect("/login");
         }
@@ -49,22 +48,10 @@ public class UpdateProductServlet extends HttpServlet {
             resp.setContentType("text/html;charset=utf-8");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
-            Product newProduct = createProductAfterUpdate(req);
+            Product newProduct = productService.createProductAfterUpdate(req, productToBeUpdated);
             productService.update(newProduct);
             resp.setContentType("text/html;charset=utf-8");
             resp.sendRedirect("/products");
         }
-    }
-
-    private Product createProductAfterUpdate(HttpServletRequest req) {
-        Date date = new Date();
-        return Product.builder()
-                .id(productToBeUpdated.getId())
-                .name(req.getParameter("productName"))
-                .price(Double.parseDouble(req.getParameter("productPrice")))
-                .description(req.getParameter("productDescription"))
-                .create(productToBeUpdated.getCreate())
-                .update(date)
-                .build();
     }
 }
