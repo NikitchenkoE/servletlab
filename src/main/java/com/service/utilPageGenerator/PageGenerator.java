@@ -35,11 +35,7 @@ public class PageGenerator {
 
     @SneakyThrows
     public String getPage(String fileName) {
-        log.info("find file whit name {}", fileName);
-        Writer writer = new StringWriter();
-        Template template = configuration.getTemplate(fileName);
-        template.process(emptyMap, writer);
-        return writer.toString();
+        return getPage(fileName, emptyMap);
     }
 
     @SneakyThrows
