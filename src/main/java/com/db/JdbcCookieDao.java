@@ -2,6 +2,7 @@ package com.db;
 
 import com.db.interfaces.CookieDao;
 import com.entity.CookieEntity;
+import com.mapper.CookieMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
@@ -9,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -16,8 +19,10 @@ public class JdbcCookieDao implements CookieDao {
     String INSERT_INTO_TABLE = "INSERT INTO cookies (cookie, expireDate) VALUES (?,?)";
     String DELETE_BY_VALUE = "DELETE FROM cookies WHERE cookie=?";
     String SELECT_BY_COOKIE = "SELECT cookiesID, cookie, expireDate FROM cookies WHERE cookie=?";
+    String SELECT_ALL_COOKIE = "SELECT cookiesID, cookie, expireDate FROM cookies";
 
     private final DataSource dataSource;
+    CookieMapper cookieMapper = new CookieMapper();
 
     public JdbcCookieDao(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -58,10 +63,7 @@ public class JdbcCookieDao implements CookieDao {
                 preparedStatement.setString(1, cookie);
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     if (resultSet.next()) {
-                        return Optional.of(new CookieEntity(
-                                resultSet.getLong("cookiesID"),
-                                resultSet.getString("cookie"),
-                                resultSet.getLong("expireDate")));
+                        return Optional.of(cookieMapper.mapCookie(resultSet));
                     } else return Optional.empty();
                 }
             }
@@ -69,5 +71,20 @@ public class JdbcCookieDao implements CookieDao {
             log.error("Error by getting cookie by id {}", cookie, exception);
             throw new RuntimeException(exception);
         }
+    }
+
+    @Override
+    public List<CookieEntity> getAllCookies(){
+        List<CookieEntity> cookies = new ArrayList<>();
+        try(Connection connection = dataSource.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_COOKIE);
+        ResultSet resultSet = preparedStatement.executeQuery()){
+            while (resultSet.next()){
+                cookies.add(cookieMapper.mapCookie(resultSet));
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return cookies;
     }
 }

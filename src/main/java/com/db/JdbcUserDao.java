@@ -34,7 +34,7 @@ public class JdbcUserDao implements UserDao {
                 preparedStatement.setLong(1, id);
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     if (resultSet.next()) {
-                        return Optional.ofNullable(userMapper.mapProduct(resultSet));
+                        return Optional.ofNullable(userMapper.mapUser(resultSet));
                     } else return Optional.empty();
                 }
             }
@@ -52,7 +52,7 @@ public class JdbcUserDao implements UserDao {
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_FROM_USERS);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
-                userList.add(userMapper.mapProduct(resultSet));
+                userList.add(userMapper.mapUser(resultSet));
             }
         } catch (SQLException exception) {
             log.error("Exception when get all users", exception);
@@ -117,7 +117,7 @@ public class JdbcUserDao implements UserDao {
                 preparedStatement.setString(1, username);
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     if (resultSet.next()) {
-                        return Optional.ofNullable(userMapper.mapProduct(resultSet));
+                        return Optional.ofNullable(userMapper.mapUser(resultSet));
                     } else return Optional.empty();
                 }
             }

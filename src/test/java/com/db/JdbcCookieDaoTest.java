@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,5 +51,16 @@ class JdbcCookieDaoTest {
         assertNull(jdbcCookieDao.get("cookie1").orElse(null));
         assertNull(jdbcCookieDao.get("cookie2").orElse(null));
         assertNull(jdbcCookieDao.get("cookie3").orElse(null));
+    }
+
+    @Test
+    void getAllCookieShouldReturnAllCookies(){
+        List<CookieEntity> expectedList = new ArrayList<>();
+        expectedList.add(cookie1);
+        expectedList.add(cookie2);
+        expectedList.add(cookie3);
+        var cookies = jdbcCookieDao.getAllCookies();
+
+        assertEquals(expectedList, cookies);
     }
 }

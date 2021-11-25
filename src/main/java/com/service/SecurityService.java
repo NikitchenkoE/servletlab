@@ -5,6 +5,7 @@ import com.db.JdbcCookieDao;
 import com.db.JdbcUserDao;
 import com.entity.CookieEntity;
 import com.entity.User;
+import com.service.scheduleClean.CookieScheduler;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -19,6 +20,9 @@ public class SecurityService {
     public SecurityService(DataSourceFactory dataSourceFactory) {
         this.jdbcCookieDao = new JdbcCookieDao(dataSourceFactory.getDataSource());
         this.jdbcUserDao = new JdbcUserDao(dataSourceFactory.getDataSource());
+        long cookieExpirationDate = 180;
+        CookieScheduler cookieScheduler = new CookieScheduler(jdbcCookieDao, cookieExpirationDate * 1000);
+        cookieScheduler.startScheduling();
     }
 
     public boolean userDataCorrect(String username, String password) {
