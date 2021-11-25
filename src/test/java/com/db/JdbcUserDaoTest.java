@@ -34,6 +34,7 @@ class JdbcUserDaoTest {
             statement.executeUpdate(SqlQueries.DROP_TABLE_USERS);
             statement.executeUpdate(SqlQueries.DROP_TABLE_PRODUCTS);
             statement.executeUpdate(SqlQueries.DROP_TABLE_COOKIES);
+            statement.executeUpdate(SqlQueries.DROP_TABLE_CART);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
