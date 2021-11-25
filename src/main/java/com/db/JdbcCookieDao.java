@@ -16,10 +16,10 @@ import java.util.Optional;
 
 @Slf4j
 public class JdbcCookieDao implements CookieDao {
-    String INSERT_INTO_TABLE = "INSERT INTO cookies (cookie, expireDate) VALUES (?,?)";
+    String INSERT_INTO_TABLE = "INSERT INTO cookies (cookie, username, expireDate) VALUES (?,?,?)";
     String DELETE_BY_VALUE = "DELETE FROM cookies WHERE cookie=?";
-    String SELECT_BY_COOKIE = "SELECT cookiesID, cookie, expireDate FROM cookies WHERE cookie=?";
-    String SELECT_ALL_COOKIE = "SELECT cookiesID, cookie, expireDate FROM cookies";
+    String SELECT_BY_COOKIE = "SELECT cookiesID, cookie, username, expireDate FROM cookies WHERE cookie=?";
+    String SELECT_ALL_COOKIE = "SELECT cookiesID, cookie, username, expireDate FROM cookies";
 
     private final DataSource dataSource;
     CookieMapper cookieMapper = new CookieMapper();
@@ -34,7 +34,8 @@ public class JdbcCookieDao implements CookieDao {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO_TABLE)) {
             preparedStatement.setString(1, cookie.getCookie());
-            preparedStatement.setLong(2,cookie.getExpireDate());
+            preparedStatement.setString(2, cookie.getUsername());
+            preparedStatement.setLong(3,cookie.getExpireDate());
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
             log.error("Exception when saved {}", cookie, exception);

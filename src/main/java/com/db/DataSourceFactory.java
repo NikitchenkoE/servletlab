@@ -13,7 +13,7 @@ import java.sql.Statement;
 public class DataSourceFactory {
     String CREATE_PRODUCT_TABLE = "CREATE TABLE products (productID IDENTITY NOT NULL PRIMARY KEY, name varchar, price double precision, description varchar, createDate timestamp, updateDate timestamp)";
     String CREATE_USER_TABLE = "CREATE TABLE users (userID IDENTITY NOT NULL PRIMARY KEY, username varchar, password varchar, sole varchar)";
-    String CREATE_COOKIE_TABLE = "CREATE TABLE cookies (cookiesID IDENTITY NOT NULL PRIMARY KEY, cookie varchar, expireDate bigint)";
+    String CREATE_COOKIE_TABLE = "CREATE TABLE cookies (cookiesID IDENTITY NOT NULL PRIMARY KEY, cookie varchar, username varchar, expireDate bigint)";
     private String url = "jdbc:h2:mem:productsDb";
     private String user = "userPg";
     private String password = "userPg";

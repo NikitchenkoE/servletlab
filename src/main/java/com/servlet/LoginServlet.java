@@ -29,11 +29,10 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (req.getParameter("userName").isEmpty() || req.getParameter("password").isEmpty()) {
-            resp.setContentType("text/html;charset=utf-8");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
             if (securityService.userDataCorrect(req.getParameter("userName"), req.getParameter("password"))) {
-                Cookie cookie = securityService.getNewCookie();
+                Cookie cookie = securityService.getNewCookie(req.getParameter("userName"));
                 resp.addCookie(cookie);
                 resp.sendRedirect("/products");
             } else {

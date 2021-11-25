@@ -10,6 +10,7 @@ public class CookieMapper {
         return CookieEntity.builder()
                 .id(resultSet.getLong("cookiesID"))
                 .cookie(resultSet.getString("cookie"))
+                .username(resultSet.getString("username"))
                 .expireDate(resultSet.getLong("expireDate"))
                 .build();
     }

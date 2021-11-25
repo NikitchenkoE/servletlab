@@ -42,7 +42,8 @@ class LoginServiceTest {
 
     @Test
     void getNewCookie() {
-        var cookie = securityService.getNewCookie();
-        assertEquals(cookie.getValue(),jdbcCookieDao.get(cookie.getValue()).get().getCookie());
+        var cookie = securityService.getNewCookie("user");
+        assertEquals(cookie.getValue(),jdbcCookieDao.get(cookie.getValue()).get().getCookie());;
+        assertEquals(jdbcCookieDao.get(cookie.getValue()).get().getUsername(),"user");
     }
 }

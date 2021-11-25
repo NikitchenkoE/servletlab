@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class CookieEntity {
     private Long id;
     private String cookie;
+    private String username;
     private long expireDate;
 }

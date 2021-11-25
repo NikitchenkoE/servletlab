@@ -20,7 +20,7 @@ public class SecurityService {
     public SecurityService(DataSourceFactory dataSourceFactory) {
         this.jdbcCookieDao = new JdbcCookieDao(dataSourceFactory.getDataSource());
         this.jdbcUserDao = new JdbcUserDao(dataSourceFactory.getDataSource());
-        long cookieExpirationDate = 180;
+        long cookieExpirationDate = 10;
         CookieScheduler cookieScheduler = new CookieScheduler(jdbcCookieDao, cookieExpirationDate * 1000);
         cookieScheduler.startScheduling();
     }
@@ -38,10 +38,11 @@ public class SecurityService {
         return loginAllowed;
     }
 
-    public Cookie getNewCookie() {
+    public Cookie getNewCookie(String username) {
         String value = UUID.randomUUID().toString();
         jdbcCookieDao.save(CookieEntity.builder()
                 .cookie(value)
+                .username(username)
                 .expireDate(new Date().getTime())
                 .build());
         Cookie cookie = new Cookie("user-token", value);
