@@ -13,9 +13,9 @@ import java.util.Optional;
 
 @Slf4j
 public class JdbcCookieDao implements CookieDao {
-    String INSERT_INTO_TABLE = "INSERT INTO cookies (cookie) VALUES (?)";
+    String INSERT_INTO_TABLE = "INSERT INTO cookies (cookie, expireDate) VALUES (?,?)";
     String DELETE_BY_VALUE = "DELETE FROM cookies WHERE cookie=?";
-    String SELECT_BY_COOKIE = "SELECT cookiesID, cookie FROM cookies WHERE cookie=?";
+    String SELECT_BY_COOKIE = "SELECT cookiesID, cookie, expireDate FROM cookies WHERE cookie=?";
 
     private final DataSource dataSource;
 
@@ -29,6 +29,7 @@ public class JdbcCookieDao implements CookieDao {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO_TABLE)) {
             preparedStatement.setString(1, cookie.getCookie());
+            preparedStatement.setLong(2,cookie.getExpireDate());
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
             log.error("Exception when saved {}", cookie, exception);
@@ -57,7 +58,10 @@ public class JdbcCookieDao implements CookieDao {
                 preparedStatement.setString(1, cookie);
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     if (resultSet.next()) {
-                        return Optional.of(new CookieEntity(resultSet.getLong("cookiesID"), resultSet.getString("cookie")));
+                        return Optional.of(new CookieEntity(
+                                resultSet.getLong("cookiesID"),
+                                resultSet.getString("cookie"),
+                                resultSet.getLong("expireDate")));
                     } else return Optional.empty();
                 }
             }

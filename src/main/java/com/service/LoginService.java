@@ -9,6 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class LoginService {
@@ -35,7 +36,10 @@ public class LoginService {
 
     public Cookie getNewCookie() {
         String value = UUID.randomUUID().toString();
-        jdbcCookieDao.save(CookieEntity.builder().cookie(value).build());
+        jdbcCookieDao.save(CookieEntity.builder()
+                .cookie(value)
+                .expireDate(new Date().getTime())
+                .build());
         Cookie cookie = new Cookie("user-token", value);
         cookie.setMaxAge(3600);
         return new Cookie("user-token", value);
