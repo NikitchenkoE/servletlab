@@ -19,18 +19,12 @@ public class DeleteServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (loginService.isLogged(req)) {
             var parameter = req.getParameter("idToDelete");
             if (parameter != null) {
                 productService.delete(Long.parseLong(parameter));
-                resp.setContentType("text/html;charset=utf-8");
                 resp.sendRedirect("/products");
             } else {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
-        } else {
-            resp.setContentType("text/html;charset=utf-8");
-            resp.sendRedirect("/login");
-        }
     }
 }

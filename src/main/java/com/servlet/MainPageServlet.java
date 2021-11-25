@@ -54,6 +54,5 @@ public class MainPageServlet extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
         resp.getWriter().println(PageGenerator.init().getPage("mainPage.ftlh", data));
-        resp.setContentType("text/html;charset=utf-8");
     }
 }

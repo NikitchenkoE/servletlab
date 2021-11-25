@@ -20,28 +20,21 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (loginService.isLogged(req)) {
-            resp.setContentType("text/html;charset=utf-8");
-            resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        if (!loginService.isLogged(req)) {
+            resp.getWriter().println(PageGenerator.init().getPage("registration.html"));
+            resp.setStatus(HttpServletResponse.SC_OK);
         }
-        resp.getWriter().println(PageGenerator.init().getPage("registration.html"));
-        resp.setContentType("text/html;charset=utf-8");
-        resp.setStatus(HttpServletResponse.SC_OK);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (req.getParameter("userName").isEmpty() || req.getParameter("password").isEmpty()) {
-            resp.setContentType("text/html;charset=utf-8");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
-            boolean isSaved;
-            isSaved = registrationService.saveUser(req.getParameter("userName"), req.getParameter("password"));
+            boolean isSaved = registrationService.saveUser(req.getParameter("userName"), req.getParameter("password"));
             if (!isSaved) {
-                resp.setContentType("text/html;charset=utf-8");
                 resp.sendRedirect("/registration");
             } else {
-                resp.setContentType("text/html;charset=utf-8");
                 resp.sendRedirect("/login");
             }
         }

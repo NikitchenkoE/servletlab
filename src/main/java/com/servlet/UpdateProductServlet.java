@@ -24,7 +24,6 @@ public class UpdateProductServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (loginService.isLogged(req)) {
             Map<String, Object> data = new HashMap<>();
             long productId = Long.parseLong(req.getParameter("idToUpdate"));
             productToBeUpdated = productService.get(productId).orElseThrow(() -> new RuntimeException("Impossible to update without id"));
@@ -34,23 +33,16 @@ public class UpdateProductServlet extends HttpServlet {
             data.put("logged", String.valueOf(loginService.isLogged(req)));
 
             resp.getWriter().println(PageGenerator.init().getPage("updateProductPage.ftlh", data));
-            resp.setContentType("text/html;charset=utf-8");
             resp.setStatus(HttpServletResponse.SC_OK);
-        } else {
-            resp.setContentType("text/html;charset=utf-8");
-            resp.sendRedirect("/login");
-        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (req.getParameter("productName").isEmpty() || req.getParameter("productPrice").isEmpty() || req.getParameter("productDescription").isEmpty()) {
-            resp.setContentType("text/html;charset=utf-8");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
             Product newProduct = productService.createProductAfterUpdate(req, productToBeUpdated);
             productService.update(newProduct);
-            resp.setContentType("text/html;charset=utf-8");
             resp.sendRedirect("/products");
         }
     }

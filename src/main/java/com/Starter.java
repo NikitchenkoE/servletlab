@@ -1,14 +1,19 @@
 package com;
 
 import com.db.DataSourceFactory;
+import com.filter.SecurityFilter;
 import com.service.LoginService;
 import com.service.ProductService;
 import com.service.RegistrationService;
 import com.servlet.*;
+import jakarta.servlet.DispatcherType;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+
+import java.util.EnumSet;
 
 @Slf4j
 public class Starter {
@@ -17,6 +22,7 @@ public class Starter {
         ProductService productService = new ProductService(dataSourceFactory);
         RegistrationService registrationService = new RegistrationService(dataSourceFactory);
         LoginService loginService = new LoginService(dataSourceFactory);
+        SecurityFilter securityFilter = new SecurityFilter(loginService);
 
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         servletContextHandler.addServlet(new ServletHolder(new MainPageServlet(productService, loginService)), "/products");
@@ -27,6 +33,7 @@ public class Starter {
         servletContextHandler.addServlet(new ServletHolder(new RegistrationServlet(registrationService, loginService)), "/registration");
         servletContextHandler.addServlet(new ServletHolder(new LoginServlet(loginService)), "/login");
         servletContextHandler.addServlet(new ServletHolder(new LogoutServlet(loginService)), "/logout");
+        servletContextHandler.addFilter(new FilterHolder(securityFilter),"/*", EnumSet.allOf(DispatcherType.class));
 
         int port = 8080;
         var portString = System.getenv("PORT");
