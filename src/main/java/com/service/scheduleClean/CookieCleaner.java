@@ -15,12 +15,11 @@ public class CookieCleaner implements Job {
 
         JdbcCookieDao jdbcCookieDao = (JdbcCookieDao) jobDataMap.get("jdbcCookieDao");
         long cookieLifeTimeInMilliseconds = jobDataMap.getLong("cookieLifeTimeInMilliseconds");
-
-        long presentTime = new Date().getTime();
         var cookies = jdbcCookieDao.getAllCookies();
         if (!cookies.isEmpty()) {
+
             for (CookieEntity cookie : cookies) {
-                if ((cookie.getExpireDate() + cookieLifeTimeInMilliseconds) >= presentTime) {
+                if ((cookie.getExpireDate() + cookieLifeTimeInMilliseconds) <= new Date().getTime()) {
                     jdbcCookieDao.delete(cookie.getCookie());
                 }
             }
