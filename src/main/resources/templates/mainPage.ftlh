@@ -19,7 +19,8 @@
             margin-top: 2%;
             margin-bottom: 2%;
         }
-        .loginAndLogoutPosition{
+
+        .loginAndLogoutPosition {
             position: absolute;
             right: 3%;
             padding-top: 0.25%;
@@ -43,17 +44,22 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="/products/add">Add Product</a>
                 </li>
-                <div class="loginAndLogoutPosition">
-                <#if logged == "false">
-                    <li class="nav-item">
-                        <a class="btn btn-outline-success btn-sm" href="/login">login</a>
-                    </li>
-                </#if>
                 <#if logged == "true">
                     <li class="nav-item">
-                        <a class="btn btn-outline-danger my-2 my-sm-0 btn-sm" href="/logout">logout</a>
+                        <a class="nav-link active" href="/cart">My cart</a>
                     </li>
                 </#if>
+                <div class="loginAndLogoutPosition">
+                    <#if logged == "false">
+                        <li class="nav-item">
+                            <a class="btn btn-outline-success btn-sm" href="/login">login</a>
+                        </li>
+                    </#if>
+                    <#if logged == "true">
+                        <li class="nav-item">
+                            <a class="btn btn-outline-danger my-2 my-sm-0 btn-sm" href="/logout">logout</a>
+                        </li>
+                    </#if>
                 </div>
             </ul>
         </div>
@@ -89,7 +95,7 @@
             <th scope="col">Created</th>
             <th scope="col">Last time updated</th>
             <#if logged == "true">
-                <th scope="col" colspan="2">Action</th>
+                <th scope="col" colspan="3">Action</th>
             </#if>
         </tr>
 
@@ -103,15 +109,20 @@
                 <td>${product.create}</td>
                 <td>${product.update}</td>
                 <#if logged == "true">
-                <td>
-                    <a class="btn btn-outline-success" href='/products/update?idToUpdate=${product.id}'>Update
-                    </a>
-                </td>
-                <td>
-                    <form action="/products/delete?idToDelete=${product.id}" method="post">
-                        <button class="btn btn-outline-danger" type="submit" value="Delete Product">Delete</button>
-                    </form>
-                </td>
+                    <td>
+                        <form action="/cart?productId=${product.id}" method="post">
+                            <button class="btn btn-outline-primary" type="submit" value="Add Product to cart">Add to cart</button>
+                        </form>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-success" href='/products/update?idToUpdate=${product.id}'>Update
+                        </a>
+                    </td>
+                    <td>
+                        <form action="/products/delete?idToDelete=${product.id}" method="post">
+                            <button class="btn btn-outline-danger" type="submit" value="Delete Product">Delete</button>
+                        </form>
+                    </td>
                 </#if>
             </tr>
         </#list>

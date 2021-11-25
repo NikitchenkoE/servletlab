@@ -2,6 +2,7 @@ package com;
 
 import com.db.DataSourceFactory;
 import com.filter.SecurityFilter;
+import com.service.CartService;
 import com.service.SecurityService;
 import com.service.ProductService;
 import com.service.RegistrationService;
@@ -22,7 +23,9 @@ public class Starter {
         ProductService productService = new ProductService(dataSourceFactory);
         RegistrationService registrationService = new RegistrationService(dataSourceFactory);
         SecurityService securityService = new SecurityService(dataSourceFactory);
+        CartService cartService = new CartService(dataSourceFactory.getDataSource());
         SecurityFilter securityFilter = new SecurityFilter(securityService);
+
 
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         servletContextHandler.addServlet(new ServletHolder(new MainPageServlet(productService, securityService)), "/products");
@@ -33,6 +36,9 @@ public class Starter {
         servletContextHandler.addServlet(new ServletHolder(new RegistrationServlet(registrationService, securityService)), "/registration");
         servletContextHandler.addServlet(new ServletHolder(new LoginServlet(securityService)), "/login");
         servletContextHandler.addServlet(new ServletHolder(new LogoutServlet(securityService)), "/logout");
+        servletContextHandler.addServlet(new ServletHolder(new CartServlet(cartService,securityService)), "/cart");
+        servletContextHandler.addServlet(new ServletHolder(new DeleteFromCartServlet(cartService)),"/cart/deleteFromCart");
+
         servletContextHandler.addFilter(new FilterHolder(securityFilter),"/*", EnumSet.allOf(DispatcherType.class));
 
         int port = 8080;

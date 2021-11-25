@@ -16,11 +16,11 @@ import java.util.UUID;
 public class SecurityService {
     private final JdbcCookieDao jdbcCookieDao;
     private final JdbcUserDao jdbcUserDao;
+    long cookieExpirationDate = 1000;
 
     public SecurityService(DataSourceFactory dataSourceFactory) {
         this.jdbcCookieDao = new JdbcCookieDao(dataSourceFactory.getDataSource());
         this.jdbcUserDao = new JdbcUserDao(dataSourceFactory.getDataSource());
-        long cookieExpirationDate = 10;
         CookieScheduler cookieScheduler = new CookieScheduler(jdbcCookieDao, cookieExpirationDate * 1000);
         cookieScheduler.startScheduling();
     }
@@ -46,7 +46,7 @@ public class SecurityService {
                 .expireDate(new Date().getTime())
                 .build());
         Cookie cookie = new Cookie("user-token", value);
-        cookie.setMaxAge(3600);
+        cookie.setMaxAge(1000);
         return new Cookie("user-token", value);
     }
 

@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddProductPageServlet extends HttpServlet {
-    ProductService productService;
-    SecurityService securityService;
+    private final ProductService productService;
+    private final SecurityService securityService;
 
     public AddProductPageServlet(ProductService productService, SecurityService securityService) {
         this.productService = productService;
