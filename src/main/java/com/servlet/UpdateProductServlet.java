@@ -1,7 +1,7 @@
 package com.servlet;
 
 import com.entity.Product;
-import com.service.LoginService;
+import com.service.SecurityService;
 import com.service.ProductService;
 import com.service.utilPageGenerator.PageGenerator;
 import jakarta.servlet.http.HttpServlet;
@@ -14,12 +14,12 @@ import java.util.Map;
 
 public class UpdateProductServlet extends HttpServlet {
     private final ProductService productService;
-    private final LoginService loginService;
+    private final SecurityService securityService;
     private Product productToBeUpdated;
 
-    public UpdateProductServlet(ProductService productService, LoginService loginService) {
+    public UpdateProductServlet(ProductService productService, SecurityService securityService) {
         this.productService = productService;
-        this.loginService = loginService;
+        this.securityService = securityService;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class UpdateProductServlet extends HttpServlet {
             data.put("productName", productToBeUpdated.getName());
             data.put("productPrice", productToBeUpdated.getPrice());
             data.put("productDescription", productToBeUpdated.getDescription());
-            data.put("logged", String.valueOf(loginService.isLogged(req)));
+            data.put("logged", String.valueOf(securityService.isLogged(req)));
 
             resp.getWriter().println(PageGenerator.init().getPage("updateProductPage.ftlh", data));
             resp.setStatus(HttpServletResponse.SC_OK);

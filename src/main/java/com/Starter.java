@@ -2,7 +2,7 @@ package com;
 
 import com.db.DataSourceFactory;
 import com.filter.SecurityFilter;
-import com.service.LoginService;
+import com.service.SecurityService;
 import com.service.ProductService;
 import com.service.RegistrationService;
 import com.servlet.*;
@@ -21,18 +21,18 @@ public class Starter {
         DataSourceFactory dataSourceFactory = new DataSourceFactory();
         ProductService productService = new ProductService(dataSourceFactory);
         RegistrationService registrationService = new RegistrationService(dataSourceFactory);
-        LoginService loginService = new LoginService(dataSourceFactory);
-        SecurityFilter securityFilter = new SecurityFilter(loginService);
+        SecurityService securityService = new SecurityService(dataSourceFactory);
+        SecurityFilter securityFilter = new SecurityFilter(securityService);
 
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        servletContextHandler.addServlet(new ServletHolder(new MainPageServlet(productService, loginService)), "/products");
-        servletContextHandler.addServlet(new ServletHolder(new MainPageServlet(productService, loginService)), "/");
-        servletContextHandler.addServlet(new ServletHolder(new AddProductPageServlet(productService, loginService)), "/products/add");
-        servletContextHandler.addServlet(new ServletHolder(new UpdateProductServlet(productService, loginService)), "/products/update");
-        servletContextHandler.addServlet(new ServletHolder(new DeleteServlet(productService, loginService)), "/products/delete");
-        servletContextHandler.addServlet(new ServletHolder(new RegistrationServlet(registrationService, loginService)), "/registration");
-        servletContextHandler.addServlet(new ServletHolder(new LoginServlet(loginService)), "/login");
-        servletContextHandler.addServlet(new ServletHolder(new LogoutServlet(loginService)), "/logout");
+        servletContextHandler.addServlet(new ServletHolder(new MainPageServlet(productService, securityService)), "/products");
+        servletContextHandler.addServlet(new ServletHolder(new MainPageServlet(productService, securityService)), "/");
+        servletContextHandler.addServlet(new ServletHolder(new AddProductPageServlet(productService, securityService)), "/products/add");
+        servletContextHandler.addServlet(new ServletHolder(new UpdateProductServlet(productService, securityService)), "/products/update");
+        servletContextHandler.addServlet(new ServletHolder(new DeleteServlet(productService, securityService)), "/products/delete");
+        servletContextHandler.addServlet(new ServletHolder(new RegistrationServlet(registrationService, securityService)), "/registration");
+        servletContextHandler.addServlet(new ServletHolder(new LoginServlet(securityService)), "/login");
+        servletContextHandler.addServlet(new ServletHolder(new LogoutServlet(securityService)), "/logout");
         servletContextHandler.addFilter(new FilterHolder(securityFilter),"/*", EnumSet.allOf(DispatcherType.class));
 
         int port = 8080;

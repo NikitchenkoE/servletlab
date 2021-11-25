@@ -4,9 +4,7 @@ import com.db.DataSourceFactory;
 import com.db.JdbcCookieDao;
 import com.db.JdbcUserDao;
 import com.db.SqlQueries;
-import com.entity.User;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
@@ -17,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LoginServiceTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
-    LoginService loginService = new LoginService(dataSourceFactory);
+    SecurityService securityService = new SecurityService(dataSourceFactory);
     RegistrationService registrationService = new RegistrationService(dataSourceFactory);
     JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSourceFactory.getDataSource());
     JdbcCookieDao jdbcCookieDao = new JdbcCookieDao(dataSourceFactory.getDataSource());
@@ -37,14 +35,14 @@ class LoginServiceTest {
     @Test
     void userDataCorrect() {
         registrationService.saveUser("user", "password");
-        assertTrue(loginService.userDataCorrect("user", "password"));
-        assertFalse(loginService.userDataCorrect("user", "passdasdawdadaword"));
-        assertFalse(loginService.userDataCorrect("user112", "password"));
+        assertTrue(securityService.userDataCorrect("user", "password"));
+        assertFalse(securityService.userDataCorrect("user", "passdasdawdadaword"));
+        assertFalse(securityService.userDataCorrect("user112", "password"));
     }
 
     @Test
     void getNewCookie() {
-        var cookie = loginService.getNewCookie();
+        var cookie = securityService.getNewCookie();
         assertEquals(cookie.getValue(),jdbcCookieDao.get(cookie.getValue()).get().getCookie());
     }
 }

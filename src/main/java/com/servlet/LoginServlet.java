@@ -1,6 +1,6 @@
 package com.servlet;
 
-import com.service.LoginService;
+import com.service.SecurityService;
 import com.service.utilPageGenerator.PageGenerator;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
@@ -10,15 +10,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class LoginServlet extends HttpServlet {
-    private final LoginService loginService;
+    private final SecurityService securityService;
 
-    public LoginServlet(LoginService loginService) {
-        this.loginService = loginService;
+    public LoginServlet(SecurityService securityService) {
+        this.securityService = securityService;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (loginService.isLogged(req)) {
+        if (securityService.isLogged(req)) {
             resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
         } else {
             resp.getWriter().println(PageGenerator.init().getPage("login.html"));
@@ -32,8 +32,8 @@ public class LoginServlet extends HttpServlet {
             resp.setContentType("text/html;charset=utf-8");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
-            if (loginService.userDataCorrect(req.getParameter("userName"), req.getParameter("password"))) {
-                Cookie cookie = loginService.getNewCookie();
+            if (securityService.userDataCorrect(req.getParameter("userName"), req.getParameter("password"))) {
+                Cookie cookie = securityService.getNewCookie();
                 resp.addCookie(cookie);
                 resp.sendRedirect("/products");
             } else {

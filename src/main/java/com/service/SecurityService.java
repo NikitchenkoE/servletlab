@@ -12,11 +12,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.Date;
 import java.util.UUID;
 
-public class LoginService {
+public class SecurityService {
     private final JdbcCookieDao jdbcCookieDao;
     private final JdbcUserDao jdbcUserDao;
 
-    public LoginService(DataSourceFactory dataSourceFactory) {
+    public SecurityService(DataSourceFactory dataSourceFactory) {
         this.jdbcCookieDao = new JdbcCookieDao(dataSourceFactory.getDataSource());
         this.jdbcUserDao = new JdbcUserDao(dataSourceFactory.getDataSource());
     }

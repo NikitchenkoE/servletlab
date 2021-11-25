@@ -1,7 +1,7 @@
 package com.servlet;
 
 import com.entity.Product;
-import com.service.LoginService;
+import com.service.SecurityService;
 import com.service.MainPageService;
 import com.service.ProductService;
 import com.service.utilPageGenerator.PageGenerator;
@@ -16,12 +16,12 @@ import java.util.Map;
 
 public class MainPageServlet extends HttpServlet {
     private final ProductService productService;
-    private final LoginService loginService;
+    private final SecurityService securityService;
     private final MainPageService mainPageService;
 
-    public MainPageServlet(ProductService productService, LoginService loginService) {
+    public MainPageServlet(ProductService productService, SecurityService securityService) {
         this.productService = productService;
-        this.loginService = loginService;
+        this.securityService = securityService;
         this.mainPageService = new MainPageService(productService);
     }
 
@@ -29,7 +29,7 @@ public class MainPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Map<String, Object> data = new HashMap<>();
         data.put("products", new ArrayList<Product>());
-        data.put("logged", String.valueOf(loginService.isLogged(req)));
+        data.put("logged", String.valueOf(securityService.isLogged(req)));
         String description = req.getParameter("productDescription");
 
         if (req.getParameter("productDescription") == null && req.getParameter("productId") == null) {
@@ -42,13 +42,13 @@ public class MainPageServlet extends HttpServlet {
             if (!req.getParameter("productId").isEmpty()) {
                 long id = Long.parseLong(req.getParameter("productId"));
                 data = mainPageService.getDataById(id);
-                data.put("logged", String.valueOf(loginService.isLogged(req)));
+                data.put("logged", String.valueOf(securityService.isLogged(req)));
                 resp.setStatus(HttpServletResponse.SC_OK);
             }
 
         } else if (description != null && !description.isEmpty()) {
             data = mainPageService.getDataByDescription(description);
-            data.put("logged", String.valueOf(loginService.isLogged(req)));
+            data.put("logged", String.valueOf(securityService.isLogged(req)));
 
         } else {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);

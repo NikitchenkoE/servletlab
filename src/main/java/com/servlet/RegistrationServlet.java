@@ -1,6 +1,6 @@
 package com.servlet;
 
-import com.service.LoginService;
+import com.service.SecurityService;
 import com.service.RegistrationService;
 import com.service.utilPageGenerator.PageGenerator;
 import jakarta.servlet.http.HttpServlet;
@@ -11,16 +11,16 @@ import java.io.IOException;
 
 public class RegistrationServlet extends HttpServlet {
     private final RegistrationService registrationService;
-    private final LoginService loginService;
+    private final SecurityService securityService;
 
-    public RegistrationServlet(RegistrationService registrationService, LoginService loginService) {
+    public RegistrationServlet(RegistrationService registrationService, SecurityService securityService) {
         this.registrationService = registrationService;
-        this.loginService = loginService;
+        this.securityService = securityService;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (!loginService.isLogged(req)) {
+        if (!securityService.isLogged(req)) {
             resp.getWriter().println(PageGenerator.init().getPage("registration.html"));
             resp.setStatus(HttpServletResponse.SC_OK);
         }

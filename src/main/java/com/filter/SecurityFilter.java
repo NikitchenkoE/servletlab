@@ -1,6 +1,6 @@
 package com.filter;
 
-import com.service.LoginService;
+import com.service.SecurityService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,10 +13,10 @@ public class SecurityFilter implements Filter {
     private final String REGISTRATION_PATH = "/registration";
     private final String MAIN_PAGE_PATH = "/";
     private final String MAIN_PAGE_PATH2 = "/products";
-    private final LoginService loginService;
+    private final SecurityService securityService;
 
-    public SecurityFilter(LoginService loginService) {
-        this.loginService = loginService;
+    public SecurityFilter(SecurityService securityService) {
+        this.securityService = securityService;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class SecurityFilter implements Filter {
         var path = httpRequest.getServletPath();
         httpResponse.setContentType("text/html;charset=utf-8");
 
-        if (!loginService.isLogged(httpRequest)) {
+        if (!securityService.isLogged(httpRequest)) {
             if (!Objects.equals(path, LOGIN_PATH) && !Objects.equals(path, REGISTRATION_PATH) && !Objects.equals(path, MAIN_PAGE_PATH) && !Objects.equals(path, MAIN_PAGE_PATH2)) {
                 httpResponse.sendRedirect(LOGIN_PATH);
             }

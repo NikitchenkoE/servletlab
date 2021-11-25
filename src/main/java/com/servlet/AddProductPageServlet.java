@@ -1,6 +1,6 @@
 package com.servlet;
 
-import com.service.LoginService;
+import com.service.SecurityService;
 import com.service.ProductService;
 import com.service.utilPageGenerator.PageGenerator;
 import jakarta.servlet.http.HttpServlet;
@@ -13,17 +13,17 @@ import java.util.Map;
 
 public class AddProductPageServlet extends HttpServlet {
     ProductService productService;
-    LoginService loginService;
+    SecurityService securityService;
 
-    public AddProductPageServlet(ProductService productService, LoginService loginService) {
+    public AddProductPageServlet(ProductService productService, SecurityService securityService) {
         this.productService = productService;
-        this.loginService = loginService;
+        this.securityService = securityService;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
             Map<String, Object> data = new HashMap<>();
-            data.put("logged", String.valueOf(loginService.isLogged(req)));
+            data.put("logged", String.valueOf(securityService.isLogged(req)));
             resp.getWriter().println(PageGenerator.init().getPage("addProductPage.ftlh", data));
             resp.setStatus(HttpServletResponse.SC_OK);
 

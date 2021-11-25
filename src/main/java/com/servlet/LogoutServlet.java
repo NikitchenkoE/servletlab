@@ -1,6 +1,6 @@
 package com.servlet;
 
-import com.service.LoginService;
+import com.service.SecurityService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
@@ -10,15 +10,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class LogoutServlet extends HttpServlet {
-    private final LoginService loginService;
+    private final SecurityService securityService;
 
-    public LogoutServlet(LoginService loginService) {
-        this.loginService = loginService;
+    public LogoutServlet(SecurityService securityService) {
+        this.securityService = securityService;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Cookie logoutCookie = loginService.logout(req);
+        Cookie logoutCookie = securityService.logout(req);
         resp.addCookie(logoutCookie);
         resp.sendRedirect("/products");
     }

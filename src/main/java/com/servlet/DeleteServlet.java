@@ -1,6 +1,6 @@
 package com.servlet;
 
-import com.service.LoginService;
+import com.service.SecurityService;
 import com.service.ProductService;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,11 +10,11 @@ import java.io.IOException;
 
 public class DeleteServlet extends HttpServlet {
     private final ProductService productService;
-    private final LoginService loginService;
+    private final SecurityService securityService;
 
-    public DeleteServlet(ProductService productService, LoginService loginService) {
+    public DeleteServlet(ProductService productService, SecurityService securityService) {
         this.productService = productService;
-        this.loginService = loginService;
+        this.securityService = securityService;
     }
 
     @Override
