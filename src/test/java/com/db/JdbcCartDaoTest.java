@@ -16,9 +16,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class JdbcCartDaoTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     JdbcCartDao jdbcCartDao = new JdbcCartDao(dataSourceFactory.getDataSource());
-    Cart cart1 = new Cart(1L, "user1", "product1", 110.5);
-    Cart cart2 = new Cart(2L, "user1", "product2", 112.5);
-    Cart cart3 = new Cart(3L, "user1", "product3", 115.5);
+    Cart cart1 = new Cart(1L, 1L, 1L);
+    Cart cart2 = new Cart(2L, 1L, 2L);
+    Cart cart3 = new Cart(3L, 1L, 3L);
+
+
 
 
     @BeforeEach
@@ -47,7 +49,7 @@ class JdbcCartDaoTest {
         expected.add(cart1);
         expected.add(cart2);
         expected.add(cart3);
-        var actual = jdbcCartDao.getCart("user1");
+        var actual = jdbcCartDao.getCart(1L);
 
         assertEquals(expected, actual);
     }

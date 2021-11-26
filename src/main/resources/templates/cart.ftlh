@@ -68,7 +68,7 @@
                 <td>${product.productName}</td>
                 <td>${product.productPrice}</td>
                     <td>
-                        <form action="/cart/deleteFromCart?idToDelete=${product.id}" method="post">
+                        <form action="/cart/deleteFromCart?idToDelete=${product.cartId}" method="post">
                             <button class="btn btn-outline-danger" type="submit" value="Delete Product">Delete</button>
                         </form>
                     </td>

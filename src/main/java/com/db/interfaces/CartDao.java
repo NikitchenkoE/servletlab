@@ -9,5 +9,7 @@ public interface CartDao {
 
     void save(Cart cart);
 
-    List<Cart> getCart(String username);
+    List<Cart> getCart(long userId);
+
+    void deleteByProductId(long id);
 }
