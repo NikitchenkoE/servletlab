@@ -8,11 +8,13 @@ import com.entity.User;
 import com.service.scheduleClean.CookieScheduler;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Date;
 import java.util.UUID;
 
+@Slf4j
 public class SecurityService {
     private final JdbcCookieDao jdbcCookieDao;
     private final JdbcUserDao jdbcUserDao;
@@ -26,6 +28,7 @@ public class SecurityService {
     }
 
     public boolean userDataCorrect(String username, String password) {
+        log.info("Checked data by username {} and password {}", username, password);
         boolean loginAllowed = false;
         User userInDb = jdbcUserDao.findByUsername(username).orElse(null);
         if (userInDb != null) {
@@ -39,6 +42,7 @@ public class SecurityService {
     }
 
     public Cookie getNewCookie(String username) {
+        log.info("Created new cookie in db for user {}", username);
         String value = UUID.randomUUID().toString();
         jdbcCookieDao.save(CookieEntity.builder()
                 .cookie(value)

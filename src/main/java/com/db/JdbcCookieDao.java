@@ -35,7 +35,7 @@ public class JdbcCookieDao implements CookieDao {
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO_TABLE)) {
             preparedStatement.setString(1, cookie.getCookie());
             preparedStatement.setString(2, cookie.getUsername());
-            preparedStatement.setLong(3,cookie.getExpireDate());
+            preparedStatement.setLong(3, cookie.getExpireDate());
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
             log.error("Exception when saved {}", cookie, exception);
@@ -75,12 +75,12 @@ public class JdbcCookieDao implements CookieDao {
     }
 
     @Override
-    public List<CookieEntity> getAllCookies(){
+    public List<CookieEntity> getAllCookies() {
         List<CookieEntity> cookies = new ArrayList<>();
-        try(Connection connection = dataSource.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_COOKIE);
-        ResultSet resultSet = preparedStatement.executeQuery()){
-            while (resultSet.next()){
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_COOKIE);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
                 cookies.add(cookieMapper.mapCookie(resultSet));
             }
         } catch (SQLException exception) {

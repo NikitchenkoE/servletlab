@@ -17,7 +17,7 @@ public class DeleteFromCartServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (!req.getParameter("idToDelete").isEmpty()) {
-            cartService.deleteProductFromTheCart(Long.parseLong(req.getParameter("idToDelete")));
+            cartService.deleteOneProductFromTheCart(Long.parseLong(req.getParameter("idToDelete")));
             resp.sendRedirect("/cart");
         }
     }

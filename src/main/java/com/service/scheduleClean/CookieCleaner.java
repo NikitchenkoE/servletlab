@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class CookieCleaner implements Job {
     @Override
-    public void execute(JobExecutionContext jobExecutionContext){
+    public void execute(JobExecutionContext jobExecutionContext) {
         JobDataMap jobDataMap = jobExecutionContext.getJobDetail().getJobDataMap();
 
         JdbcCookieDao jdbcCookieDao = (JdbcCookieDao) jobDataMap.get("jdbcCookieDao");

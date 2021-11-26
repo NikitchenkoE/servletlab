@@ -32,7 +32,7 @@ public class Starter {
         servletContextHandler.addServlet(new ServletHolder(new MainPageServlet(productService, securityService)), "/");
         servletContextHandler.addServlet(new ServletHolder(new AddProductPageServlet(productService, securityService)), "/products/add");
         servletContextHandler.addServlet(new ServletHolder(new UpdateProductServlet(productService, securityService)), "/products/update");
-        servletContextHandler.addServlet(new ServletHolder(new DeleteServlet(productService, securityService)), "/products/delete");
+        servletContextHandler.addServlet(new ServletHolder(new DeleteServlet(productService, securityService, cartService)), "/products/delete");
         servletContextHandler.addServlet(new ServletHolder(new RegistrationServlet(registrationService, securityService)), "/registration");
         servletContextHandler.addServlet(new ServletHolder(new LoginServlet(securityService)), "/login");
         servletContextHandler.addServlet(new ServletHolder(new LogoutServlet(securityService)), "/logout");
