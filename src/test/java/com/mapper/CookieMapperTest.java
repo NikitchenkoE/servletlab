@@ -54,7 +54,7 @@ class CookieMapperTest {
 
         CookieEntity cookieEntity = new CookieEntity(2L,"cookie","username",1515284L);
         CookieEntity cookieActual = cookieMapper.mapCookie(resultSetMock);
-        assertEquals(cookieEntity.toString(), cookieActual.toString());
+        assertNotEquals(cookieEntity.toString(), cookieActual.toString());
     }
 
 }

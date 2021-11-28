@@ -14,15 +14,19 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.EnumSet;
+import java.util.Properties;
 
 @Slf4j
 public class Starter {
     public static void main(String[] args) throws Exception {
-        DataSourceFactory dataSourceFactory = new DataSourceFactory();
+        Properties properties = Starter.propertyLoader();
+        DataSourceFactory dataSourceFactory = new DataSourceFactory(properties);
         ProductService productService = new ProductService(dataSourceFactory);
         RegistrationService registrationService = new RegistrationService(dataSourceFactory);
-        SecurityService securityService = new SecurityService(dataSourceFactory);
+        SecurityService securityService = new SecurityService(dataSourceFactory,properties);
         CartService cartService = new CartService(dataSourceFactory.getDataSource());
         SecurityFilter securityFilter = new SecurityFilter(securityService);
 
@@ -54,5 +58,16 @@ public class Starter {
         server.start();
         server.join();
         log.info("Server started");
+    }
+
+    private static Properties propertyLoader(){
+        Properties properties = new Properties();
+        try(FileInputStream fileInputStream = new FileInputStream("src/main/resources/projectProp.properties")){
+            properties.load(fileInputStream);
+        } catch (IOException exception) {
+            log.error("Problem when loading properties", exception);
+            throw new RuntimeException("Problem when loading properties", exception);
+        }
+        return properties;
     }
 }

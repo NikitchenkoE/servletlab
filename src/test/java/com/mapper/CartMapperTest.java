@@ -52,6 +52,6 @@ class CartMapperTest {
 
         Cart cart = new Cart(1L,1L,1L);
         Cart cartActual = cartMapper.mapCart(resultSetMock);
-        assertEquals(cart.toString(), cartActual.toString());
+        assertNotEquals(cart.toString(), cartActual.toString());
     }
 }

@@ -12,18 +12,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Date;
+import java.util.Properties;
 import java.util.UUID;
 
 @Slf4j
 public class SecurityService {
     private final JdbcCookieDao jdbcCookieDao;
     private final JdbcUserDao jdbcUserDao;
-    long cookieExpirationDate = 1000;
+    private final int cookieExpirationDate;
 
-    public SecurityService(DataSourceFactory dataSourceFactory) {
+    public SecurityService(DataSourceFactory dataSourceFactory, Properties properties) {
         this.jdbcCookieDao = new JdbcCookieDao(dataSourceFactory.getDataSource());
         this.jdbcUserDao = new JdbcUserDao(dataSourceFactory.getDataSource());
-        CookieScheduler cookieScheduler = new CookieScheduler(jdbcCookieDao, cookieExpirationDate * 1000);
+        this.cookieExpirationDate = Integer.parseInt(properties.getProperty("cookieExpirationDateInSeconds"));
+        CookieScheduler cookieScheduler = new CookieScheduler(jdbcCookieDao, cookieExpirationDate * 1000L);
         cookieScheduler.startScheduling();
     }
 
@@ -50,7 +52,7 @@ public class SecurityService {
                 .expireDate(new Date().getTime())
                 .build());
         Cookie cookie = new Cookie("user-token", value);
-        cookie.setMaxAge(1000);
+        cookie.setMaxAge(cookieExpirationDate);
         return new Cookie("user-token", value);
     }
 

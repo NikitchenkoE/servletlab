@@ -33,6 +33,5 @@ class RegistrationServiceTest {
         registrationService.saveUser(name,password);
 
         var userInDb = jdbcUserDao.get(1);
-        System.out.println(userInDb);
     }
 }

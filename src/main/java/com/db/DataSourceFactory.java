@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 @Slf4j
 public class DataSourceFactory {
@@ -15,9 +16,9 @@ public class DataSourceFactory {
     private final String CREATE_USER_TABLE = "CREATE TABLE users (userID IDENTITY NOT NULL PRIMARY KEY, username varchar, password varchar, sole varchar)";
     private final String CREATE_COOKIE_TABLE = "CREATE TABLE cookies (cookiesID IDENTITY NOT NULL PRIMARY KEY, cookie varchar, username varchar, expireDate bigint)";
     private final String CREATE_CART_TABLE = "CREATE TABLE cart (cartItemId IDENTITY NOT NULL PRIMARY KEY, userId bigint, productId bigint)";
-    private String url = "jdbc:h2:mem:productsDb";
-    private String user = "userPg";
-    private String password = "userPg";
+    private final String url;
+    private final String user;
+    private final String password;
 
     public DataSourceFactory(String url, String user, String password) {
         this.url = url;
@@ -26,7 +27,10 @@ public class DataSourceFactory {
         createTables();
     }
 
-    public DataSourceFactory() {
+    public DataSourceFactory(Properties properties) {
+        this.url = properties.getProperty("dbUrl");
+        this.user = properties.getProperty("dbUser");
+        this.password = properties.getProperty("dbPassword");
         createTables();
     }
 
