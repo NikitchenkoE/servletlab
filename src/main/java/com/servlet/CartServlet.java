@@ -13,16 +13,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CartServlet extends HttpServlet {
-    private final CartService cartService;
-    private final SecurityService securityService;
+    private CartService cartService;
+    private SecurityService securityService;
 
-    public CartServlet(CartService cartService, SecurityService securityService) {
-        this.cartService = cartService;
-        this.securityService = securityService;
+    @Override
+    public void init() throws ServletException {
+        cartService = (CartService) getServletContext().getAttribute("cartService");
+        securityService = (SecurityService) getServletContext().getAttribute("securityService");
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Map<String, Object> data = new HashMap<>();
         data.put("products", cartService.findAllProductInCart(req));
         data.put("logged", String.valueOf(securityService.isLogged(req)));
@@ -32,7 +33,7 @@ public class CartServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         cartService.addProductToCart(req);
         resp.sendRedirect("/products");
     }

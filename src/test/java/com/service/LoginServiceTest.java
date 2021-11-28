@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class LoginServiceTest {
     Properties properties = propertyLoader();
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
-    SecurityService securityService = new SecurityService(dataSourceFactory,properties);
-    RegistrationService registrationService = new RegistrationService(dataSourceFactory);
+    SecurityService securityService = new SecurityService(dataSourceFactory.getDataSource(),properties);
+    RegistrationService registrationService = new RegistrationService(dataSourceFactory.getDataSource());
     JdbcCookieDao jdbcCookieDao = new JdbcCookieDao(dataSourceFactory.getDataSource());
 
     @AfterEach

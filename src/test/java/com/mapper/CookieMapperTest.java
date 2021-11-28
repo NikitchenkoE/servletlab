@@ -1,9 +1,6 @@
 package com.mapper;
 
-import com.entity.Cart;
 import com.entity.CookieEntity;
-import jakarta.servlet.http.Cookie;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +11,8 @@ import org.mockito.MockitoSession;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class CookieMapperTest {
     @Mock

@@ -1,10 +1,10 @@
 package com.service;
 
 import com.db.JdbcProductDao;
-import com.db.DataSourceFactory;
 import com.entity.Product;
 import jakarta.servlet.http.HttpServletRequest;
 
+import javax.sql.DataSource;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -12,8 +12,8 @@ import java.util.Optional;
 public class ProductService {
     private final JdbcProductDao jdbcProductDao;
 
-    public ProductService(DataSourceFactory dataSourceFactory) {
-        this.jdbcProductDao = new JdbcProductDao(dataSourceFactory.getDataSource());
+    public ProductService(DataSource dataSource) {
+        this.jdbcProductDao = new JdbcProductDao(dataSource);
     }
 
     public void save(HttpServletRequest req) {

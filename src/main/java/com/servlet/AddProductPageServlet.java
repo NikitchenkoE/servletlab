@@ -1,8 +1,9 @@
 package com.servlet;
 
-import com.service.SecurityService;
 import com.service.ProductService;
+import com.service.SecurityService;
 import com.service.utilPageGenerator.PageGenerator;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,12 +13,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddProductPageServlet extends HttpServlet {
-    private final ProductService productService;
-    private final SecurityService securityService;
+    private ProductService productService;
+    private SecurityService securityService;
 
-    public AddProductPageServlet(ProductService productService, SecurityService securityService) {
-        this.productService = productService;
-        this.securityService = securityService;
+    @Override
+    public void init() throws ServletException {
+        productService = (ProductService) getServletContext().getAttribute("productService");
+        securityService = (SecurityService) getServletContext().getAttribute("securityService");
     }
 
     @Override

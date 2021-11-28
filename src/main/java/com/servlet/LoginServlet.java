@@ -2,6 +2,7 @@ package com.servlet;
 
 import com.service.SecurityService;
 import com.service.utilPageGenerator.PageGenerator;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,10 +11,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class LoginServlet extends HttpServlet {
-    private final SecurityService securityService;
+    private SecurityService securityService;
 
-    public LoginServlet(SecurityService securityService) {
-        this.securityService = securityService;
+    @Override
+    public void init() throws ServletException {
+        securityService = (SecurityService) getServletContext().getAttribute("securityService");
     }
 
     @Override

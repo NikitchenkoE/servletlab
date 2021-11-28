@@ -6,14 +6,15 @@ import com.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import javax.sql.DataSource;
 import java.util.UUID;
 
 @Slf4j
 public class RegistrationService {
     private final JdbcUserDao jdbcUserDao;
 
-    public RegistrationService(DataSourceFactory dataSourceFactory) {
-        this.jdbcUserDao = new JdbcUserDao(dataSourceFactory.getDataSource());
+    public RegistrationService(DataSource dataSource) {
+        this.jdbcUserDao = new JdbcUserDao(dataSource);
     }
 
     public boolean saveUser(String username, String password) {

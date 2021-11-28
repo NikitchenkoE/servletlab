@@ -1,8 +1,9 @@
 package com.servlet;
 
-import com.service.SecurityService;
 import com.service.RegistrationService;
+import com.service.SecurityService;
 import com.service.utilPageGenerator.PageGenerator;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,12 +11,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class RegistrationServlet extends HttpServlet {
-    private final RegistrationService registrationService;
-    private final SecurityService securityService;
+    private RegistrationService registrationService;
+    private SecurityService securityService;
 
-    public RegistrationServlet(RegistrationService registrationService, SecurityService securityService) {
-        this.registrationService = registrationService;
-        this.securityService = securityService;
+    @Override
+    public void init() throws ServletException {
+        registrationService = (RegistrationService) getServletContext().getAttribute("registrationService");
+        securityService = (SecurityService) getServletContext().getAttribute("securityService");
     }
 
     @Override

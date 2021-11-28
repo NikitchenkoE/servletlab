@@ -1,6 +1,5 @@
 package com.service;
 
-import com.db.DataSourceFactory;
 import com.db.JdbcCookieDao;
 import com.db.JdbcUserDao;
 import com.entity.CookieEntity;
@@ -11,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import javax.sql.DataSource;
 import java.util.Date;
 import java.util.Properties;
 import java.util.UUID;
@@ -21,9 +21,9 @@ public class SecurityService {
     private final JdbcUserDao jdbcUserDao;
     private final int cookieExpirationDate;
 
-    public SecurityService(DataSourceFactory dataSourceFactory, Properties properties) {
-        this.jdbcCookieDao = new JdbcCookieDao(dataSourceFactory.getDataSource());
-        this.jdbcUserDao = new JdbcUserDao(dataSourceFactory.getDataSource());
+    public SecurityService(DataSource dataSource, Properties properties) {
+        this.jdbcCookieDao = new JdbcCookieDao(dataSource);
+        this.jdbcUserDao = new JdbcUserDao(dataSource);
         this.cookieExpirationDate = Integer.parseInt(properties.getProperty("cookieExpirationDateInSeconds"));
         CookieScheduler cookieScheduler = new CookieScheduler(jdbcCookieDao, cookieExpirationDate * 1000L);
         cookieScheduler.startScheduling();

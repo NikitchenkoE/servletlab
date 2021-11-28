@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class RegistrationServiceTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSourceFactory.getDataSource());
-    RegistrationService registrationService = new RegistrationService(dataSourceFactory);
+    RegistrationService registrationService = new RegistrationService(dataSourceFactory.getDataSource());
 
     @AfterEach
     void dropTable() {

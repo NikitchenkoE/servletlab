@@ -13,10 +13,11 @@ public class SecurityFilter implements Filter {
     private final String REGISTRATION_PATH = "/registration";
     private final String MAIN_PAGE_PATH = "/";
     private final String MAIN_PAGE_PATH2 = "/products";
-    private final SecurityService securityService;
+    private SecurityService securityService;
 
-    public SecurityFilter(SecurityService securityService) {
-        this.securityService = securityService;
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        securityService = (SecurityService) filterConfig.getServletContext().getAttribute("securityService");
     }
 
     @Override
@@ -35,5 +36,11 @@ public class SecurityFilter implements Filter {
         }
         filterChain.doFilter(httpRequest, httpResponse);
     }
+
+    @Override
+    public void destroy() {
+
+    }
+
 }
 

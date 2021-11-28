@@ -1,6 +1,7 @@
 package com.servlet;
 
 import com.service.CartService;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,10 +9,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class DeleteFromCartServlet extends HttpServlet {
-    private final CartService cartService;
+    private CartService cartService;
 
-    public DeleteFromCartServlet(CartService cartService) {
-        this.cartService = cartService;
+    @Override
+    public void init() throws ServletException {
+        cartService = (CartService) getServletContext().getAttribute("cartService");
     }
 
     @Override
