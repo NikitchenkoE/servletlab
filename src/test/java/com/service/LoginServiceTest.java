@@ -2,7 +2,6 @@ package com.service;
 
 import com.db.DataSourceFactory;
 import com.db.JdbcCookieDao;
-import com.db.JdbcUserDao;
 import com.db.SqlQueries;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,6 @@ class LoginServiceTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     SecurityService securityService = new SecurityService(dataSourceFactory,properties);
     RegistrationService registrationService = new RegistrationService(dataSourceFactory);
-    JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSourceFactory.getDataSource());
     JdbcCookieDao jdbcCookieDao = new JdbcCookieDao(dataSourceFactory.getDataSource());
 
     @AfterEach

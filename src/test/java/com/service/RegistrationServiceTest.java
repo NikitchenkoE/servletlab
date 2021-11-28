@@ -1,14 +1,16 @@
 package com.service;
 
-import com.db.SqlQueries;
 import com.db.DataSourceFactory;
 import com.db.JdbcUserDao;
+import com.db.SqlQueries;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RegistrationServiceTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
@@ -30,8 +32,8 @@ class RegistrationServiceTest {
     void saveUserToDb() {
         String name = "user";
         String password = "password";
-        registrationService.saveUser(name,password);
-
+        registrationService.saveUser(name, password);
         var userInDb = jdbcUserDao.get(1);
+        assertEquals(name, userInDb.get().getUsername());
     }
 }
