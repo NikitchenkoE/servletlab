@@ -1,9 +1,9 @@
 package com.service;
 
-import com.db.JdbcCartDao;
-import com.db.JdbcCookieDao;
-import com.db.JdbcProductDao;
-import com.db.JdbcUserDao;
+import com.db.jdbc.JdbcCartDao;
+import com.db.jdbc.JdbcCookieDao;
+import com.db.jdbc.JdbcProductDao;
+import com.db.jdbc.JdbcUserDao;
 import com.dto.ProductInCartDto;
 import com.entity.Cart;
 import com.mapper.MapToProductInCartDto;
@@ -38,8 +38,8 @@ public class CartService {
         }
         if (userCookie != null) {
             var product = jdbcProductDao.get(productId).orElseThrow(() -> new RuntimeException("Product not found in db"));
-            var cookie = jdbcCookieDao.get(userCookie.getValue()).orElseThrow(() -> new RuntimeException("Cookie not found in db"));
-            var user = jdbcUserDao.findByUsername(cookie.getUsername()).orElseThrow(() -> new RuntimeException("User not fond in db"));
+            var session = jdbcCookieDao.get(userCookie.getValue()).orElseThrow(() -> new RuntimeException("Cookie not found in db"));
+            var user = jdbcUserDao.findByUsername(session.getUsername()).orElseThrow(() -> new RuntimeException("User not fond in db"));
             jdbcCartDao.save(Cart.builder()
                     .userId(user.getId())
                     .productId(product.getId())

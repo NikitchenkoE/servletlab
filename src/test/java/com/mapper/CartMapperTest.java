@@ -1,7 +1,7 @@
 package com.mapper;
 
+import com.db.mapper.CartMapper;
 import com.entity.Cart;
-import com.entity.Product;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +11,6 @@ import org.mockito.MockitoSession;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 

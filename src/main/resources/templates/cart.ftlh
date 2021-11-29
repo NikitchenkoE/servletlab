@@ -12,14 +12,7 @@
             word-break: break-all;
         }
 
-        .searchInputsPositions {
-            position: absolute;
-            right: 3%;
-            width: 20%;
-            margin-top: 2%;
-            margin-bottom: 2%;
-        }
-        .loginAndLogoutPosition{
+        .loginAndLogoutPosition {
             position: absolute;
             right: 3%;
             padding-top: 0.25%;
@@ -27,7 +20,6 @@
     </style>
 </head>
 <body>
-<p hidden>${logged}</p>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Shop</a>
@@ -41,14 +33,12 @@
                     <a class="nav-link active" aria-current="page" href="/products">All products</a>
                 </li>
                 <div class="loginAndLogoutPosition">
-                    <#if logged == "true">
                     <li class="nav-item">
                         <a class="btn btn-outline-danger my-2 my-sm-0 btn-sm" href="/logout">logout</a>
                     </li>
-                </#if>
+                </div>
+            </ul>
         </div>
-        </ul>
-    </div>
     </div>
 </nav>
 <div class="container text-center" style="margin-top: 5%">
@@ -67,18 +57,17 @@
             <tr style="text-align:center; vertical-align: middle">
                 <td>${product.productName}</td>
                 <td>${product.productPrice}</td>
-                    <td>
-                        <form action="/cart/deleteFromCart?idToDelete=${product.cartId}" method="post">
-                            <button class="btn btn-outline-danger" type="submit" value="Delete Product">Delete</button>
-                        </form>
-                    </td>
+                <td>
+                    <form action="/cart/deleteFromCart?idToDelete=${product.cartId}" method="post">
+                        <button class="btn btn-outline-danger" type="submit" value="Delete Product">Delete</button>
+                    </form>
+                </td>
             </tr>
         </#list>
     </table>
 </div>
 
 <p>Total: ${total}$ </p>
-
 
 
 </body>

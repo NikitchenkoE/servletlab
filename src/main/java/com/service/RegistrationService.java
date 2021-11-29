@@ -1,7 +1,6 @@
 package com.service;
 
-import com.db.DataSourceFactory;
-import com.db.JdbcUserDao;
+import com.db.jdbc.JdbcUserDao;
 import com.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;

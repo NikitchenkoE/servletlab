@@ -1,6 +1,7 @@
 package com.mapper;
 
-import com.entity.CookieEntity;
+import com.db.mapper.CookieMapper;
+import com.entity.Session;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,8 +39,8 @@ class CookieMapperTest {
         Mockito.when(resultSetMock.getString("username")).thenReturn("username");
         Mockito.when(resultSetMock.getLong("expireDate")).thenReturn(1515284L);
 
-        CookieEntity cookieEntity = new CookieEntity(1L,"cookie","username",1515284L);
-        CookieEntity cookieActual = cookieMapper.mapCookie(resultSetMock);
+        Session cookieEntity = new Session(1L,"cookie","username",1515284L);
+        Session cookieActual = cookieMapper.mapCookie(resultSetMock);
         assertEquals(cookieEntity.toString(), cookieActual.toString());
     }
 
@@ -50,8 +51,8 @@ class CookieMapperTest {
         Mockito.when(resultSetMock.getString("username")).thenReturn("username");
         Mockito.when(resultSetMock.getLong("expireDate")).thenReturn(25L);
 
-        CookieEntity cookieEntity = new CookieEntity(2L,"cookie","username",1515284L);
-        CookieEntity cookieActual = cookieMapper.mapCookie(resultSetMock);
+        Session cookieEntity = new Session(2L,"cookie","username",1515284L);
+        Session cookieActual = cookieMapper.mapCookie(resultSetMock);
         assertNotEquals(cookieEntity.toString(), cookieActual.toString());
     }
 

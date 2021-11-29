@@ -1,5 +1,6 @@
 package com.mapper;
 
+import com.db.mapper.ProductMapper;
 import com.entity.Product;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

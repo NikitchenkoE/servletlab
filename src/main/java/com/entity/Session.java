@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CookieEntity {
+public class Session {
     private Long id;
-    private String cookie;
+    private String token;
     private String username;
     private long expireDate;
 }

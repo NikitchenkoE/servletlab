@@ -27,13 +27,11 @@ public class InitListener implements ServletContextListener {
         RegistrationService registrationService = new RegistrationService(dataSource);
         SecurityService securityService = new SecurityService(dataSource,properties);
         CartService cartService = new CartService(dataSource);
-        SecurityFilter securityFilter = new SecurityFilter();
 
         servletContextEvent.getServletContext().setAttribute("productService", productService);
         servletContextEvent.getServletContext().setAttribute("registrationService", registrationService);
         servletContextEvent.getServletContext().setAttribute("securityService", securityService);
         servletContextEvent.getServletContext().setAttribute("cartService", cartService);
-        servletContextEvent.getServletContext().setAttribute("securityFilter", securityFilter);
     }
 
     @Override
@@ -43,7 +41,7 @@ public class InitListener implements ServletContextListener {
 
     private static Properties propertyLoader(){
         Properties properties = new Properties();
-        try(FileInputStream fileInputStream = new FileInputStream("src/main/resources/projectProp.properties")){
+        try(FileInputStream fileInputStream = new FileInputStream("src/main/resources/application.properties")){
             properties.load(fileInputStream);
         } catch (IOException exception) {
             log.error("Problem when loading properties", exception);

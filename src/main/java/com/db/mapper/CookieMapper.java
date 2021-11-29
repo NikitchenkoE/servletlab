@@ -1,15 +1,15 @@
-package com.mapper;
+package com.db.mapper;
 
-import com.entity.CookieEntity;
+import com.entity.Session;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CookieMapper {
-    public CookieEntity mapCookie(ResultSet resultSet) throws SQLException {
-        return CookieEntity.builder()
+    public Session mapCookie(ResultSet resultSet) throws SQLException {
+        return Session.builder()
                 .id(resultSet.getLong("cookiesID"))
-                .cookie(resultSet.getString("cookie"))
+                .token(resultSet.getString("cookie"))
                 .username(resultSet.getString("username"))
                 .expireDate(resultSet.getLong("expireDate"))
                 .build();

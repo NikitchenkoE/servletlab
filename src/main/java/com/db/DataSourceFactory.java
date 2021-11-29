@@ -27,9 +27,9 @@ public class DataSourceFactory {
     }
 
     public DataSourceFactory(Properties properties) {
-        this.url = properties.getProperty("dbUrl");
-        this.user = properties.getProperty("dbUser");
-        this.password = properties.getProperty("dbPassword");
+        this.url = properties.getProperty("db.Url");
+        this.user = properties.getProperty("db.User");
+        this.password = properties.getProperty("db.Password");
         createTables();
     }
 

@@ -1,8 +1,8 @@
-package com.db;
+package com.db.jdbc;
 
 import com.db.interfaces.CookieDao;
-import com.entity.CookieEntity;
-import com.mapper.CookieMapper;
+import com.entity.Session;
+import com.db.mapper.CookieMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
@@ -29,11 +29,11 @@ public class JdbcCookieDao implements CookieDao {
     }
 
     @Override
-    public void save(CookieEntity cookie) {
+    public void save(Session cookie) {
         log.info("Saved {}", cookie);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO_TABLE)) {
-            preparedStatement.setString(1, cookie.getCookie());
+            preparedStatement.setString(1, cookie.getToken());
             preparedStatement.setString(2, cookie.getUsername());
             preparedStatement.setLong(3, cookie.getExpireDate());
             preparedStatement.executeUpdate();
@@ -57,7 +57,7 @@ public class JdbcCookieDao implements CookieDao {
     }
 
     @Override
-    public Optional<CookieEntity> get(String cookie) {
+    public Optional<Session> get(String cookie) {
         log.info("get cookie by {}", cookie);
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_COOKIE)) {
@@ -75,8 +75,8 @@ public class JdbcCookieDao implements CookieDao {
     }
 
     @Override
-    public List<CookieEntity> getAllCookies() {
-        List<CookieEntity> cookies = new ArrayList<>();
+    public List<Session> getAllCookies() {
+        List<Session> cookies = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_COOKIE);
              ResultSet resultSet = preparedStatement.executeQuery()) {

@@ -31,7 +31,7 @@ public class MainPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Map<String, Object> data = new HashMap<>();
         data.put("products", new ArrayList<Product>());
-        data.put("logged", String.valueOf(securityService.isLogged(req)));
+        data.put("logged", String.valueOf(securityService.isLogged(req.getCookies())));
         String description = req.getParameter("productDescription");
 
         if (req.getParameter("productDescription") == null && req.getParameter("productId") == null) {
@@ -43,14 +43,12 @@ public class MainPageServlet extends HttpServlet {
         } else if (req.getParameter("productId") != null) {
             if (!req.getParameter("productId").isEmpty()) {
                 long id = Long.parseLong(req.getParameter("productId"));
-                data = mainPageService.getDataById(id);
-                data.put("logged", String.valueOf(securityService.isLogged(req)));
+                data.put("products", mainPageService.getDataById(id));
                 resp.setStatus(HttpServletResponse.SC_OK);
             }
 
         } else if (description != null && !description.isEmpty()) {
-            data = mainPageService.getDataByDescription(description);
-            data.put("logged", String.valueOf(securityService.isLogged(req)));
+            data.put("products", mainPageService.getDataByDescription(description));
 
         } else {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);

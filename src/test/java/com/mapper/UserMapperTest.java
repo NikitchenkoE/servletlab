@@ -1,5 +1,6 @@
 package com.mapper;
 
+import com.db.mapper.UserMapper;
 import com.entity.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

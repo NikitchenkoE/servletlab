@@ -1,8 +1,8 @@
-package com.db;
+package com.db.jdbc;
 
 import com.db.interfaces.CartDao;
 import com.entity.Cart;
-import com.mapper.CartMapper;
+import com.db.mapper.CartMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
@@ -33,7 +33,7 @@ public class JdbcCartDao implements CartDao {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
-            log.error("Problem when deleting cart with id {}", id);
+            log.error("Problem when deleting cart with id {}", id, exception);
             throw new RuntimeException(exception);
         }
     }
@@ -46,7 +46,7 @@ public class JdbcCartDao implements CartDao {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
-            log.error("Problem when deleting product with id {}", id);
+            log.error("Problem when deleting product with id {}", id, exception);
             throw new RuntimeException(exception);
         }
     }
@@ -60,7 +60,7 @@ public class JdbcCartDao implements CartDao {
             preparedStatement.setLong(2, cart.getProductId());
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
-            log.error("Problem when saving cart {}", cart);
+            log.error("Problem when saving cart {}", cart, exception);
             throw new RuntimeException(exception);
         }
     }
@@ -79,7 +79,7 @@ public class JdbcCartDao implements CartDao {
                 return userProductsInTheCart;
             }
         } catch (SQLException exception) {
-            log.error("Problem when getting user cart with user id {} {}", userId);
+            log.error("Problem when getting user cart with user id {}", userId, exception);
             throw new RuntimeException(exception);
         }
     }

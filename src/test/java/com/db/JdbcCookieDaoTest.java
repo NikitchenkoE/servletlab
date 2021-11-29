@@ -1,6 +1,7 @@
 package com.db;
 
-import com.entity.CookieEntity;
+import com.db.jdbc.JdbcCookieDao;
+import com.entity.Session;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class JdbcCookieDaoTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     JdbcCookieDao jdbcCookieDao = new JdbcCookieDao(dataSourceFactory.getDataSource());
-    CookieEntity cookie1 = new CookieEntity(1L, "cookie1", "user1", 125);
-    CookieEntity cookie2 = new CookieEntity(2L, "cookie2", "user2", 126);
-    CookieEntity cookie3 = new CookieEntity(3L, "cookie3", "user3", 127);
+    Session cookie1 = new Session(1L, "cookie1", "user1", 125);
+    Session cookie2 = new Session(2L, "cookie2", "user2", 126);
+    Session cookie3 = new Session(3L, "cookie3", "user3", 127);
 
 
     @BeforeEach
@@ -56,7 +57,7 @@ class JdbcCookieDaoTest {
 
     @Test
     void getAllCookieShouldReturnAllCookies() {
-        List<CookieEntity> expectedList = new ArrayList<>();
+        List<Session> expectedList = new ArrayList<>();
         expectedList.add(cookie1);
         expectedList.add(cookie2);
         expectedList.add(cookie3);

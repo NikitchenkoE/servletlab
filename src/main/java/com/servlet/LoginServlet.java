@@ -20,12 +20,8 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (securityService.isLogged(req)) {
-            resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        } else {
-            resp.getWriter().println(PageGenerator.init().getPage("login.html"));
-            resp.setStatus(HttpServletResponse.SC_OK);
-        }
+        resp.getWriter().println(PageGenerator.init().getPage("login.ftlh"));
+        resp.setStatus(HttpServletResponse.SC_OK);
     }
 
     @Override
@@ -33,7 +29,7 @@ public class LoginServlet extends HttpServlet {
         if (req.getParameter("userName").isEmpty() || req.getParameter("password").isEmpty()) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
-            if (securityService.userDataCorrect(req.getParameter("userName"), req.getParameter("password"))) {
+            if (securityService.isAuth(req.getParameter("userName"), req.getParameter("password"))) {
                 Cookie cookie = securityService.getNewCookie(req.getParameter("userName"));
                 resp.addCookie(cookie);
                 resp.sendRedirect("/products");

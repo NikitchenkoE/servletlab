@@ -1,8 +1,8 @@
-package com.db;
+package com.db.jdbc;
 
 import com.db.interfaces.ProductDao;
 import com.entity.Product;
-import com.mapper.ProductMapper;
+import com.db.mapper.ProductMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;

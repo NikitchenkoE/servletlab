@@ -1,7 +1,7 @@
 package com.service;
 
 import com.db.DataSourceFactory;
-import com.db.JdbcCookieDao;
+import com.db.jdbc.JdbcCookieDao;
 import com.db.SqlQueries;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -38,21 +38,21 @@ class LoginServiceTest {
     @Test
     void userDataCorrect() {
         registrationService.saveUser("user", "password");
-        assertTrue(securityService.userDataCorrect("user", "password"));
-        assertFalse(securityService.userDataCorrect("user", "passdasdawdadaword"));
-        assertFalse(securityService.userDataCorrect("user112", "password"));
+        assertTrue(securityService.isAuth("user", "password"));
+        assertFalse(securityService.isAuth("user", "passdasdawdadaword"));
+        assertFalse(securityService.isAuth("user112", "password"));
     }
 
     @Test
     void getNewCookie() {
         var cookie = securityService.getNewCookie("user");
-        assertEquals(cookie.getValue(),jdbcCookieDao.get(cookie.getValue()).get().getCookie());;
+        assertEquals(cookie.getValue(),jdbcCookieDao.get(cookie.getValue()).get().getToken());;
         assertEquals(jdbcCookieDao.get(cookie.getValue()).get().getUsername(),"user");
     }
 
     private static Properties propertyLoader(){
         Properties properties = new Properties();
-        try(FileInputStream fileInputStream = new FileInputStream("src/main/resources/projectProp.properties")){
+        try(FileInputStream fileInputStream = new FileInputStream("src/main/resources/application.properties")){
             properties.load(fileInputStream);
         } catch (IOException exception) {
             throw new RuntimeException("Problem when loading properties", exception);

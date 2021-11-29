@@ -1,8 +1,8 @@
-package com.db;
+package com.db.jdbc;
 
 import com.db.interfaces.UserDao;
 import com.entity.User;
-import com.mapper.UserMapper;
+import com.db.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;

@@ -1,13 +1,13 @@
 package com.db.interfaces;
 
-import com.entity.CookieEntity;
+import com.entity.Session;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CookieDao {
-    void save(CookieEntity cookie);
+    void save(Session cookie);
     void delete(String value);
-    Optional<CookieEntity> get(String cookie);
-    List<CookieEntity> getAllCookies();
+    Optional<Session> get(String cookie);
+    List<Session> getAllCookies();
 }

@@ -1,7 +1,6 @@
 package com.servlet;
 
 import com.service.ProductService;
-import com.service.SecurityService;
 import com.service.utilPageGenerator.PageGenerator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -14,21 +13,17 @@ import java.util.Map;
 
 public class AddProductPageServlet extends HttpServlet {
     private ProductService productService;
-    private SecurityService securityService;
 
     @Override
     public void init() throws ServletException {
         productService = (ProductService) getServletContext().getAttribute("productService");
-        securityService = (SecurityService) getServletContext().getAttribute("securityService");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
             Map<String, Object> data = new HashMap<>();
-            data.put("logged", String.valueOf(securityService.isLogged(req)));
             resp.getWriter().println(PageGenerator.init().getPage("addProductPage.ftlh", data));
             resp.setStatus(HttpServletResponse.SC_OK);
-
     }
 
     @Override
@@ -36,7 +31,10 @@ public class AddProductPageServlet extends HttpServlet {
         if (req.getParameter("productName").isEmpty() || req.getParameter("productPrice").isEmpty() || req.getParameter("productDescription").isEmpty()) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
-            productService.save(req);
+            var productName = req.getParameter("productName");
+            var productDescription = req.getParameter("productDescription");
+            var productPrice = req.getParameter("productPrice");
+            productService.save(productName, productDescription, productPrice);
             resp.sendRedirect("/products");
         }
     }

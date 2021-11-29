@@ -12,20 +12,16 @@ import java.io.IOException;
 
 public class RegistrationServlet extends HttpServlet {
     private RegistrationService registrationService;
-    private SecurityService securityService;
 
     @Override
     public void init() throws ServletException {
         registrationService = (RegistrationService) getServletContext().getAttribute("registrationService");
-        securityService = (SecurityService) getServletContext().getAttribute("securityService");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (!securityService.isLogged(req)) {
-            resp.getWriter().println(PageGenerator.init().getPage("registration.html"));
-            resp.setStatus(HttpServletResponse.SC_OK);
-        }
+        resp.getWriter().println(PageGenerator.init().getPage("registration.ftlh"));
+        resp.setStatus(HttpServletResponse.SC_OK);
     }
 
     @Override

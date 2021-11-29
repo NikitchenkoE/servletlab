@@ -1,16 +1,16 @@
 package com.service.scheduleClean;
 
-import com.db.JdbcCookieDao;
+import com.db.jdbc.JdbcCookieDao;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
-public class CookieScheduler {
+public class Scheduler {
     private final JdbcCookieDao jdbcCookieDao;
-    private long cookieLifeTimeInMilliseconds;
+    private final long cookieLifeTimeInMilliseconds;
 
-    public CookieScheduler(JdbcCookieDao jdbcCookieDao, long cookieLifeTimeInSeconds) {
+    public Scheduler(JdbcCookieDao jdbcCookieDao, long cookieLifeTimeInMilliseconds) {
         this.jdbcCookieDao = jdbcCookieDao;
-        this.cookieLifeTimeInMilliseconds = cookieLifeTimeInSeconds;
+        this.cookieLifeTimeInMilliseconds = cookieLifeTimeInMilliseconds;
     }
 
     public void startScheduling() {
@@ -28,7 +28,7 @@ public class CookieScheduler {
                     .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMilliseconds(cookieLifeTimeInMilliseconds).repeatForever())
                     .build();
 
-            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+            org.quartz.Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.start();
             scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {

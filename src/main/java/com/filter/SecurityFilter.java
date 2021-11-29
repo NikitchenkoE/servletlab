@@ -6,13 +6,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.Objects;
+import java.util.Arrays;
+import java.util.List;
 
 public class SecurityFilter implements Filter {
     private final String LOGIN_PATH = "/login";
     private final String REGISTRATION_PATH = "/registration";
     private final String MAIN_PAGE_PATH = "/";
     private final String MAIN_PAGE_PATH2 = "/products";
+    private final List<String> allowedPagesWithoutAuth = Arrays.asList(LOGIN_PATH, REGISTRATION_PATH, MAIN_PAGE_PATH, MAIN_PAGE_PATH2);
+    private final List<String> forbiddenPagesToAuthUser = Arrays.asList(LOGIN_PATH, REGISTRATION_PATH);
     private SecurityService securityService;
 
     @Override
@@ -25,15 +28,18 @@ public class SecurityFilter implements Filter {
         var httpRequest = (HttpServletRequest) servletRequest;
         var httpResponse = (HttpServletResponse) servletResponse;
         var path = httpRequest.getServletPath();
+        boolean isAuth = securityService.isLogged(httpRequest.getCookies());
         httpResponse.setContentType("text/html;charset=utf-8");
 
-        if (!securityService.isLogged(httpRequest)) {
-            if (!Objects.equals(path, LOGIN_PATH) && !Objects.equals(path, REGISTRATION_PATH) && !Objects.equals(path, MAIN_PAGE_PATH) && !Objects.equals(path, MAIN_PAGE_PATH2)) {
+        if (!isAuth) {
+            if (!allowedPagesWithoutAuth.contains(path)) {
                 httpResponse.sendRedirect(LOGIN_PATH);
             }
-        } else if (Objects.equals(path, REGISTRATION_PATH)) {
-            httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        }
+        } else if (forbiddenPagesToAuthUser.contains(path)) {
+                httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                httpResponse.sendError(403);
+            }
+
         filterChain.doFilter(httpRequest, httpResponse);
     }
 

@@ -1,6 +1,6 @@
 package com.service;
 
-import com.db.JdbcProductDao;
+import com.db.jdbc.JdbcProductDao;
 import com.entity.Product;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -16,8 +16,8 @@ public class ProductService {
         this.jdbcProductDao = new JdbcProductDao(dataSource);
     }
 
-    public void save(HttpServletRequest req) {
-        jdbcProductDao.save(createNewProduct(req));
+    public void save(String productName, String productDescription, String productPrice) {
+        jdbcProductDao.save(createNewProduct(productName, productDescription, productPrice));
     }
 
     public void delete(long parseLong) {
@@ -32,32 +32,29 @@ public class ProductService {
         return jdbcProductDao.get(productId);
     }
 
-    public void update(Product newProduct) {
-        jdbcProductDao.update(newProduct);
+    public void update(Product productToBeUpdated, String productName, String productDescription, String productPrice) {
+        Date date = new Date();
+
+        jdbcProductDao.update(Product.builder()
+                .id(productToBeUpdated.getId())
+                .name(productName)
+                .price(Double.parseDouble(productPrice))
+                .description(productDescription)
+                .create(productToBeUpdated.getCreate())
+                .update(date)
+                .build());
     }
 
     public List<Product> getByDescription(String description) {
         return jdbcProductDao.getByDescription(description);
     }
 
-    public Product createProductAfterUpdate(HttpServletRequest req, Product productToBeUpdated) {
+    private Product createNewProduct(String productName, String productDescription, String productPrice) {
         Date date = new Date();
         return Product.builder()
-                .id(productToBeUpdated.getId())
-                .name(req.getParameter("productName"))
-                .price(Double.parseDouble(req.getParameter("productPrice")))
-                .description(req.getParameter("productDescription"))
-                .create(productToBeUpdated.getCreate())
-                .update(date)
-                .build();
-    }
-
-    private Product createNewProduct(HttpServletRequest req) {
-        Date date = new Date();
-        return Product.builder()
-                .name(req.getParameter("productName"))
-                .price(Double.parseDouble(req.getParameter("productPrice")))
-                .description(req.getParameter("productDescription"))
+                .name(productName)
+                .price(Double.parseDouble(productPrice))
+                .description(productDescription)
                 .create(date)
                 .update(date)
                 .build();

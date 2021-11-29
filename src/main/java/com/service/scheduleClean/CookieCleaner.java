@@ -1,7 +1,7 @@
 package com.service.scheduleClean;
 
-import com.db.JdbcCookieDao;
-import com.entity.CookieEntity;
+import com.db.jdbc.JdbcCookieDao;
+import com.entity.Session;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -18,9 +18,9 @@ public class CookieCleaner implements Job {
         var cookies = jdbcCookieDao.getAllCookies();
         if (!cookies.isEmpty()) {
 
-            for (CookieEntity cookie : cookies) {
+            for (Session cookie : cookies) {
                 if ((cookie.getExpireDate() + cookieLifeTimeInMilliseconds) <= new Date().getTime()) {
-                    jdbcCookieDao.delete(cookie.getCookie());
+                    jdbcCookieDao.delete(cookie.getToken());
                 }
             }
         }

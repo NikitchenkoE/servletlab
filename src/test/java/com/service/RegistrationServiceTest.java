@@ -1,7 +1,7 @@
 package com.service;
 
 import com.db.DataSourceFactory;
-import com.db.JdbcUserDao;
+import com.db.jdbc.JdbcUserDao;
 import com.db.SqlQueries;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
