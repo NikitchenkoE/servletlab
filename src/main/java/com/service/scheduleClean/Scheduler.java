@@ -1,14 +1,14 @@
 package com.service.scheduleClean;
 
-import com.db.jdbc.JdbcCookieDao;
+import com.db.jdbc.JdbcSessionDao;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 public class Scheduler {
-    private final JdbcCookieDao jdbcCookieDao;
+    private final JdbcSessionDao jdbcCookieDao;
     private final long cookieLifeTimeInMilliseconds;
 
-    public Scheduler(JdbcCookieDao jdbcCookieDao, long cookieLifeTimeInMilliseconds) {
+    public Scheduler(JdbcSessionDao jdbcCookieDao, long cookieLifeTimeInMilliseconds) {
         this.jdbcCookieDao = jdbcCookieDao;
         this.cookieLifeTimeInMilliseconds = cookieLifeTimeInMilliseconds;
     }

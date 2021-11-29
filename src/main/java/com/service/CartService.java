@@ -1,14 +1,11 @@
 package com.service;
 
 import com.db.jdbc.JdbcCartDao;
-import com.db.jdbc.JdbcCookieDao;
 import com.db.jdbc.JdbcProductDao;
-import com.db.jdbc.JdbcUserDao;
 import com.dto.ProductInCartDto;
 import com.entity.Cart;
+import com.entity.User;
 import com.mapper.MapToProductInCartDto;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
@@ -18,50 +15,34 @@ import java.util.List;
 @Slf4j
 public class CartService {
     private final JdbcCartDao jdbcCartDao;
-    private final JdbcCookieDao jdbcCookieDao;
     private final JdbcProductDao jdbcProductDao;
-    private final JdbcUserDao jdbcUserDao;
     private final MapToProductInCartDto mapToProductInCartDto = new MapToProductInCartDto();
 
     public CartService(DataSource dataSource) {
         this.jdbcCartDao = new JdbcCartDao(dataSource);
-        this.jdbcCookieDao = new JdbcCookieDao(dataSource);
         this.jdbcProductDao = new JdbcProductDao(dataSource);
-        this.jdbcUserDao = new JdbcUserDao(dataSource);
     }
 
-    public void addProductToCart(HttpServletRequest request) {
-        Long productId = null;
-        Cookie userCookie = findUserCookie(request);
-        if (request.getParameter("productId") != null) {
-            productId = Long.parseLong(request.getParameter("productId"));
-        }
-        if (userCookie != null) {
-            var product = jdbcProductDao.get(productId).orElseThrow(() -> new RuntimeException("Product not found in db"));
-            var session = jdbcCookieDao.get(userCookie.getValue()).orElseThrow(() -> new RuntimeException("Cookie not found in db"));
-            var user = jdbcUserDao.findByUsername(session.getUsername()).orElseThrow(() -> new RuntimeException("User not fond in db"));
-            jdbcCartDao.save(Cart.builder()
-                    .userId(user.getId())
-                    .productId(product.getId())
-                    .build());
-        }
+    public void addProductToCart(User user, String productId) {
+        jdbcCartDao.save(Cart.builder()
+                .userId(user.getId())
+                .productId(Long.valueOf(productId))
+                .build());
+
     }
 
     public void deleteOneProductFromTheCart(long id) {
-        log.info("Deleted item with id {}",id);
+        log.info("Deleted item with id {}", id);
         jdbcCartDao.delete(id);
     }
 
     public void deleteAllProductWithSameIdFromCart(long id) {
-        log.info("deleted all items with id {}",id);
+        log.info("deleted all items with id {}", id);
         jdbcCartDao.deleteByProductId(id);
     }
 
-    public List<ProductInCartDto> findAllProductInCart(HttpServletRequest request) {
+    public List<ProductInCartDto> findAllProductInCart(User user) {
         List<ProductInCartDto> productInCartList = new ArrayList<>();
-        Cookie userCookie = findUserCookie(request);
-        var cookie = jdbcCookieDao.get(userCookie.getValue()).orElseThrow(() -> new RuntimeException("Cookie not found in db"));
-        var user = jdbcUserDao.findByUsername(cookie.getUsername()).orElseThrow(() -> new RuntimeException("User not fond in db"));
         var userCart = jdbcCartDao.getCart(user.getId());
         for (Cart cart : userCart) {
             jdbcProductDao.get(cart.getProductId())
@@ -70,25 +51,13 @@ public class CartService {
         return productInCartList;
     }
 
-    public double sumAllProducts(HttpServletRequest request) {
+    public double sumAllProducts(User user) {
         double result = 0.0;
-        var products = findAllProductInCart(request);
+        var products = findAllProductInCart(user);
         for (ProductInCartDto product : products) {
             result += product.getProductPrice();
         }
         return result;
     }
-
-    private Cookie findUserCookie(HttpServletRequest request) {
-        Cookie userCookie = null;
-        var cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("user-token")) {
-                userCookie = cookie;
-            }
-        }
-        return userCookie;
-    }
-
 
 }

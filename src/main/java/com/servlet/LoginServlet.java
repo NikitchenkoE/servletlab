@@ -1,7 +1,7 @@
 package com.servlet;
 
 import com.service.SecurityService;
-import com.service.utilPageGenerator.PageGenerator;
+import com.service.util.PageGenerator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;

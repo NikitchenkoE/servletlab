@@ -1,6 +1,6 @@
 package com.service;
 
-import com.db.jdbc.JdbcCookieDao;
+import com.db.jdbc.JdbcSessionDao;
 import com.db.jdbc.JdbcUserDao;
 import com.entity.Session;
 import com.entity.User;
@@ -18,17 +18,17 @@ import java.util.UUID;
 
 @Slf4j
 public class SecurityService {
-    private final JdbcCookieDao jdbcCookieDao;
+    private final JdbcSessionDao jdbcSessionDao;
     private final JdbcUserDao jdbcUserDao;
     private final int cookieExpirationDate;
 
     public SecurityService(DataSource dataSource, Properties properties) {
-        this.jdbcCookieDao = new JdbcCookieDao(dataSource);
+        this.jdbcSessionDao = new JdbcSessionDao(dataSource);
         this.jdbcUserDao = new JdbcUserDao(dataSource);
         this.cookieExpirationDate = Integer.parseInt(properties.getProperty("session.ExpirationDateInSeconds"));
 
         //TODO fixme return to another place
-        Scheduler cookieScheduler = new Scheduler(jdbcCookieDao, cookieExpirationDate * 1000L);
+        Scheduler cookieScheduler = new Scheduler(jdbcSessionDao, cookieExpirationDate * 1000L);
         cookieScheduler.startScheduling();
     }
 
@@ -49,9 +49,10 @@ public class SecurityService {
     public Cookie getNewCookie(String username) {
         log.info("Created new cookie in db for user {}", username);
         String value = UUID.randomUUID().toString();
-        jdbcCookieDao.save(Session.builder()
+        User user = jdbcUserDao.findByUsername(username).orElseThrow(() -> new RuntimeException("Can't find user with this username"));
+        jdbcSessionDao.save(Session.builder()
                 .token(value)
-                .username(username)
+                .user(user)
                 .expireDate(new Date().getTime())
                 .build());
         Cookie cookie = new Cookie("user-token", value);
@@ -63,7 +64,7 @@ public class SecurityService {
         boolean auth = false;
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                auth = jdbcCookieDao.get(cookie.getValue()).isPresent();
+                auth = jdbcSessionDao.get(cookie.getValue()).isPresent();
             }
         }
         return auth;
@@ -76,8 +77,21 @@ public class SecurityService {
             if (cookie.getName().equalsIgnoreCase("user-token")) {
                 cookie.setMaxAge(0);
                 readCookie = cookie;
+                break;
             }
         }
         return readCookie;
+    }
+
+    public User getAuthUser(Cookie[] cookies) {
+        User user = new User();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                var session = jdbcSessionDao.get(cookie.getValue()).orElseThrow(() -> new RuntimeException("Cant find session with this token"));
+                user = session.getUser();
+                break;
+            }
+        }
+        return user;
     }
 }

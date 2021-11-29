@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class Session {
     private Long id;
     private String token;
-    private String username;
+    private User user;
     private long expireDate;
 }

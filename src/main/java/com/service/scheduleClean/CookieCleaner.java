@@ -1,6 +1,6 @@
 package com.service.scheduleClean;
 
-import com.db.jdbc.JdbcCookieDao;
+import com.db.jdbc.JdbcSessionDao;
 import com.entity.Session;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -13,7 +13,7 @@ public class CookieCleaner implements Job {
     public void execute(JobExecutionContext jobExecutionContext) {
         JobDataMap jobDataMap = jobExecutionContext.getJobDetail().getJobDataMap();
 
-        JdbcCookieDao jdbcCookieDao = (JdbcCookieDao) jobDataMap.get("jdbcCookieDao");
+        JdbcSessionDao jdbcCookieDao = (JdbcSessionDao) jobDataMap.get("jdbcCookieDao");
         long cookieLifeTimeInMilliseconds = jobDataMap.getLong("cookieLifeTimeInMilliseconds");
         var cookies = jdbcCookieDao.getAllCookies();
         if (!cookies.isEmpty()) {

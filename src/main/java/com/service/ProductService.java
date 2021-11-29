@@ -2,7 +2,6 @@ package com.service;
 
 import com.db.jdbc.JdbcProductDao;
 import com.entity.Product;
-import jakarta.servlet.http.HttpServletRequest;
 
 import javax.sql.DataSource;
 import java.util.Date;

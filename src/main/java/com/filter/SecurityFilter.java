@@ -39,7 +39,11 @@ public class SecurityFilter implements Filter {
                 httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 httpResponse.sendError(403);
             }
+        else {
+            servletRequest.setAttribute("user", securityService.getAuthUser(httpRequest.getCookies()));
+        }
 
+        servletRequest.setAttribute("isLogged", isAuth);
         filterChain.doFilter(httpRequest, httpResponse);
     }
 

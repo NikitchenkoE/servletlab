@@ -1,7 +1,7 @@
 package com.service;
 
 import com.db.DataSourceFactory;
-import com.db.jdbc.JdbcCookieDao;
+import com.db.jdbc.JdbcSessionDao;
 import com.db.SqlQueries;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -15,12 +15,12 @@ import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class LoginServiceTest {
+class SecurityServiceTest {
     Properties properties = propertyLoader();
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     SecurityService securityService = new SecurityService(dataSourceFactory.getDataSource(),properties);
     RegistrationService registrationService = new RegistrationService(dataSourceFactory.getDataSource());
-    JdbcCookieDao jdbcCookieDao = new JdbcCookieDao(dataSourceFactory.getDataSource());
+    JdbcSessionDao jdbcCookieDao = new JdbcSessionDao(dataSourceFactory.getDataSource());
 
     @AfterEach
     void dropTable() {
@@ -28,7 +28,7 @@ class LoginServiceTest {
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(SqlQueries.DROP_TABLE_USERS);
             statement.executeUpdate(SqlQueries.DROP_TABLE_PRODUCTS);
-            statement.executeUpdate(SqlQueries.DROP_TABLE_COOKIES);
+            statement.executeUpdate(SqlQueries.DROP_TABLE_SESSIONS);
             statement.executeUpdate(SqlQueries.DROP_TABLE_CART);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -41,13 +41,6 @@ class LoginServiceTest {
         assertTrue(securityService.isAuth("user", "password"));
         assertFalse(securityService.isAuth("user", "passdasdawdadaword"));
         assertFalse(securityService.isAuth("user112", "password"));
-    }
-
-    @Test
-    void getNewCookie() {
-        var cookie = securityService.getNewCookie("user");
-        assertEquals(cookie.getValue(),jdbcCookieDao.get(cookie.getValue()).get().getToken());;
-        assertEquals(jdbcCookieDao.get(cookie.getValue()).get().getUsername(),"user");
     }
 
     private static Properties propertyLoader(){

@@ -2,7 +2,7 @@ package com.servlet;
 
 import com.entity.Product;
 import com.service.ProductService;
-import com.service.utilPageGenerator.PageGenerator;
+import com.service.util.PageGenerator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

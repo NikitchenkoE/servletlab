@@ -1,8 +1,7 @@
 package com.servlet;
 
 import com.service.RegistrationService;
-import com.service.SecurityService;
-import com.service.utilPageGenerator.PageGenerator;
+import com.service.util.PageGenerator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

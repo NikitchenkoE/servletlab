@@ -3,8 +3,7 @@ package com.servlet;
 import com.entity.Product;
 import com.service.MainPageService;
 import com.service.ProductService;
-import com.service.SecurityService;
-import com.service.utilPageGenerator.PageGenerator;
+import com.service.util.PageGenerator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,13 +16,11 @@ import java.util.Map;
 
 public class MainPageServlet extends HttpServlet {
     private ProductService productService;
-    private SecurityService securityService;
     private MainPageService mainPageService;
 
     @Override
     public void init() throws ServletException {
         productService = (ProductService) getServletContext().getAttribute("productService");
-        securityService = (SecurityService) getServletContext().getAttribute("securityService");
         mainPageService = new MainPageService(productService);
     }
 
@@ -31,7 +28,7 @@ public class MainPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Map<String, Object> data = new HashMap<>();
         data.put("products", new ArrayList<Product>());
-        data.put("logged", String.valueOf(securityService.isLogged(req.getCookies())));
+        data.put("logged", String.valueOf(req.getAttribute("isLogged")));
         String description = req.getParameter("productDescription");
 
         if (req.getParameter("productDescription") == null && req.getParameter("productId") == null) {

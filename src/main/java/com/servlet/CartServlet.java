@@ -1,7 +1,8 @@
 package com.servlet;
 
+import com.entity.User;
 import com.service.CartService;
-import com.service.utilPageGenerator.PageGenerator;
+import com.service.util.PageGenerator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,15 +23,18 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Map<String, Object> data = new HashMap<>();
-        data.put("products", cartService.findAllProductInCart(req));
-        data.put("total", cartService.sumAllProducts(req));
+        User user = (User) req.getAttribute("user");
+        data.put("products", cartService.findAllProductInCart(user));
+        data.put("total", cartService.sumAllProducts(user));
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.getWriter().println(PageGenerator.init().getPage("cart.ftlh", data));
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        cartService.addProductToCart(req);
+        User user = (User) req.getAttribute("user");
+        var productId = req.getParameter("productId");
+        cartService.addProductToCart(user, productId);
         resp.sendRedirect("/products");
     }
 }

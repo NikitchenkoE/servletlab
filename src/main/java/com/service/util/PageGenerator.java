@@ -1,4 +1,4 @@
-package com.service.utilPageGenerator;
+package com.service.util;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;

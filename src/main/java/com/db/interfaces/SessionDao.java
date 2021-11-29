@@ -5,9 +5,12 @@ import com.entity.Session;
 import java.util.List;
 import java.util.Optional;
 
-public interface CookieDao {
+public interface SessionDao {
     void save(Session cookie);
+
     void delete(String value);
+
     Optional<Session> get(String cookie);
+
     List<Session> getAllCookies();
 }
