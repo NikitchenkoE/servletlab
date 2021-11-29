@@ -13,4 +13,6 @@ public interface SessionDao {
     Optional<Session> get(String cookie);
 
     List<Session> getAllCookies();
+
+    void cleanExpiredCookie(long presentTime);
 }

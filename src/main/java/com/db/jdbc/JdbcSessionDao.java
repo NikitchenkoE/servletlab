@@ -17,7 +17,8 @@ import java.util.Optional;
 @Slf4j
 public class JdbcSessionDao implements SessionDao {
     String INSERT_INTO_TABLE = "INSERT INTO sessions (token, userInSession, expireDate) VALUES (?,?,?)";
-    String DELETE_BY_VALUE = "DELETE FROM sessions WHERE token=?";
+    String DELETE_BY_TOKEN = "DELETE FROM sessions WHERE token=?";
+    String DELETE_ALL_THAT_EXPIRED = "DELETE FROM sessions WHERE expireDate<?";
     String SELECT_BY_TOKEN = "SELECT sessionId, token, userInSession, expireDate FROM sessions WHERE token=?";
     String SELECT_ALL_COOKIE = "SELECT sessionId, token, userInSession, expireDate FROM sessions";
 
@@ -47,11 +48,24 @@ public class JdbcSessionDao implements SessionDao {
     public void delete(String token) {
         log.info("Delete session with token {}", token);
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_VALUE)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_TOKEN)) {
             preparedStatement.setString(1, token);
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
             log.error("Exception when deleting {}", token, exception);
+            throw new RuntimeException(exception);
+        }
+    }
+
+    @Override
+    public void cleanExpiredCookie(long presentTime) {
+        log.info("Cleaned session expired date of which < {}", presentTime);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ALL_THAT_EXPIRED)) {
+            preparedStatement.setLong(1, presentTime);
+            preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            log.error("Exception when deleting {}", presentTime, exception);
             throw new RuntimeException(exception);
         }
     }
