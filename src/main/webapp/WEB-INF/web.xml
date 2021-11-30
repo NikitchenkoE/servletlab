@@ -6,7 +6,7 @@
          version="4.0">
 
     <listener>
-        <listener-class>com.listener.InitListener</listener-class>
+        <listener-class>com.listener.Listener</listener-class>
     </listener>
 
     <filter>

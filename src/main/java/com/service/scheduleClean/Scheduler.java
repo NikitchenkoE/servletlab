@@ -1,17 +1,17 @@
 package com.service.scheduleClean;
 
-import com.db.jdbc.JdbcSessionDao;
+import com.db.interfaces.SessionDao;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 @Slf4j
 public class Scheduler {
-    private final JdbcSessionDao jdbcCookieDao;
+    private final SessionDao jdbcCookieDao;
     private final long cookieLifeTimeInMilliseconds;
 
-    public Scheduler(JdbcSessionDao jdbcCookieDao, long cookieLifeTimeInMilliseconds) {
-        this.jdbcCookieDao = jdbcCookieDao;
+    public Scheduler(SessionDao sessionDao, long cookieLifeTimeInMilliseconds) {
+        this.jdbcCookieDao = sessionDao;
         this.cookieLifeTimeInMilliseconds = cookieLifeTimeInMilliseconds;
     }
 

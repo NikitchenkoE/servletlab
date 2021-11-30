@@ -3,6 +3,7 @@ package com.service;
 import com.db.DataSourceFactory;
 import com.db.jdbc.JdbcSessionDao;
 import com.db.SqlQueries;
+import com.db.jdbc.JdbcUserDao;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,8 +19,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class SecurityServiceTest {
     Properties properties = propertyLoader();
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
-    SecurityService securityService = new SecurityService(dataSourceFactory.getDataSource(),properties);
-    RegistrationService registrationService = new RegistrationService(dataSourceFactory.getDataSource());
+    SecurityService securityService = new SecurityService(new JdbcSessionDao(dataSourceFactory.getDataSource()), new JdbcUserDao(dataSourceFactory.getDataSource()), Integer.parseInt(properties.getProperty("session.ExpirationDateInSeconds")));
+    RegistrationService registrationService = new RegistrationService(new JdbcUserDao(dataSourceFactory.getDataSource()));
 
     @AfterEach
     void dropTable() {
@@ -34,17 +35,9 @@ class SecurityServiceTest {
         }
     }
 
-    @Test
-    void userDataCorrect() {
-        registrationService.saveUser("user", "password");
-        assertTrue(securityService.isAuth("user", "password"));
-        assertFalse(securityService.isAuth("user", "passdasdawdadaword"));
-        assertFalse(securityService.isAuth("user112", "password"));
-    }
-
-    private static Properties propertyLoader(){
+    private static Properties propertyLoader() {
         Properties properties = new Properties();
-        try(FileInputStream fileInputStream = new FileInputStream("src/main/resources/application.properties")){
+        try (FileInputStream fileInputStream = new FileInputStream("src/main/resources/application.properties")) {
             properties.load(fileInputStream);
         } catch (IOException exception) {
             throw new RuntimeException("Problem when loading properties", exception);

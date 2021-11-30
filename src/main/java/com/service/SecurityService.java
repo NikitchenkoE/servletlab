@@ -1,7 +1,7 @@
 package com.service;
 
-import com.db.jdbc.JdbcSessionDao;
-import com.db.jdbc.JdbcUserDao;
+import com.db.interfaces.SessionDao;
+import com.db.interfaces.UserDao;
 import com.entity.Session;
 import com.entity.User;
 import com.service.scheduleClean.Scheduler;
@@ -10,22 +10,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import javax.sql.DataSource;
 import java.util.Date;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.UUID;
 
 @Slf4j
 public class SecurityService {
-    private final JdbcSessionDao jdbcSessionDao;
-    private final JdbcUserDao jdbcUserDao;
+    private final SessionDao jdbcSessionDao;
+    private final UserDao jdbcUserDao;
     private final int cookieExpirationDate;
 
-    public SecurityService(DataSource dataSource, Properties properties) {
-        this.jdbcSessionDao = new JdbcSessionDao(dataSource);
-        this.jdbcUserDao = new JdbcUserDao(dataSource);
-        this.cookieExpirationDate = Integer.parseInt(properties.getProperty("session.ExpirationDateInSeconds"));
+    public SecurityService(SessionDao sessionDao, UserDao userDao, int cookieExpirationDate) {
+        this.jdbcSessionDao = sessionDao;
+        this.jdbcUserDao = userDao;
+        this.cookieExpirationDate =cookieExpirationDate;
 
         //TODO fixme return to another place
         Scheduler cookieScheduler = new Scheduler(jdbcSessionDao, cookieExpirationDate * 1000L);

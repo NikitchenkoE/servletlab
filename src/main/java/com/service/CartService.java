@@ -1,26 +1,25 @@
 package com.service;
 
-import com.db.jdbc.JdbcCartDao;
-import com.db.jdbc.JdbcProductDao;
-import com.entity.dto.ProductInCartDto;
+import com.db.interfaces.CartDao;
+import com.db.interfaces.ProductDao;
 import com.entity.ProductInCart;
 import com.entity.User;
+import com.entity.dto.ProductInCartDto;
 import com.entity.mapper.MapToProductInCartDto;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 public class CartService {
-    private final JdbcCartDao jdbcCartDao;
-    private final JdbcProductDao jdbcProductDao;
+    private final CartDao jdbcCartDao;
+    private final ProductDao jdbcProductDao;
     private final MapToProductInCartDto mapToProductInCartDto = new MapToProductInCartDto();
 
-    public CartService(DataSource dataSource) {
-        this.jdbcCartDao = new JdbcCartDao(dataSource);
-        this.jdbcProductDao = new JdbcProductDao(dataSource);
+    public CartService(CartDao jdbcCartDao, ProductDao jdbcProductDao) {
+        this.jdbcCartDao = jdbcCartDao;
+        this.jdbcProductDao = jdbcProductDao;
     }
 
     public void addProductToCart(User user, String productId) {

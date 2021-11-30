@@ -1,18 +1,17 @@
 package com.service;
 
-import com.db.jdbc.JdbcProductDao;
+import com.db.interfaces.ProductDao;
 import com.entity.Product;
 
-import javax.sql.DataSource;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 public class ProductService {
-    private final JdbcProductDao jdbcProductDao;
+    private final ProductDao jdbcProductDao;
 
-    public ProductService(DataSource dataSource) {
-        this.jdbcProductDao = new JdbcProductDao(dataSource);
+    public ProductService(ProductDao jdbcProductDao) {
+        this.jdbcProductDao = jdbcProductDao;
     }
 
     public void save(String productName, String productDescription, String productPrice) {
