@@ -1,8 +1,8 @@
 package com.servlet;
 
+import com.ServiceLocator;
 import com.service.ProductService;
 import com.service.util.PageGenerator;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,18 +12,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddProductPageServlet extends HttpServlet {
-    private ProductService productService;
-
-    @Override
-    public void init() throws ServletException {
-        productService = (ProductService) getServletContext().getAttribute("productService");
-    }
+    private final ProductService productService = ServiceLocator.getDependency(ProductService.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-            Map<String, Object> data = new HashMap<>();
-            resp.getWriter().println(PageGenerator.init().getPage("addProductPage.ftlh", data));
-            resp.setStatus(HttpServletResponse.SC_OK);
+        Map<String, Object> data = new HashMap<>();
+        resp.getWriter().println(PageGenerator.init().getPage("addProductPage.ftlh", data));
+        resp.setStatus(HttpServletResponse.SC_OK);
     }
 
     @Override

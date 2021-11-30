@@ -1,8 +1,8 @@
 package com.servlet;
 
+import com.ServiceLocator;
 import com.service.SecurityService;
 import com.service.util.PageGenerator;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,12 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class LoginServlet extends HttpServlet {
-    private SecurityService securityService;
-
-    @Override
-    public void init() throws ServletException {
-        securityService = (SecurityService) getServletContext().getAttribute("securityService");
-    }
+    private final SecurityService securityService = ServiceLocator.getDependency(SecurityService.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

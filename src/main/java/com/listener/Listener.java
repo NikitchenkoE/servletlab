@@ -1,5 +1,6 @@
 package com.listener;
 
+import com.ServiceLocator;
 import com.db.DataSourceFactory;
 import com.db.jdbc.JdbcCartDao;
 import com.db.jdbc.JdbcProductDao;
@@ -14,7 +15,6 @@ import jakarta.servlet.ServletContextListener;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -31,15 +31,20 @@ public class Listener implements ServletContextListener {
         JdbcSessionDao jdbcSessionDao = new JdbcSessionDao(dataSource);
         JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
 
-        ProductService productService = new ProductService(jdbcProductDao);
-        RegistrationService registrationService = new RegistrationService(jdbcUserDao);
-        SecurityService securityService = new SecurityService(jdbcSessionDao, jdbcUserDao, Integer.parseInt(properties.getProperty("session.ExpirationDateInSeconds")));
-        CartService cartService = new CartService(jdbcCartDao, jdbcProductDao);
-
-        servletContextEvent.getServletContext().setAttribute("productService", productService);
-        servletContextEvent.getServletContext().setAttribute("registrationService", registrationService);
-        servletContextEvent.getServletContext().setAttribute("securityService", securityService);
-        servletContextEvent.getServletContext().setAttribute("cartService", cartService);
+        ServiceLocator.addDependency(ProductService.class, new ProductService(jdbcProductDao));
+        ServiceLocator.addDependency(RegistrationService.class, new RegistrationService(jdbcUserDao));
+        ServiceLocator.addDependency(SecurityService.class, new SecurityService(jdbcSessionDao, jdbcUserDao, Integer.parseInt(properties.getProperty("session.ExpirationDateInSeconds"))));
+        ServiceLocator.addDependency(CartService.class, new CartService(jdbcCartDao, jdbcProductDao));
+//
+//        ProductService productService = new ProductService(jdbcProductDao);
+//        RegistrationService registrationService = new RegistrationService(jdbcUserDao);
+//        SecurityService securityService = new SecurityService(jdbcSessionDao, jdbcUserDao, Integer.parseInt(properties.getProperty("session.ExpirationDateInSeconds")));
+//        CartService cartService = new CartService(jdbcCartDao, jdbcProductDao);
+//
+//        servletContextEvent.getServletContext().setAttribute("productService", productService);
+//        servletContextEvent.getServletContext().setAttribute("registrationService", registrationService);
+//        servletContextEvent.getServletContext().setAttribute("securityService", securityService);
+//        servletContextEvent.getServletContext().setAttribute("cartService", cartService);
     }
 
     @Override

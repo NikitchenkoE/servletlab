@@ -1,10 +1,10 @@
 package com.servlet;
 
+import com.ServiceLocator;
 import com.entity.Product;
 import com.service.MainPageService;
 import com.service.ProductService;
 import com.service.util.PageGenerator;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,14 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainPageServlet extends HttpServlet {
-    private ProductService productService;
-    private MainPageService mainPageService;
-
-    @Override
-    public void init() throws ServletException {
-        productService = (ProductService) getServletContext().getAttribute("productService");
-        mainPageService = new MainPageService(productService);
-    }
+    private final ProductService productService = ServiceLocator.getDependency(ProductService.class);
+    private final MainPageService mainPageService = new MainPageService(productService);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

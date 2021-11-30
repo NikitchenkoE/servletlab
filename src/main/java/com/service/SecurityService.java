@@ -23,7 +23,7 @@ public class SecurityService {
     public SecurityService(SessionDao sessionDao, UserDao userDao, int cookieExpirationDate) {
         this.jdbcSessionDao = sessionDao;
         this.jdbcUserDao = userDao;
-        this.cookieExpirationDate =cookieExpirationDate;
+        this.cookieExpirationDate = cookieExpirationDate;
 
         //TODO fixme return to another place
         Scheduler cookieScheduler = new Scheduler(jdbcSessionDao, cookieExpirationDate * 1000L);
@@ -68,12 +68,12 @@ public class SecurityService {
         return auth;
     }
 
-    public Cookie logout(HttpServletRequest req) {
+    public Cookie logout(Cookie[] cookies) {
         Cookie readCookie = null;
-        Cookie[] cookies = req.getCookies();
         for (Cookie cookie : cookies) {
             if (cookie.getName().equalsIgnoreCase("user-token")) {
                 cookie.setMaxAge(0);
+                jdbcSessionDao.delete(cookie.getValue());
                 readCookie = cookie;
                 break;
             }

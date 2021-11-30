@@ -1,5 +1,6 @@
 package com.filter;
 
+import com.ServiceLocator;
 import com.service.SecurityService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,12 +17,7 @@ public class SecurityFilter implements Filter {
     private final String MAIN_PAGE_PATH2 = "/products";
     private final List<String> allowedPagesWithoutAuth = Arrays.asList(LOGIN_PATH, REGISTRATION_PATH, MAIN_PAGE_PATH, MAIN_PAGE_PATH2);
     private final List<String> forbiddenPagesToAuthUser = Arrays.asList(LOGIN_PATH, REGISTRATION_PATH);
-    private SecurityService securityService;
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        securityService = (SecurityService) filterConfig.getServletContext().getAttribute("securityService");
-    }
+    private final SecurityService securityService = ServiceLocator.getDependency(SecurityService.class);
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -36,10 +32,9 @@ public class SecurityFilter implements Filter {
                 httpResponse.sendRedirect(LOGIN_PATH);
             }
         } else if (forbiddenPagesToAuthUser.contains(path)) {
-                httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                httpResponse.sendError(403);
-            }
-        else {
+            httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            httpResponse.sendError(403);
+        } else {
             servletRequest.setAttribute("user", securityService.getAuthUser(httpRequest.getCookies()));
         }
 

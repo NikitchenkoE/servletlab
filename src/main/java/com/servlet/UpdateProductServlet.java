@@ -1,9 +1,9 @@
 package com.servlet;
 
+import com.ServiceLocator;
 import com.entity.Product;
 import com.service.ProductService;
 import com.service.util.PageGenerator;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,13 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UpdateProductServlet extends HttpServlet {
-    private ProductService productService;
+    private final ProductService productService = ServiceLocator.getDependency(ProductService.class);
     private Product productToBeUpdated;
-
-    @Override
-    public void init() throws ServletException {
-        productService = (ProductService) getServletContext().getAttribute("productService");
-    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
