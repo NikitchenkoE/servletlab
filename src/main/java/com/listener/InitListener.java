@@ -1,7 +1,6 @@
 package com.listener;
 
 import com.db.DataSourceFactory;
-import com.filter.SecurityFilter;
 import com.service.CartService;
 import com.service.ProductService;
 import com.service.RegistrationService;

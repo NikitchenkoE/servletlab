@@ -1,11 +1,11 @@
-package com.mapper;
+package com.entity.mapper;
 
-import com.dto.ProductInCartDto;
-import com.entity.Cart;
+import com.entity.dto.ProductInCartDto;
+import com.entity.ProductInCart;
 import com.entity.Product;
 
 public class MapToProductInCartDto {
-    public ProductInCartDto mapToProductInCart(Cart cart, Product product) {
+    public ProductInCartDto mapToProductInCart(ProductInCart cart, Product product) {
         return ProductInCartDto.builder()
                 .cartId(cart.getId())
                 .productName(product.getName())

@@ -1,15 +1,15 @@
 package com.db.interfaces;
 
-import com.entity.Cart;
+import com.entity.ProductInCart;
 
 import java.util.List;
 
 public interface CartDao {
     void delete(long id);
 
-    void save(Cart cart);
+    void save(ProductInCart cart);
 
-    List<Cart> getCart(long userId);
+    List<ProductInCart> getCart(long userId);
 
     void deleteByProductId(long id);
 }

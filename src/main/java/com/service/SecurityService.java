@@ -46,16 +46,16 @@ public class SecurityService {
         return loginAllowed;
     }
 
-    public Cookie getNewCookie(String username) {
+    public Cookie getNewToken(String username) {
         log.info("Created new cookie in db for user {}", username);
-        String value = UUID.randomUUID().toString();
+        String token = UUID.randomUUID().toString();
         User user = jdbcUserDao.findByUsername(username).orElseThrow(() -> new RuntimeException("Can't find user with this username"));
         jdbcSessionDao.save(Session.builder()
-                .token(value)
+                .token(token)
                 .user(user)
                 .expireDate(new Date().getTime())
                 .build());
-        Cookie cookie = new Cookie("user-token", value);
+        Cookie cookie = new Cookie("user-token", token);
         cookie.setMaxAge(cookieExpirationDate);
         return cookie;
     }

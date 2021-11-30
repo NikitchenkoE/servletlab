@@ -30,7 +30,7 @@ public class LoginServlet extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
             if (securityService.isAuth(req.getParameter("userName"), req.getParameter("password"))) {
-                Cookie cookie = securityService.getNewCookie(req.getParameter("userName"));
+                Cookie cookie = securityService.getNewToken(req.getParameter("userName"));
                 resp.addCookie(cookie);
                 resp.sendRedirect("/products");
             } else {

@@ -1,7 +1,7 @@
 package com.db;
 
 import com.db.jdbc.JdbcCartDao;
-import com.entity.Cart;
+import com.entity.ProductInCart;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class JdbcCartDaoTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     JdbcCartDao jdbcCartDao = new JdbcCartDao(dataSourceFactory.getDataSource());
-    Cart cart1 = new Cart(1L, 1L, 1L);
-    Cart cart2 = new Cart(2L, 1L, 2L);
-    Cart cart3 = new Cart(3L, 1L, 3L);
+    ProductInCart cart1 = new ProductInCart(1L, 1L, 1L);
+    ProductInCart cart2 = new ProductInCart(2L, 1L, 2L);
+    ProductInCart cart3 = new ProductInCart(3L, 1L, 3L);
 
 
 

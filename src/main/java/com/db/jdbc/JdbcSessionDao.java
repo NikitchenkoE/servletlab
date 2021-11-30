@@ -78,7 +78,7 @@ public class JdbcSessionDao implements SessionDao {
                 preparedStatement.setString(1, token);
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     if (resultSet.next()) {
-                        return Optional.of(cookieMapper.mapCookie(resultSet));
+                        return Optional.of(cookieMapper.mapSession(resultSet));
                     } else return Optional.empty();
                 }
             }
@@ -90,16 +90,16 @@ public class JdbcSessionDao implements SessionDao {
 
     @Override
     public List<Session> getAllCookies() {
-        List<Session> cookies = new ArrayList<>();
+        List<Session> sessions = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_COOKIE);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
-                cookies.add(cookieMapper.mapCookie(resultSet));
+                sessions.add(cookieMapper.mapSession(resultSet));
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-        return cookies;
+        return sessions;
     }
 }

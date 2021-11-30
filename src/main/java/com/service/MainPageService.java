@@ -1,8 +1,8 @@
 package com.service;
 
-import com.dto.ProductDto;
+import com.entity.dto.ProductDto;
 import com.entity.Product;
-import com.mapper.MapToProductDto;
+import com.entity.mapper.MapToProductDto;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;

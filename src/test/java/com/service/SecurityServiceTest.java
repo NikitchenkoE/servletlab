@@ -20,7 +20,6 @@ class SecurityServiceTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     SecurityService securityService = new SecurityService(dataSourceFactory.getDataSource(),properties);
     RegistrationService registrationService = new RegistrationService(dataSourceFactory.getDataSource());
-    JdbcSessionDao jdbcCookieDao = new JdbcSessionDao(dataSourceFactory.getDataSource());
 
     @AfterEach
     void dropTable() {

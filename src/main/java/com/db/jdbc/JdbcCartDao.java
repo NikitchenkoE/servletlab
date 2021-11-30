@@ -1,8 +1,8 @@
 package com.db.jdbc;
 
 import com.db.interfaces.CartDao;
-import com.entity.Cart;
-import com.db.mapper.CartMapper;
+import com.entity.ProductInCart;
+import com.db.mapper.CartProductMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
@@ -52,29 +52,29 @@ public class JdbcCartDao implements CartDao {
     }
 
     @Override
-    public void save(Cart cart) {
-        log.info("Saved {}", cart);
+    public void save(ProductInCart productInCart) {
+        log.info("Saved {}", productInCart);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_TO_CART)) {
-            preparedStatement.setLong(1, cart.getUserId());
-            preparedStatement.setLong(2, cart.getProductId());
+            preparedStatement.setLong(1, productInCart.getUserId());
+            preparedStatement.setLong(2, productInCart.getProductId());
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
-            log.error("Problem when saving cart {}", cart, exception);
+            log.error("Problem when saving cart {}", productInCart, exception);
             throw new RuntimeException(exception);
         }
     }
 
     @Override
-    public List<Cart> getCart(long userId) {
+    public List<ProductInCart> getCart(long userId) {
         log.info("Get user cart with id {}", userId);
-        List<Cart> userProductsInTheCart = new ArrayList<>();
+        List<ProductInCart> userProductsInTheCart = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_BY_USERNAME)) {
             preparedStatement.setLong(1, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    userProductsInTheCart.add(new CartMapper().mapCart(resultSet));
+                    userProductsInTheCart.add(new CartProductMapper().mapProductInCart(resultSet));
                 }
                 return userProductsInTheCart;
             }

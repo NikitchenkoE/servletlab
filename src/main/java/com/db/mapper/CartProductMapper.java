@@ -1,13 +1,13 @@
 package com.db.mapper;
 
-import com.entity.Cart;
+import com.entity.ProductInCart;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CartMapper {
-    public Cart mapCart(ResultSet resultSet) throws SQLException {
-        return Cart.builder()
+public class CartProductMapper {
+    public ProductInCart mapProductInCart(ResultSet resultSet) throws SQLException {
+        return ProductInCart.builder()
                 .id(resultSet.getLong("cartItemId"))
                 .userId(resultSet.getLong("userId"))
                 .productId(resultSet.getLong("productId"))

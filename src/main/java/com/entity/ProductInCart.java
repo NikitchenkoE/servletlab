@@ -1,4 +1,4 @@
-package com.dto;
+package com.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductInCartDto {
-    private Long cartId;
-    private String productName;
-    private double productPrice;
+public class ProductInCart {
+    private Long id;
+    private Long userId;
+    private Long productId;
+
 }

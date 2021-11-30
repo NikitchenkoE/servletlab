@@ -17,7 +17,7 @@ public class RegistrationService {
     }
 
     public boolean saveUser(String username, String password) {
-        if (!userExist(username)) {
+        if (jdbcUserDao.findByUsername(username).isEmpty()) {
             String sole = UUID.randomUUID().toString();
             String soledPassword = DigestUtils.md5Hex(password + sole);
 
@@ -32,9 +32,5 @@ public class RegistrationService {
             log.info("user with this nickname exist");
             return false;
         }
-    }
-
-    private boolean userExist(String username) {
-        return jdbcUserDao.findByUsername(username).orElse(null) != null;
     }
 }

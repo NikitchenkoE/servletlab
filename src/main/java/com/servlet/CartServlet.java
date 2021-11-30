@@ -24,17 +24,21 @@ public class CartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Map<String, Object> data = new HashMap<>();
         User user = (User) req.getAttribute("user");
-        data.put("products", cartService.findAllProductInCart(user));
-        data.put("total", cartService.sumAllProducts(user));
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().println(PageGenerator.init().getPage("cart.ftlh", data));
+        if (user != null) {
+            data.put("products", cartService.findAllProductInCart(user));
+            data.put("total", cartService.sumAllProducts(user));
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().println(PageGenerator.init().getPage("cart.ftlh", data));
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         User user = (User) req.getAttribute("user");
-        var productId = req.getParameter("productId");
-        cartService.addProductToCart(user, productId);
+        if (user != null) {
+            var productId = req.getParameter("productId");
+            cartService.addProductToCart(user, productId);
+        }
         resp.sendRedirect("/products");
     }
 }

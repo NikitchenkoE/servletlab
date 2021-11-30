@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SessionMapper {
-    public Session mapCookie(ResultSet resultSet) throws SQLException {
+    public Session mapSession(ResultSet resultSet) throws SQLException {
         return Session.builder()
                 .id(resultSet.getLong("sessionId"))
                 .token(resultSet.getString("token"))
