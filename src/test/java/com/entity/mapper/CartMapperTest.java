@@ -1,7 +1,7 @@
-package com.mapper;
+package com.entity.mapper;
 
-import com.db.mapper.CartMapper;
-import com.entity.Cart;
+import com.db.mapper.CartProductMapper;
+import com.entity.ProductInCart;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ class CartMapperTest {
     ResultSet resultSetMock;
 
     MockitoSession mockitoSession;
-    CartMapper cartMapper = new CartMapper();
+    CartProductMapper cartMapper = new CartProductMapper();
 
     @BeforeEach
     void before() {
@@ -37,8 +37,8 @@ class CartMapperTest {
         Mockito.when(resultSetMock.getLong("userId")).thenReturn(1L);
         Mockito.when(resultSetMock.getLong("productId")).thenReturn(1L);
 
-        Cart cart = new Cart(1L,1L,1L);
-        Cart cartActual = cartMapper.mapCart(resultSetMock);
+        ProductInCart cart = new ProductInCart(1L,1L,1L);
+        ProductInCart cartActual = cartMapper.mapProductInCart(resultSetMock);
         assertEquals(cart.toString(), cartActual.toString());
     }
 
@@ -48,8 +48,8 @@ class CartMapperTest {
         Mockito.when(resultSetMock.getLong("userId")).thenReturn(2L);
         Mockito.when(resultSetMock.getLong("productId")).thenReturn(2L);
 
-        Cart cart = new Cart(1L,1L,1L);
-        Cart cartActual = cartMapper.mapCart(resultSetMock);
+        ProductInCart cart = new ProductInCart(1L,1L,1L);
+        ProductInCart cartActual = cartMapper.mapProductInCart(resultSetMock);
         assertNotEquals(cart.toString(), cartActual.toString());
     }
 }

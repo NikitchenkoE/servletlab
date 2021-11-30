@@ -1,4 +1,4 @@
-package com.mapper;
+package com.entity.mapper;
 
 import com.db.mapper.ProductMapper;
 import com.entity.Product;

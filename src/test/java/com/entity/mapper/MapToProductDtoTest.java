@@ -1,6 +1,6 @@
-package com.mapper;
+package com.entity.mapper;
 
-import com.dto.ProductDto;
+import com.entity.dto.ProductDto;
 import com.entity.Product;
 import org.junit.jupiter.api.Test;
 

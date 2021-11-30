@@ -1,4 +1,4 @@
-package com.mapper;
+package com.entity.mapper;
 
 import com.db.mapper.SessionMapper;
 import com.entity.Session;
@@ -43,7 +43,7 @@ class CookieMapperTest {
         Mockito.when(resultSetMock.getLong("expireDate")).thenReturn(1515284L);
 
         Session cookieEntity = new Session(1L,"token",user1,1515284L);
-        Session cookieActual = cookieMapper.mapCookie(resultSetMock);
+        Session cookieActual = cookieMapper.mapSession(resultSetMock);
         assertEquals(cookieEntity.toString(), cookieActual.toString());
     }
 
@@ -55,7 +55,7 @@ class CookieMapperTest {
         Mockito.when(resultSetMock.getLong("expireDate")).thenReturn(25L);
 
         Session cookieEntity = new Session(2L,"cookie",user2,1515284L);
-        Session cookieActual = cookieMapper.mapCookie(resultSetMock);
+        Session cookieActual = cookieMapper.mapSession(resultSetMock);
         assertNotEquals(cookieEntity.toString(), cookieActual.toString());
     }
 
