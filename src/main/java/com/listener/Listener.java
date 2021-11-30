@@ -49,8 +49,10 @@ public class Listener implements ServletContextListener {
 
     private static Properties propertyLoader() {
         Properties properties = new Properties();
-        try (FileInputStream fileInputStream = new FileInputStream("src/main/resources/application.properties")) {
-            properties.load(fileInputStream);
+        try {
+            properties.load(Thread.currentThread()
+                    .getContextClassLoader()
+                    .getResourceAsStream("application.properties"));
         } catch (IOException exception) {
             log.error("Problem when loading properties", exception);
             throw new RuntimeException("Problem when loading properties", exception);
