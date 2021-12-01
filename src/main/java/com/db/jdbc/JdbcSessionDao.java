@@ -3,6 +3,8 @@ package com.db.jdbc;
 import com.db.interfaces.SessionDao;
 import com.entity.Session;
 import com.db.mapper.SessionMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
@@ -35,10 +37,10 @@ public class JdbcSessionDao implements SessionDao {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO_TABLE)) {
             preparedStatement.setString(1, session.getToken());
-            preparedStatement.setObject(2, session.getUser());
+            preparedStatement.setObject(2, new ObjectMapper().writeValueAsString(session.getUser()));
             preparedStatement.setLong(3, session.getExpireDate());
             preparedStatement.executeUpdate();
-        } catch (SQLException exception) {
+        } catch (SQLException | JsonProcessingException exception) {
             log.error("Exception when saved {}", session, exception);
             throw new RuntimeException(exception);
         }
@@ -82,7 +84,7 @@ public class JdbcSessionDao implements SessionDao {
                     } else return Optional.empty();
                 }
             }
-        } catch (SQLException exception) {
+        } catch (SQLException | JsonProcessingException exception) {
             log.error("Error by getting cookie by id {}", token, exception);
             throw new RuntimeException(exception);
         }
@@ -97,7 +99,7 @@ public class JdbcSessionDao implements SessionDao {
             while (resultSet.next()) {
                 sessions.add(cookieMapper.mapSession(resultSet));
             }
-        } catch (SQLException exception) {
+        } catch (SQLException | JsonProcessingException exception) {
             exception.printStackTrace();
         }
         return sessions;

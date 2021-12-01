@@ -20,7 +20,7 @@ class JdbcCookieDaoTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     Flyway flyway = Flyway.configure().dataSource("jdbc:h2:mem:testdb", "user", "user").load();
 
-    JdbcSessionDao jdbcCookieDao = new JdbcSessionDao(dataSourceFactory.getDataSource());
+    JdbcSessionDao jdbcSessionDao = new JdbcSessionDao(dataSourceFactory.getDataSource());
     User user1 = new User(1L, "user1", "soledPassword1", "sole1");
     User user2 = new User(2L, "user2", "soledPassword2", "sole2");
     User user3 = new User(3L, "user3", "soledPassword3", "sole3+");
@@ -32,9 +32,9 @@ class JdbcCookieDaoTest {
     @BeforeEach
     void init() {
         flyway.migrate();
-        jdbcCookieDao.save(cookie1);
-        jdbcCookieDao.save(cookie2);
-        jdbcCookieDao.save(cookie3);
+        jdbcSessionDao.save(cookie1);
+        jdbcSessionDao.save(cookie2);
+        jdbcSessionDao.save(cookie3);
     }
 
     @AfterEach
@@ -53,15 +53,15 @@ class JdbcCookieDaoTest {
 
     @Test
     void delete() {
-        assertNotNull(jdbcCookieDao.get("cookie1").orElse(null));
-        assertNotNull(jdbcCookieDao.get("cookie2").orElse(null));
-        assertNotNull(jdbcCookieDao.get("cookie3").orElse(null));
-        jdbcCookieDao.delete("cookie1");
-        jdbcCookieDao.delete("cookie2");
-        jdbcCookieDao.delete("cookie3");
-        assertNull(jdbcCookieDao.get("cookie1").orElse(null));
-        assertNull(jdbcCookieDao.get("cookie2").orElse(null));
-        assertNull(jdbcCookieDao.get("cookie3").orElse(null));
+        assertNotNull(jdbcSessionDao.get("cookie1").orElse(null));
+        assertNotNull(jdbcSessionDao.get("cookie2").orElse(null));
+        assertNotNull(jdbcSessionDao.get("cookie3").orElse(null));
+        jdbcSessionDao.delete("cookie1");
+        jdbcSessionDao.delete("cookie2");
+        jdbcSessionDao.delete("cookie3");
+        assertNull(jdbcSessionDao.get("cookie1").orElse(null));
+        assertNull(jdbcSessionDao.get("cookie2").orElse(null));
+        assertNull(jdbcSessionDao.get("cookie3").orElse(null));
     }
 
     @Test
@@ -70,7 +70,7 @@ class JdbcCookieDaoTest {
         expectedList.add(cookie1);
         expectedList.add(cookie2);
         expectedList.add(cookie3);
-        var cookies = jdbcCookieDao.getAllCookies();
+        var cookies = jdbcSessionDao.getAllCookies();
 
         assertEquals(expectedList, cookies);
     }

@@ -20,7 +20,7 @@ CREATE TABLE sessions
 (
     sessionId     IDENTITY NOT NULL PRIMARY KEY,
     token         varchar,
-    userInSession JAVA_OBJECT,
+    userInSession varchar,
     expireDate    bigint
 );
 
