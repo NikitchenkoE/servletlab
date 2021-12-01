@@ -12,7 +12,7 @@ public interface SessionDao {
 
     Optional<Session> get(String cookie);
 
-    List<Session> getAllCookies();
+    List<Session> getAllTokens();
 
     void cleanExpiredCookie(long presentTime);
 }

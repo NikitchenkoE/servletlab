@@ -70,7 +70,7 @@ class JdbcCookieDaoTest {
         expectedList.add(cookie1);
         expectedList.add(cookie2);
         expectedList.add(cookie3);
-        var cookies = jdbcSessionDao.getAllCookies();
+        var cookies = jdbcSessionDao.getAllTokens();
 
         assertEquals(expectedList, cookies);
     }

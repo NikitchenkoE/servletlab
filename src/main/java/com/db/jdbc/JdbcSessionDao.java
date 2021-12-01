@@ -22,7 +22,7 @@ public class JdbcSessionDao implements SessionDao {
     String DELETE_BY_TOKEN = "DELETE FROM sessions WHERE token=?";
     String DELETE_ALL_THAT_EXPIRED = "DELETE FROM sessions WHERE expireDate<?";
     String SELECT_BY_TOKEN = "SELECT sessionId, token, userInSession, expireDate FROM sessions WHERE token=?";
-    String SELECT_ALL_COOKIE = "SELECT sessionId, token, userInSession, expireDate FROM sessions";
+    String SELECT_ALL_TOKENS = "SELECT sessionId, token, userInSession, expireDate FROM sessions";
 
     private final DataSource dataSource;
     SessionMapper cookieMapper = new SessionMapper();
@@ -91,10 +91,10 @@ public class JdbcSessionDao implements SessionDao {
     }
 
     @Override
-    public List<Session> getAllCookies() {
+    public List<Session> getAllTokens() {
         List<Session> sessions = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_COOKIE);
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_TOKENS);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 sessions.add(cookieMapper.mapSession(resultSet));
