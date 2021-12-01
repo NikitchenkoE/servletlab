@@ -13,17 +13,17 @@ import java.util.List;
 
 @Slf4j
 public class CartService {
-    private final CartDao jdbcCartDao;
-    private final ProductDao jdbcProductDao;
+    private final CartDao cartDao;
+    private final ProductDao productDao;
     private final MapToProductInCartDto mapToProductInCartDto = new MapToProductInCartDto();
 
     public CartService(CartDao jdbcCartDao, ProductDao jdbcProductDao) {
-        this.jdbcCartDao = jdbcCartDao;
-        this.jdbcProductDao = jdbcProductDao;
+        this.cartDao = jdbcCartDao;
+        this.productDao = jdbcProductDao;
     }
 
     public void addProductToCart(User user, String productId) {
-        jdbcCartDao.save(ProductInCart.builder()
+        cartDao.save(ProductInCart.builder()
                 .userId(user.getId())
                 .productId(Long.valueOf(productId))
                 .build());
@@ -32,19 +32,19 @@ public class CartService {
 
     public void deleteOneProductFromTheCart(long id) {
         log.info("Deleted item with id {}", id);
-        jdbcCartDao.delete(id);
+        cartDao.delete(id);
     }
 
     public void deleteAllProductWithSameIdFromCart(long id) {
         log.info("deleted all items with id {}", id);
-        jdbcCartDao.deleteByProductId(id);
+        cartDao.deleteByProductId(id);
     }
 
     public List<ProductInCartDto> findAllProductInCart(User user) {
         List<ProductInCartDto> productInCartList = new ArrayList<>();
-        var userCart = jdbcCartDao.getCart(user.getId());
+        var userCart = cartDao.getCart(user.getId());
         for (ProductInCart productInCart : userCart) {
-            jdbcProductDao.get(productInCart.getProductId())
+            productDao.get(productInCart.getProductId())
                     .ifPresent(product -> productInCartList.add(mapToProductInCartDto.mapToProductInCart(productInCart, product)));
         }
         return productInCartList;

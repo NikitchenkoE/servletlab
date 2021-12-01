@@ -8,32 +8,32 @@ import java.util.List;
 import java.util.Optional;
 
 public class ProductService {
-    private final ProductDao jdbcProductDao;
+    private final com.db.interfaces.ProductDao productDao;
 
     public ProductService(ProductDao jdbcProductDao) {
-        this.jdbcProductDao = jdbcProductDao;
+        this.productDao = jdbcProductDao;
     }
 
     public void save(String productName, String productDescription, String productPrice) {
-        jdbcProductDao.save(createNewProduct(productName, productDescription, productPrice));
+        productDao.save(createNewProduct(productName, productDescription, productPrice));
     }
 
     public void delete(long parseLong) {
-        jdbcProductDao.delete(parseLong);
+        productDao.delete(parseLong);
     }
 
     public List<Product> getAll() {
-        return jdbcProductDao.getAll();
+        return productDao.getAll();
     }
 
     public Optional<Product> get(long productId) {
-        return jdbcProductDao.get(productId);
+        return productDao.get(productId);
     }
 
     public void update(Product productToBeUpdated, String productName, String productDescription, String productPrice) {
         Date date = new Date();
 
-        jdbcProductDao.update(Product.builder()
+        productDao.update(Product.builder()
                 .id(productToBeUpdated.getId())
                 .name(productName)
                 .price(Double.parseDouble(productPrice))
@@ -44,7 +44,7 @@ public class ProductService {
     }
 
     public List<Product> getByDescription(String description) {
-        return jdbcProductDao.getByDescription(description);
+        return productDao.getByDescription(description);
     }
 
     private Product createNewProduct(String productName, String productDescription, String productPrice) {

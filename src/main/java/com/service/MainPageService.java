@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 public class MainPageService {
     private final ProductService productService;
 
-    public MainPageService(ProductService productService) {
-        this.productService = productService;
+    public MainPageService(ProductService productDao) {
+        this.productService = productDao;
     }
 
     public List<ProductDto> mapToProductDtoList(List<Product> productList) {

@@ -7,19 +7,19 @@ import org.quartz.impl.StdSchedulerFactory;
 
 @Slf4j
 public class Scheduler {
-    private final SessionDao jdbcCookieDao;
-    private final long cookieLifeTimeInMilliseconds;
+    private final SessionDao sessionDao;
+    private final long sessionLifeTimeInMilliseconds;
 
     public Scheduler(SessionDao sessionDao, long cookieLifeTimeInMilliseconds) {
-        this.jdbcCookieDao = sessionDao;
-        this.cookieLifeTimeInMilliseconds = cookieLifeTimeInMilliseconds;
+        this.sessionDao = sessionDao;
+        this.sessionLifeTimeInMilliseconds = cookieLifeTimeInMilliseconds;
     }
 
     public void startScheduling() {
         try {
             JobDataMap jobDataMap = new JobDataMap();
-            jobDataMap.put("jdbcCookieDao", jdbcCookieDao);
-            jobDataMap.put("cookieLifeTimeInMilliseconds", cookieLifeTimeInMilliseconds);
+            jobDataMap.put("jdbcCookieDao", sessionDao);
+            jobDataMap.put("cookieLifeTimeInMilliseconds", sessionLifeTimeInMilliseconds);
 
             JobDetail jobDetail = JobBuilder.newJob(SessionCleaner.class)
                     .usingJobData(jobDataMap).build();
@@ -27,7 +27,7 @@ public class Scheduler {
             Trigger trigger = TriggerBuilder.newTrigger()
                     .withIdentity("CookieCleanerTrigger")
                     .startNow()
-                    .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMilliseconds(cookieLifeTimeInMilliseconds).repeatForever())
+                    .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMilliseconds(sessionLifeTimeInMilliseconds).repeatForever())
                     .build();
 
             org.quartz.Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();

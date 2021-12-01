@@ -2,6 +2,7 @@ package com.listener;
 
 import com.ServiceLocator;
 import com.db.DataSourceFactory;
+import com.db.interfaces.SessionDao;
 import com.db.jdbc.JdbcCartDao;
 import com.db.jdbc.JdbcProductDao;
 import com.db.jdbc.JdbcSessionDao;
@@ -10,9 +11,11 @@ import com.service.CartService;
 import com.service.ProductService;
 import com.service.RegistrationService;
 import com.service.SecurityService;
+import com.service.scheduleClean.Scheduler;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import lombok.extern.slf4j.Slf4j;
+import org.flywaydb.core.Flyway;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -25,6 +28,7 @@ public class Listener implements ServletContextListener {
         Properties properties = Listener.propertyLoader();
         DataSourceFactory dataSourceFactory = new DataSourceFactory(properties);
         DataSource dataSource = dataSourceFactory.getDataSource();
+        createTables(properties);
 
         JdbcCartDao jdbcCartDao = new JdbcCartDao(dataSource);
         JdbcProductDao jdbcProductDao = new JdbcProductDao(dataSource);
@@ -35,16 +39,8 @@ public class Listener implements ServletContextListener {
         ServiceLocator.addDependency(RegistrationService.class, new RegistrationService(jdbcUserDao));
         ServiceLocator.addDependency(SecurityService.class, new SecurityService(jdbcSessionDao, jdbcUserDao, Integer.parseInt(properties.getProperty("session.ExpirationDateInSeconds"))));
         ServiceLocator.addDependency(CartService.class, new CartService(jdbcCartDao, jdbcProductDao));
-//
-//        ProductService productService = new ProductService(jdbcProductDao);
-//        RegistrationService registrationService = new RegistrationService(jdbcUserDao);
-//        SecurityService securityService = new SecurityService(jdbcSessionDao, jdbcUserDao, Integer.parseInt(properties.getProperty("session.ExpirationDateInSeconds")));
-//        CartService cartService = new CartService(jdbcCartDao, jdbcProductDao);
-//
-//        servletContextEvent.getServletContext().setAttribute("productService", productService);
-//        servletContextEvent.getServletContext().setAttribute("registrationService", registrationService);
-//        servletContextEvent.getServletContext().setAttribute("securityService", securityService);
-//        servletContextEvent.getServletContext().setAttribute("cartService", cartService);
+
+        startScheduling(jdbcSessionDao, properties);
     }
 
     @Override
@@ -63,5 +59,16 @@ public class Listener implements ServletContextListener {
             throw new RuntimeException("Problem when loading properties", exception);
         }
         return properties;
+    }
+
+    private static void createTables(Properties properties) {
+        Flyway flyway = Flyway.configure().dataSource(properties.getProperty("db.Url"), properties.getProperty("db.User"), properties.getProperty("db.Password")).load();
+        flyway.migrate();
+        log.info("Tables created");
+    }
+
+    private static void startScheduling(SessionDao sessionDao, Properties properties) {
+        Scheduler cookieScheduler = new Scheduler(sessionDao, Integer.parseInt(properties.getProperty("session.ExpirationDateInSeconds")) * 1000L);
+        cookieScheduler.startScheduling();
     }
 }
