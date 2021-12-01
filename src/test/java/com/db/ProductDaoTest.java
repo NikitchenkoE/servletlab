@@ -2,6 +2,7 @@ package com.db;
 
 import com.db.jdbc.JdbcProductDao;
 import com.entity.Product;
+import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,16 +17,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ProductDaoTest {
     DataSourceFactory dataConnectionPull = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
+    Flyway flyway = Flyway.configure().dataSource("jdbc:h2:mem:testdb", "user", "user").load();
     JdbcProductDao productDao = new JdbcProductDao(dataConnectionPull.getDataSource());
-    Product productEntity1 = new Product(1L, "first", 15.0,"description", new Date(), new Date());
-    Product productEntity2 = new Product(2L, "second", 25.0,"description", new Date(), new Date());
-    Product productEntity3 = new Product(3L, "third", 35.0,"description", new Date(), new Date());
+    Product productEntity1 = new Product(1L, "first", 15.0, "description", new Date(), new Date());
+    Product productEntity2 = new Product(2L, "second", 25.0, "description", new Date(), new Date());
+    Product productEntity3 = new Product(3L, "third", 35.0, "description", new Date(), new Date());
 
     @BeforeEach
     void init() {
-            productDao.save(productEntity1);
-            productDao.save(productEntity2);
-            productDao.save(productEntity3);
+        flyway.migrate();
+        productDao.save(productEntity1);
+        productDao.save(productEntity2);
+        productDao.save(productEntity3);
     }
 
     @AfterEach
@@ -39,6 +42,7 @@ class ProductDaoTest {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        flyway.clean();
     }
 
     @Test
@@ -66,7 +70,7 @@ class ProductDaoTest {
 
     @Test
     void saveToBdShouldSave() throws SQLException {
-        Product productEntityToSave = new Product(4L, "first", 15.0,"description", new Date(), new Date());
+        Product productEntityToSave = new Product(4L, "first", 15.0, "description", new Date(), new Date());
         String sql = "SELECT * FROM products WHERE productId=4";
         productDao.save(productEntityToSave);
         Product productEntity;
@@ -91,7 +95,7 @@ class ProductDaoTest {
     @Test
     void updateProductInBD() {
         Product beforeUpdate = productDao.get(2).orElse(null);
-        Product productEntityToUpdate = new Product(2L, "updated", 20.0,"description", new Date(), new Date());
+        Product productEntityToUpdate = new Product(2L, "updated", 20.0, "description", new Date(), new Date());
         productDao.update(productEntityToUpdate);
 
         Product updatedProductEntity = productDao.get(2).orElse(null);
@@ -113,24 +117,24 @@ class ProductDaoTest {
     }
 
     @Test
-    void testFindByDescription(){
+    void testFindByDescription() {
         List<Product> expected = new ArrayList<>();
         expected.add(productEntity1);
         expected.add(productEntity2);
         expected.add(productEntity3);
 
         List<Product> actual = productDao.getByDescription("description");
-        assertEquals(expected.toString(),actual.toString());
+        assertEquals(expected.toString(), actual.toString());
     }
 
     @Test
-    void testFindByPartOfDescription(){
+    void testFindByPartOfDescription() {
         List<Product> expected = new ArrayList<>();
         expected.add(productEntity1);
         expected.add(productEntity2);
         expected.add(productEntity3);
 
         List<Product> actual = productDao.getByDescription("desc");
-        assertEquals(expected.toString(),actual.toString());
+        assertEquals(expected.toString(), actual.toString());
     }
 }

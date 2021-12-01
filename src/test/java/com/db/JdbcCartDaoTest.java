@@ -2,6 +2,7 @@ package com.db;
 
 import com.db.jdbc.JdbcCartDao;
 import com.entity.ProductInCart;
+import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,16 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JdbcCartDaoTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
+    Flyway flyway = Flyway.configure().dataSource("jdbc:h2:mem:testdb", "user", "user").load();
     JdbcCartDao jdbcCartDao = new JdbcCartDao(dataSourceFactory.getDataSource());
     ProductInCart cart1 = new ProductInCart(1L, 1L, 1L);
     ProductInCart cart2 = new ProductInCart(2L, 1L, 2L);
     ProductInCart cart3 = new ProductInCart(3L, 1L, 3L);
 
 
-
-
     @BeforeEach
     void init() {
+        flyway.migrate();
         jdbcCartDao.save(cart1);
         jdbcCartDao.save(cart2);
         jdbcCartDao.save(cart3);
@@ -41,6 +42,7 @@ class JdbcCartDaoTest {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        flyway.clean();
     }
 
     @Test

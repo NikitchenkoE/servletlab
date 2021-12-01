@@ -3,7 +3,9 @@ package com.service;
 import com.db.DataSourceFactory;
 import com.db.jdbc.JdbcUserDao;
 import com.db.SqlQueries;
+import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
@@ -14,9 +16,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RegistrationServiceTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
+    Flyway flyway = Flyway.configure().dataSource("jdbc:h2:mem:testdb", "user", "user").load();
     JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSourceFactory.getDataSource());
     RegistrationService registrationService = new RegistrationService(jdbcUserDao);
 
+    @BeforeEach
+    void init(){
+        flyway.migrate();
+    }
     @AfterEach
     void dropTable() {
         try (Connection connection = dataSourceFactory.getDataSource().getConnection();
@@ -26,6 +33,7 @@ class RegistrationServiceTest {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        flyway.clean();
     }
 
     @Test

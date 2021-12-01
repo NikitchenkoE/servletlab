@@ -3,6 +3,7 @@ package com.db;
 import com.db.jdbc.JdbcSessionDao;
 import com.entity.Session;
 import com.entity.User;
+import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class JdbcCookieDaoTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
+    Flyway flyway = Flyway.configure().dataSource("jdbc:h2:mem:testdb", "user", "user").load();
+
     JdbcSessionDao jdbcCookieDao = new JdbcSessionDao(dataSourceFactory.getDataSource());
     User user1 = new User(1L, "user1", "soledPassword1", "sole1");
     User user2 = new User(2L, "user2", "soledPassword2", "sole2");
@@ -28,6 +31,7 @@ class JdbcCookieDaoTest {
 
     @BeforeEach
     void init() {
+        flyway.migrate();
         jdbcCookieDao.save(cookie1);
         jdbcCookieDao.save(cookie2);
         jdbcCookieDao.save(cookie3);
@@ -44,6 +48,7 @@ class JdbcCookieDaoTest {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        flyway.clean();
     }
 
     @Test

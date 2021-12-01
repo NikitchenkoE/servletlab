@@ -2,6 +2,7 @@ package com.db;
 
 import com.db.jdbc.JdbcUserDao;
 import com.entity.User;
+import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,13 +17,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class JdbcUserDaoTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
+    Flyway flyway = Flyway.configure().dataSource("jdbc:h2:mem:testdb", "user", "user").load();
+
     JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSourceFactory.getDataSource());
-    User user1 = new User(1L,"user1","soledPassword1","sole1");
-    User user2 = new User(2L,"user2","soledPassword2","sole2");
-    User user3 = new User(3L,"user3","soledPassword3","sole3+");
+    User user1 = new User(1L, "user1", "soledPassword1", "sole1");
+    User user2 = new User(2L, "user2", "soledPassword2", "sole2");
+    User user3 = new User(3L, "user3", "soledPassword3", "sole3+");
 
     @BeforeEach
     void init() {
+        flyway.migrate();
         jdbcUserDao.save(user1);
         jdbcUserDao.save(user2);
         jdbcUserDao.save(user3);
@@ -39,7 +43,9 @@ class JdbcUserDaoTest {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        flyway.clean();
     }
+
     @Test
     void testGetUserOrElseNull() {
         User userEntity1FromDb = jdbcUserDao.get(1).orElse(null);
@@ -66,7 +72,7 @@ class JdbcUserDaoTest {
     @Test
     void update() {
         User beforeUpdate = jdbcUserDao.get(2).orElse(null);
-        User toUpdate = new User(2L,"newName","newPassword","newSole");
+        User toUpdate = new User(2L, "newName", "newPassword", "newSole");
         jdbcUserDao.update(toUpdate);
 
         User updatedUser = jdbcUserDao.get(2).orElse(null);
@@ -86,10 +92,11 @@ class JdbcUserDaoTest {
         assertNull(jdbcUserDao.get(2).orElse(null));
         assertNull(jdbcUserDao.get(3).orElse(null));
     }
+
     @Test
-    void findByUsername(){
-        assertEquals(user1.toString(),jdbcUserDao.findByUsername("user1").get().toString());
-        assertEquals(user2.toString(),jdbcUserDao.findByUsername("user2").get().toString());
-        assertEquals(user3.toString(),jdbcUserDao.findByUsername("user3").get().toString());
+    void findByUsername() {
+        assertEquals(user1.toString(), jdbcUserDao.findByUsername("user1").get().toString());
+        assertEquals(user2.toString(), jdbcUserDao.findByUsername("user2").get().toString());
+        assertEquals(user3.toString(), jdbcUserDao.findByUsername("user3").get().toString());
     }
 }
