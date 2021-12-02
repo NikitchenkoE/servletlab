@@ -12,11 +12,11 @@ import com.service.ProductService;
 import com.service.RegistrationService;
 import com.service.SecurityService;
 import com.service.scheduleClean.Scheduler;
-import jakarta.servlet.ServletContextEvent;
-import jakarta.servlet.ServletContextListener;
 import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
 
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.Properties;

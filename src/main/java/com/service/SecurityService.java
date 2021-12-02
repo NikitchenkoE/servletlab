@@ -4,11 +4,10 @@ import com.db.interfaces.SessionDao;
 import com.db.interfaces.UserDao;
 import com.entity.Session;
 import com.entity.User;
-import com.service.scheduleClean.Scheduler;
-import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import javax.servlet.http.Cookie;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
