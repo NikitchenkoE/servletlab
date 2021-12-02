@@ -38,6 +38,10 @@
         <property name="productDao" ref="productDao"/>
     </bean>
 
+    <bean id="mainPageService" class="com.service.MainPageService">
+        <property name="productService" ref="productService"/>
+    </bean>
+
     <bean id="registrationService" class="com.service.RegistrationService">
         <property name="userDao" ref="userDao"/>
     </bean>

@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -30,31 +28,35 @@ public class MainPageController {
 
     @GetMapping(path = {"/", "/products"})
     @ResponseBody
-    protected byte[] getMainPage(@RequestAttribute Optional<Boolean> logged,
-                                 @RequestAttribute Optional<String> productDescription,
-                                 @RequestAttribute Optional<String> productId) {
+    protected byte[] getMainPageWithAllProducts(@RequestAttribute Optional<Boolean> logged) {
         Map<String, Object> model = new HashMap<>();
-
-        String description = productDescription.orElse(null);
-        String id = productId.orElse(null);
-        model.put("products", new ArrayList<Product>());
         model.put("logged", String.valueOf(logged.orElse(true)));
 
-        if (description == null && id == null) {
-            var products = productService.getAll();
-            var productDtoList = mainPageService.mapToProductDtoList(products);
-            model.put("products", productDtoList);
+        var products = productService.getAll();
+        var productDtoList = mainPageService.mapToProductDtoList(products);
+        model.put("products", productDtoList);
 
-        } else if (id != null) {
-            if (!id.isEmpty()) {
-                long prodid = Long.parseLong(id);
-                model.put("products", mainPageService.getDataById(prodid));
-            }
+        return PageGenerator.init().writePage(model, "mainPage.ftlh");
+    }
 
-        } else if (description != null && !description.isEmpty()) {
-            model.put("products", mainPageService.getDataByDescription(description));
+    @GetMapping("/productsById")
+    @ResponseBody
+    protected byte[] getMainPageById(@RequestAttribute Optional<Boolean> logged,
+                                     @RequestParam("productId") String productId) {
+        long id = Long.parseLong(productId);
+        Map<String, Object> model = new HashMap<>();
+        model.put("products",mainPageService.getDataById(id));
+        model.put("logged", String.valueOf(logged.orElse(true)));
+        return PageGenerator.init().writePage(model, "mainPage.ftlh");
+    }
 
-        }
+    @GetMapping("/productsByDescription")
+    @ResponseBody
+    protected byte[] getMainPageByDescription(@RequestAttribute Optional<Boolean> logged,
+                                              @RequestParam("productDescription") String productDescription) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("logged", String.valueOf(logged.orElse(true)));
+        model.put("products", mainPageService.getDataByDescription(productDescription));
         return PageGenerator.init().writePage(model, "mainPage.ftlh");
     }
 
@@ -64,13 +66,13 @@ public class MainPageController {
         return PageGenerator.init().writePage("addProductPage.ftlh");
     }
 
-    @PostMapping(path = "/products/add")
+    @PostMapping("/products/add")
     protected String addNewProduct(@ModelAttribute Product product) {
         productService.save(product);
         return "redirect:/";
     }
 
-    @PostMapping(path = "/products/delete")
+    @PostMapping("/products/delete")
     protected String deleteProduct(@RequestParam("idToDelete") Long id) {
         productService.delete(id);
         cartService.deleteAllProductWithSameIdFromCart(id);
@@ -89,7 +91,7 @@ public class MainPageController {
     }
 
     @PostMapping("/products/update")
-    protected String updateProduct(@RequestParam("productId") Long id, @ModelAttribute Product product) throws IOException {
+    protected String updateProduct(@RequestParam("productId") Long id, @ModelAttribute Product product) {
         Product productToBeUpdated = productService.get(id).orElseThrow(() -> new RuntimeException("Impossible to update without id"));
         productService.update(productToBeUpdated, product);
         return "redirect:/";

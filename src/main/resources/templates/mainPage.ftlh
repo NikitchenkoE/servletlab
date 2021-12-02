@@ -68,14 +68,14 @@
 
 <div class="searchInputsPositions">
     <div class="input-group mb-3">
-        <form class="d-flex">
+        <form class="d-flex" action="/productsById">
             <input class="form-control me-2" type="number" min="1" placeholder="Search by Id" aria-label="Search"
                    name="productId">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
     </div>
     <div class="input-group mb-3">
-        <form class="d-flex">
+        <form class="d-flex" action="/productsByDescription">
             <input class="form-control me-2" type="text" placeholder="Search by description" aria-label="Search"
                    name="productDescription">
             <button class="btn btn-outline-success" type="submit">Search</button>
