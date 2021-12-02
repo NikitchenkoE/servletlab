@@ -21,7 +21,7 @@ public class RegistrationController {
     @GetMapping("/registration")
     @ResponseBody
     protected byte[] getRegistrationPage(){
-        return PageGenerator.init().writePage("registration.ftlh");
+        return PageGenerator.init().writePage("registration.ftl");
     }
 
     @PostMapping("/registration")

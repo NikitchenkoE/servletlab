@@ -4,13 +4,11 @@ import com.entity.Product;
 import com.service.CartService;
 import com.service.MainPageService;
 import com.service.ProductService;
-import com.service.util.PageGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -27,43 +25,38 @@ public class MainPageController {
     }
 
     @GetMapping(path = {"/", "/products"})
-    @ResponseBody
-    protected byte[] getMainPageWithAllProducts(@RequestAttribute Optional<Boolean> logged) {
-        Map<String, Object> model = new HashMap<>();
-        model.put("logged", String.valueOf(logged.orElse(true)));
+    protected String getMainPageWithAllProducts(@RequestAttribute Optional<Boolean> logged, Model model) {
+        model.addAttribute("logged", String.valueOf(logged.orElse(true)));
 
         var products = productService.getAll();
         var productDtoList = mainPageService.mapToProductDtoList(products);
-        model.put("products", productDtoList);
+        model.addAttribute("products", productDtoList);
 
-        return PageGenerator.init().writePage(model, "mainPage.ftlh");
+        return "mainPage";
     }
 
     @GetMapping("/productsById")
-    @ResponseBody
-    protected byte[] getMainPageById(@RequestAttribute Optional<Boolean> logged,
-                                     @RequestParam("productId") String productId) {
+    protected String getMainPageById(@RequestAttribute Optional<Boolean> logged,
+                                     @RequestParam("productId") String productId,
+                                     Model model) {
         long id = Long.parseLong(productId);
-        Map<String, Object> model = new HashMap<>();
-        model.put("products",mainPageService.getDataById(id));
-        model.put("logged", String.valueOf(logged.orElse(true)));
-        return PageGenerator.init().writePage(model, "mainPage.ftlh");
+        model.addAttribute("products", mainPageService.getDataById(id));
+        model.addAttribute("logged", String.valueOf(logged.orElse(true)));
+        return "mainPage";
     }
 
     @GetMapping("/productsByDescription")
-    @ResponseBody
-    protected byte[] getMainPageByDescription(@RequestAttribute Optional<Boolean> logged,
-                                              @RequestParam("productDescription") String productDescription) {
-        Map<String, Object> model = new HashMap<>();
-        model.put("logged", String.valueOf(logged.orElse(true)));
-        model.put("products", mainPageService.getDataByDescription(productDescription));
-        return PageGenerator.init().writePage(model, "mainPage.ftlh");
+    protected String getMainPageByDescription(@RequestAttribute Optional<Boolean> logged,
+                                              @RequestParam("productDescription") String productDescription,
+                                              Model model) {
+        model.addAttribute("logged", String.valueOf(logged.orElse(true)));
+        model.addAttribute("products", mainPageService.getDataByDescription(productDescription));
+        return "mainPage";
     }
 
     @GetMapping(path = "/products/add")
-    @ResponseBody
-    protected byte[] getAddProductPage() {
-        return PageGenerator.init().writePage("addProductPage.ftlh");
+    protected String getAddProductPage() {
+        return "addProductPage";
     }
 
     @PostMapping("/products/add")
@@ -80,13 +73,12 @@ public class MainPageController {
     }
 
     @GetMapping("/products/update")
-    @ResponseBody
-    protected byte[] getUpdateProductPage(@RequestParam("idToUpdate") Long id) {
-        Map<String, Object> model = new HashMap<>();
+    protected String getUpdateProductPage(@RequestParam("idToUpdate") Long id,
+                                          Model model) {
         Product productToBeUpdated = productService.get(id).orElseThrow(() -> new RuntimeException("Impossible to update without id"));
-        model.put("product", productToBeUpdated);
+        model.addAttribute("product", productToBeUpdated);
 
-        return PageGenerator.init().writePage(model, "updateProductPage.ftlh");
+        return "updateProductPage";
 
     }
 

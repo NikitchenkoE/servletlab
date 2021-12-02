@@ -23,7 +23,7 @@ public class CartServlet extends HttpServlet {
             data.put("products", cartService.findAllProductInCart(user));
             data.put("total", cartService.sumAllProducts(user));
             resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().println(PageGenerator.init().getPage("cart.ftlh", data));
+            resp.getWriter().println(PageGenerator.init().getPage("cart.ftl", data));
         }
     }
 

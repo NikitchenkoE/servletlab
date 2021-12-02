@@ -22,7 +22,7 @@ public class PageGenerator {
 
     private PageGenerator() {
         this.configuration = new Configuration(Configuration.VERSION_2_3_31);
-        configuration.setClassForTemplateLoading(this.getClass(), "/templates");
+        configuration.setClassForTemplateLoading(this.getClass(), "/WEB-INF/templates");
         configuration.setDefaultEncoding("UTF-8");
         configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
         configuration.setLogTemplateExceptions(true);

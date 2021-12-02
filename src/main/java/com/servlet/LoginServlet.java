@@ -15,7 +15,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.getWriter().println(PageGenerator.init().getPage("login.ftlh"));
+        resp.getWriter().println(PageGenerator.init().getPage("login.ftl"));
         resp.setStatus(HttpServletResponse.SC_OK);
     }
 
