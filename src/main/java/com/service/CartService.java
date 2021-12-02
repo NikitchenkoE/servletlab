@@ -13,14 +13,11 @@ import java.util.List;
 
 @Slf4j
 public class CartService {
-    private final CartDao cartDao;
-    private final ProductDao productDao;
+    private CartDao cartDao;
+    private ProductDao productDao;
     private final MapToProductInCartDto mapToProductInCartDto = new MapToProductInCartDto();
 
-    public CartService(CartDao jdbcCartDao, ProductDao jdbcProductDao) {
-        this.cartDao = jdbcCartDao;
-        this.productDao = jdbcProductDao;
-    }
+
 
     public void addProductToCart(User user, String productId) {
         cartDao.save(ProductInCart.builder()
@@ -59,4 +56,11 @@ public class CartService {
         return result;
     }
 
+    public void setCartDao(CartDao cartDao) {
+        this.cartDao = cartDao;
+    }
+
+    public void setProductDao(ProductDao productDao) {
+        this.productDao = productDao;
+    }
 }

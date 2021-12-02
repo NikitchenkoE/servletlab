@@ -15,15 +15,11 @@ import java.util.List;
 
 @Slf4j
 public class JdbcCartDao implements CartDao {
-    private final DataSource dataSource;
+    private DataSource dataSource;
     private final String DELETE_BY_ID = "DELETE FROM cart WHERE cartItemId=?";
     private final String DELETE_BY_PRODUCT_ID = "DELETE FROM cart WHERE productId=?";
     private final String SAVE_TO_CART = "INSERT INTO cart (userId, productId) VALUES (?,?)";
     private final String GET_ALL_BY_USERNAME = "SELECT cartItemId, userId, productId FROM cart WHERE userId=?";
-
-    public JdbcCartDao(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public void delete(long id) {
@@ -82,5 +78,9 @@ public class JdbcCartDao implements CartDao {
             log.error("Problem when getting user cart with user id {}", userId, exception);
             throw new RuntimeException(exception);
         }
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }

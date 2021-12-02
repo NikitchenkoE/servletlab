@@ -42,26 +42,26 @@
     <div>
         <h2 style="color: #6c757d">Update Product</h2>
     </div>
-    <form action="/products/update" method="POST">
+    <form action="/products/update?productId=${product.id}" method="POST">
         <div class="m-3">
             <div class="input-group mb-3">
                 <label class="col-4 col-form-label" style="color: #6c757d">Product Name </label>
                 <div class="col-4">
-                    <input type="text" class="form-control" name="productName" size="15" value="${productName}"/>
+                    <input type="text" class="form-control" name="name" size="15" value="${product.name}"/>
                 </div>
             </div>
 
             <div class="input-group mb-3">
                 <label class="col-4 col-form-label" style="color: #6c757d">Product Price </label>
                 <div class="col-4">
-                    <input type="number" step="0.01" min="0.01" class="form-control" name="productPrice" size="15" value="${productPrice}"/>
+                    <input type="number" step="0.01" min="0.01" class="form-control" name="price" size="15" value="${product.price}.price"/>
                 </div>
             </div>
 
             <div class="input-group mb-3">
                 <label class="col-4 col-form-label" style="color: #6c757d">Product Description </label>
                 <div class="col-4">
-                    <textarea class="form-control" name="productDescription" maxlength="150">${productDescription}</textarea>
+                    <textarea class="form-control" name="description" maxlength="150">${product.description}</textarea>
                 </div>
             </div>
 

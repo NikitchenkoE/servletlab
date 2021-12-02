@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class JdbcCartDaoTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     Flyway flyway = Flyway.configure().dataSource("jdbc:h2:mem:testdb", "user", "user").load();
-    JdbcCartDao jdbcCartDao = new JdbcCartDao(dataSourceFactory.getDataSource());
+    JdbcCartDao jdbcCartDao = new JdbcCartDao();
     ProductInCart cart1 = new ProductInCart(1L, 1L, 1L);
     ProductInCart cart2 = new ProductInCart(2L, 1L, 2L);
     ProductInCart cart3 = new ProductInCart(3L, 1L, 3L);
@@ -26,6 +26,7 @@ class JdbcCartDaoTest {
     @BeforeEach
     void init() {
         flyway.migrate();
+        jdbcCartDao.setDataSource(dataSourceFactory.getDataSource());
         jdbcCartDao.save(cart1);
         jdbcCartDao.save(cart2);
         jdbcCartDao.save(cart3);

@@ -1,12 +1,15 @@
 package com.db.jdbc;
 
 import com.db.interfaces.UserDao;
-import com.entity.User;
 import com.db.mapper.UserMapper;
+import com.entity.User;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,12 +22,8 @@ public class JdbcUserDao implements UserDao {
     String SELECT_ALL_FROM_USERS = "SELECT userID, username, password, sole FROM users";
     String UPDATE_BY_ID = "UPDATE users SET userID=?, username=?, password=?, sole=? WHERE userID=?";
     String DELETE_BY_ID = "DELETE FROM users WHERE userID=?";
-    private final DataSource dataSource;
+    private DataSource dataSource;
     UserMapper userMapper = new UserMapper();
-
-    public JdbcUserDao(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public Optional<User> get(long id) {
@@ -125,5 +124,9 @@ public class JdbcUserDao implements UserDao {
             log.error("Error by getting product by id {}", username, exception);
             throw new RuntimeException(exception);
         }
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }

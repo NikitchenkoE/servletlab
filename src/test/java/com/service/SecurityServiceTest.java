@@ -1,11 +1,11 @@
 package com.service;
 
 import com.db.DataSourceFactory;
-import com.db.jdbc.JdbcSessionDao;
 import com.db.SqlQueries;
+import com.db.jdbc.JdbcSessionDao;
 import com.db.jdbc.JdbcUserDao;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,13 +14,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class SecurityServiceTest {
     Properties properties = propertyLoader();
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
-    SecurityService securityService = new SecurityService(new JdbcSessionDao(dataSourceFactory.getDataSource()), new JdbcUserDao(dataSourceFactory.getDataSource()), Integer.parseInt(properties.getProperty("session.ExpirationDateInSeconds")));
-    RegistrationService registrationService = new RegistrationService(new JdbcUserDao(dataSourceFactory.getDataSource()));
 
     @AfterEach
     void dropTable() {

@@ -17,11 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class RegistrationServiceTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     Flyway flyway = Flyway.configure().dataSource("jdbc:h2:mem:testdb", "user", "user").load();
-    JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSourceFactory.getDataSource());
-    RegistrationService registrationService = new RegistrationService(jdbcUserDao);
+    JdbcUserDao jdbcUserDao = new JdbcUserDao();
 
     @BeforeEach
     void init(){
+        jdbcUserDao.setDataSource(dataSourceFactory.getDataSource());
         flyway.migrate();
     }
     @AfterEach
@@ -38,6 +38,8 @@ class RegistrationServiceTest {
 
     @Test
     void saveUserToDb() {
+        RegistrationService registrationService = new RegistrationService();
+        registrationService.setUserDao(jdbcUserDao);
         String name = "user";
         String password = "password";
         registrationService.saveUser(name, password);

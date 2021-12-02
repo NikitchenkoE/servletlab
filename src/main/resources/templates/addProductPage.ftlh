@@ -49,20 +49,20 @@
             <div class="input-group mb-3">
                 <label class="col-4 col-form-label" style="color: #6c757d">Product Name </label>
                 <div class="col-4">
-                    <input type="text" class="form-control" name="productName" size="15"/>
+                    <input type="text" name="name" class="form-control" id="name" size="15"/>
                 </div>
             </div>
 
             <div class="input-group mb-3">
                 <label class="col-4 col-form-label" style="color: #6c757d">Product Price </label>
                 <div class="col-4">
-                    <input type="number" step="0.01" min="0.01" class="form-control" name="productPrice" size="15"/>
+                    <input type="number" name="price" step="0.01" min="0.01" class="form-control" id="price" size="15"/>
                 </div>
             </div>
             <div class="input-group mb-3">
                 <label class="col-4 col-form-label" style="color: #6c757d">Product Description </label>
                 <div class="col-4">
-                    <textarea class="form-control" name="productDescription" maxlength="300"></textarea>
+                    <textarea class="form-control" name="description" id="description" maxlength="300"></textarea>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary" style="margin-top: 1%">Add</button>

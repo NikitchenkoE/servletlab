@@ -9,11 +9,7 @@ import java.util.UUID;
 
 @Slf4j
 public class RegistrationService {
-    private final UserDao userDao;
-
-    public RegistrationService(UserDao userDao) {
-        this.userDao = userDao;
-    }
+    private UserDao userDao;
 
     public boolean saveUser(String username, String password) {
         if (userDao.findByUsername(username).isEmpty()) {
@@ -31,5 +27,9 @@ public class RegistrationService {
             log.info("user with this nickname exist");
             return false;
         }
+    }
+
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
     }
 }

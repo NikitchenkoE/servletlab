@@ -18,13 +18,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductDaoTest {
     DataSourceFactory dataConnectionPull = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     Flyway flyway = Flyway.configure().dataSource("jdbc:h2:mem:testdb", "user", "user").load();
-    JdbcProductDao productDao = new JdbcProductDao(dataConnectionPull.getDataSource());
+    JdbcProductDao productDao = new JdbcProductDao();
     Product productEntity1 = new Product(1L, "first", 15.0, "description", new Date(), new Date());
     Product productEntity2 = new Product(2L, "second", 25.0, "description", new Date(), new Date());
     Product productEntity3 = new Product(3L, "third", 35.0, "description", new Date(), new Date());
 
     @BeforeEach
     void init() {
+        productDao.setDataSource(dataConnectionPull.getDataSource());
         flyway.migrate();
         productDao.save(productEntity1);
         productDao.save(productEntity2);

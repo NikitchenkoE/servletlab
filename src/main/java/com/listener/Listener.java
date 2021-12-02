@@ -30,15 +30,16 @@ public class Listener implements ServletContextListener {
         DataSource dataSource = dataSourceFactory.getDataSource();
         createTables(properties);
 
-        JdbcCartDao jdbcCartDao = new JdbcCartDao(dataSource);
-        JdbcProductDao jdbcProductDao = new JdbcProductDao(dataSource);
+//        JdbcCartDao jdbcCartDao = new JdbcCartDao(dataSource);
+        JdbcProductDao jdbcProductDao = new JdbcProductDao();
+        jdbcProductDao.setDataSource(dataSource);
         JdbcSessionDao jdbcSessionDao = new JdbcSessionDao(dataSource);
-        JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
+//        JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
 
-        ServiceLocator.addDependency(ProductService.class, new ProductService(jdbcProductDao));
-        ServiceLocator.addDependency(RegistrationService.class, new RegistrationService(jdbcUserDao));
-        ServiceLocator.addDependency(SecurityService.class, new SecurityService(jdbcSessionDao, jdbcUserDao, Integer.parseInt(properties.getProperty("session.ExpirationDateInSeconds"))));
-        ServiceLocator.addDependency(CartService.class, new CartService(jdbcCartDao, jdbcProductDao));
+        ServiceLocator.addDependency(ProductService.class, new ProductService());
+//        ServiceLocator.addDependency(RegistrationService.class, new RegistrationService(jdbcUserDao));
+//        ServiceLocator.addDependency(SecurityService.class, new SecurityService(jdbcSessionDao, jdbcUserDao, Integer.parseInt(properties.getProperty("session.ExpirationDateInSeconds"))));
+//        ServiceLocator.addDependency(CartService.class, new CartService(jdbcCartDao, jdbcProductDao));
 
         startScheduling(jdbcSessionDao, properties);
     }

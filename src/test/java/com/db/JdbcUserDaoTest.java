@@ -19,13 +19,14 @@ class JdbcUserDaoTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     Flyway flyway = Flyway.configure().dataSource("jdbc:h2:mem:testdb", "user", "user").load();
 
-    JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSourceFactory.getDataSource());
+    JdbcUserDao jdbcUserDao = new JdbcUserDao();
     User user1 = new User(1L, "user1", "soledPassword1", "sole1");
     User user2 = new User(2L, "user2", "soledPassword2", "sole2");
     User user3 = new User(3L, "user3", "soledPassword3", "sole3+");
 
     @BeforeEach
     void init() {
+        jdbcUserDao.setDataSource(dataSourceFactory.getDataSource());
         flyway.migrate();
         jdbcUserDao.save(user1);
         jdbcUserDao.save(user2);

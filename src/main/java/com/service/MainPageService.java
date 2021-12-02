@@ -4,6 +4,9 @@ import com.entity.dto.ProductDto;
 import com.entity.Product;
 import com.entity.mapper.MapToProductDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,12 +15,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
+@Service
 public class MainPageService {
-    private final ProductService productService;
-
-    public MainPageService(ProductService productDao) {
-        this.productService = productDao;
-    }
+    private ProductService productService;
 
     public List<ProductDto> mapToProductDtoList(List<Product> productList) {
         MapToProductDto mapToProductDto = new MapToProductDto();
@@ -49,5 +49,9 @@ public class MainPageService {
         var productsDto = mapToProductDtoList(products);
         data.put("products", productsDto);
         return data;
+    }
+
+    public void setProductService(ProductService productService) {
+        this.productService = productService;
     }
 }

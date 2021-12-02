@@ -2,20 +2,18 @@ package com.service;
 
 import com.db.interfaces.ProductDao;
 import com.entity.Product;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+
 public class ProductService {
-    private final com.db.interfaces.ProductDao productDao;
+    private ProductDao productDao;
 
-    public ProductService(ProductDao jdbcProductDao) {
-        this.productDao = jdbcProductDao;
-    }
-
-    public void save(String productName, String productDescription, String productPrice) {
-        productDao.save(createNewProduct(productName, productDescription, productPrice));
+    public void save(Product product) {
+        productDao.save(createNewProduct(product));
     }
 
     public void delete(long parseLong) {
@@ -30,14 +28,14 @@ public class ProductService {
         return productDao.get(productId);
     }
 
-    public void update(Product productToBeUpdated, String productName, String productDescription, String productPrice) {
+    public void update(Product productToBeUpdated, Product product) {
         Date date = new Date();
 
         productDao.update(Product.builder()
                 .id(productToBeUpdated.getId())
-                .name(productName)
-                .price(Double.parseDouble(productPrice))
-                .description(productDescription)
+                .name(product.getName())
+                .price(product.getPrice())
+                .description(product.getDescription())
                 .create(productToBeUpdated.getCreate())
                 .update(date)
                 .build());
@@ -47,14 +45,18 @@ public class ProductService {
         return productDao.getByDescription(description);
     }
 
-    private Product createNewProduct(String productName, String productDescription, String productPrice) {
+    private Product createNewProduct(Product product) {
         Date date = new Date();
         return Product.builder()
-                .name(productName)
-                .price(Double.parseDouble(productPrice))
-                .description(productDescription)
+                .name(product.getName())
+                .price(product.getPrice())
+                .description(product.getDescription())
                 .create(date)
                 .update(date)
                 .build();
+    }
+
+    public void setProductDao(ProductDao productDao) {
+        this.productDao = productDao;
     }
 }

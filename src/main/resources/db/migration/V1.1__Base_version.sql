@@ -1,6 +1,6 @@
 CREATE TABLE products
 (
-    productID   IDENTITY NOT NULL PRIMARY KEY,
+    productID   SERIAL NOT NULL PRIMARY KEY,
     name        varchar,
     price       double precision,
     description varchar,
@@ -10,7 +10,7 @@ CREATE TABLE products
 
 CREATE TABLE users
 (
-    userID   IDENTITY NOT NULL PRIMARY KEY,
+    userID   SERIAL NOT NULL PRIMARY KEY,
     username varchar,
     password varchar,
     sole     varchar
@@ -18,7 +18,7 @@ CREATE TABLE users
 
 CREATE TABLE sessions
 (
-    sessionId     IDENTITY NOT NULL PRIMARY KEY,
+    sessionId     SERIAL NOT NULL PRIMARY KEY,
     token         varchar,
     userInSession varchar,
     expireDate    bigint
@@ -26,7 +26,7 @@ CREATE TABLE sessions
 
 CREATE TABLE cart
 (
-    cartItemId IDENTITY NOT NULL PRIMARY KEY,
+    cartItemId SERIAL NOT NULL PRIMARY KEY,
     userId     bigint,
     productId  bigint
 );

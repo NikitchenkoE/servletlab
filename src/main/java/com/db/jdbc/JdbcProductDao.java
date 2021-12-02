@@ -20,12 +20,8 @@ public class JdbcProductDao implements ProductDao {
     String DELETE_BY_ID = "DELETE FROM products WHERE productId=?";
     String SELECT_BY_DESCRIPTION = "SELECT productID, name, price, description, createDate, updateDate FROM products WHERE description LIKE ?";
 
-    private final DataSource dataSource;
+    private DataSource dataSource;
     private final ProductMapper productMapper = new ProductMapper();
-
-    public JdbcProductDao(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public Optional<Product> get(long id) {
@@ -130,5 +126,9 @@ public class JdbcProductDao implements ProductDao {
             throwables.printStackTrace();
         }
         return productEntities;
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }
