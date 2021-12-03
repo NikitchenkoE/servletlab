@@ -13,7 +13,7 @@ public class SessionMapper {
         return Session.builder()
                 .id(resultSet.getLong("sessionId"))
                 .token(resultSet.getString("token"))
-                .user(new ObjectMapper().readValue(resultSet.getString("userInSession"),User.class))
+                .user(new ObjectMapper().readValue(resultSet.getString("userInSession"), User.class))
                 .expireDate(resultSet.getLong("expireDate"))
                 .build();
     }

@@ -29,6 +29,7 @@
 </head>
 <body>
 <p hidden>${logged}</p>
+<p hidden>${user}</p>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Shop</a>
@@ -41,13 +42,17 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/products">All products</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="/products/add">Add Product</a>
-                </li>
-                <#if logged == "true">
+                <#if user.role == "ADMIN">
                     <li class="nav-item">
-                        <a class="nav-link active" href="/cart">My cart</a>
+                        <a class="nav-link active" href="/products/add">Add Product</a>
                     </li>
+                </#if>
+                <#if logged == "true">
+                    <#if user.role == "USER">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/cart">My cart</a>
+                        </li>
+                    </#if>
                 </#if>
                 <div class="loginAndLogoutPosition">
                     <#if logged == "false">
@@ -109,20 +114,27 @@
                 <td>${product.create}</td>
                 <td>${product.update}</td>
                 <#if logged == "true">
-                    <td>
-                        <form action="/cart?productId=${product.id}" method="post">
-                            <button class="btn btn-outline-primary" type="submit" value="Add Product to cart">Add to cart</button>
-                        </form>
-                    </td>
-                    <td>
-                        <a class="btn btn-outline-success" href='/products/update?idToUpdate=${product.id}'>Update
-                        </a>
-                    </td>
-                    <td>
-                        <form action="/products/delete?idToDelete=${product.id}" method="post">
-                            <button class="btn btn-outline-danger" type="submit" value="Delete Product">Delete</button>
-                        </form>
-                    </td>
+                    <#if user.role == "USER">
+                        <td>
+                            <form action="/cart?productId=${product.id}" method="post">
+                                <button class="btn btn-outline-primary" type="submit" value="Add Product to cart">Add to
+                                    cart
+                                </button>
+                            </form>
+                        </td>
+                    </#if>
+                    <#if user.role == "ADMiN">
+                        <td>
+                            <a class="btn btn-outline-success" href='/products/update?idToUpdate=${product.id}'>Update
+                            </a>
+                        </td>
+                        <td>
+                            <form action="/products/delete?idToDelete=${product.id}" method="post">
+                                <button class="btn btn-outline-danger" type="submit" value="Delete Product">Delete
+                                </button>
+                            </form>
+                        </td>
+                    </#if>
                 </#if>
             </tr>
         </#list>

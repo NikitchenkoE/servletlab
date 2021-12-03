@@ -1,6 +1,7 @@
 package com.servlet;
 
 import com.entity.Product;
+import com.entity.dto.AuthorizedUserDto;
 import com.service.CartService;
 import com.service.MainPageService;
 import com.service.ProductService;
@@ -25,8 +26,17 @@ public class MainPageController {
     }
 
     @GetMapping(path = {"/", "/products"})
-    protected String getMainPageWithAllProducts(@RequestAttribute Optional<Boolean> logged, Model model) {
+    protected String getMainPageWithAllProducts(@RequestAttribute Optional<Boolean> logged,
+                                                @RequestAttribute Optional<AuthorizedUserDto> authUser,
+                                                Model model) {
+        AuthorizedUserDto user = authUser.orElse(AuthorizedUserDto.builder()
+                .id(1L)
+                .username("user")
+                .role("USER")
+                .build());
+
         model.addAttribute("logged", String.valueOf(logged.orElse(true)));
+        model.addAttribute("user", user);
 
         var products = productService.getAll();
         var productDtoList = mainPageService.mapToProductDtoList(products);
