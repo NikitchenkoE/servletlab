@@ -1,20 +1,22 @@
 package com.servlet;
 
 import com.service.SecurityService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
-public class LoginController extends HttpServlet {
+public class SessionController {
     private final SecurityService securityService;
 
-    public LoginController(SecurityService securityService) {
+    @Autowired
+    public SessionController(SecurityService securityService) {
         this.securityService = securityService;
     }
 
@@ -34,6 +36,13 @@ public class LoginController extends HttpServlet {
         } else {
             return "redirect:/login";
         }
+    }
+
+    @GetMapping("/logout")
+    protected String logout(HttpServletRequest req, HttpServletResponse resp) {
+        Cookie logoutCookie = securityService.logout(req.getCookies());
+        resp.addCookie(logoutCookie);
+        return "redirect:/";
     }
 }
 
