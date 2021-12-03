@@ -7,13 +7,8 @@ import org.quartz.impl.StdSchedulerFactory;
 
 @Slf4j
 public class Scheduler {
-    private final SessionDao sessionDao;
-    private final long sessionLifeTimeInMilliseconds;
-
-    public Scheduler(SessionDao sessionDao, long cookieLifeTimeInMilliseconds) {
-        this.sessionDao = sessionDao;
-        this.sessionLifeTimeInMilliseconds = cookieLifeTimeInMilliseconds;
-    }
+    private SessionDao sessionDao;
+    private long sessionLifeTimeInMilliseconds;
 
     public void startScheduling() {
         try {
@@ -37,5 +32,13 @@ public class Scheduler {
             log.error("Exception when starting scheduling", exception);
             throw new RuntimeException("Exception when starting scheduling", exception);
         }
+    }
+
+    public void setSessionDao(SessionDao sessionDao) {
+        this.sessionDao = sessionDao;
+    }
+
+    public void setSessionLifeTimeInMilliseconds(long sessionLifeTimeInMilliseconds) {
+        this.sessionLifeTimeInMilliseconds = sessionLifeTimeInMilliseconds;
     }
 }

@@ -1,7 +1,7 @@
 package com.filter;
 
-import com.ServiceLocator;
 import com.service.SecurityService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +17,12 @@ public class SecurityFilter implements Filter {
     private final String MAIN_PAGE_PATH2 = "/products";
     private final List<String> allowedPagesWithoutAuth = Arrays.asList(LOGIN_PATH, REGISTRATION_PATH, MAIN_PAGE_PATH, MAIN_PAGE_PATH2);
     private final List<String> forbiddenPagesToAuthUser = Arrays.asList(LOGIN_PATH, REGISTRATION_PATH);
-    private final SecurityService securityService = ServiceLocator.getDependency(SecurityService.class);
+    private final SecurityService securityService;
+
+    @Autowired
+    public SecurityFilter(SecurityService securityService) {
+        this.securityService = securityService;
+    }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
