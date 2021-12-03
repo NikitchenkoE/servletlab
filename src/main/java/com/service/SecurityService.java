@@ -14,15 +14,9 @@ import java.util.UUID;
 
 @Slf4j
 public class SecurityService {
-    private final SessionDao sessionDao;
-    private final UserDao userDao;
-    private final int cookieExpirationDate;
-
-    public SecurityService(SessionDao sessionDao, UserDao userDao, int cookieExpirationDate) {
-        this.sessionDao = sessionDao;
-        this.userDao = userDao;
-        this.cookieExpirationDate = cookieExpirationDate;
-    }
+    private SessionDao sessionDao;
+    private UserDao userDao;
+    private int cookieExpirationDate;
 
     public boolean isAuth(String username, String password) {
         log.info("Checked data by username {} and password {}", username, password);
@@ -85,5 +79,17 @@ public class SecurityService {
             }
         }
         return user;
+    }
+
+    public void setSessionDao(SessionDao sessionDao) {
+        this.sessionDao = sessionDao;
+    }
+
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    public void setCookieExpirationDate(int cookieExpirationDate) {
+        this.cookieExpirationDate = cookieExpirationDate;
     }
 }

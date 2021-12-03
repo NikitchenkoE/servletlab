@@ -34,12 +34,22 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
+    <bean id="sessionDao" class="com.db.jdbc.JdbcSessionDao">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
     <bean id="productService" class="com.service.ProductService">
         <property name="productDao" ref="productDao"/>
     </bean>
 
     <bean id="mainPageService" class="com.service.MainPageService">
         <property name="productService" ref="productService"/>
+    </bean>
+
+    <bean id="securityService" class="com.service.SecurityService">
+        <property name="sessionDao" ref="sessionDao"/>
+        <property name="userDao" ref="userDao"/>
+        <property name="cookieExpirationDate" value="120"/>
     </bean>
 
     <bean id="registrationService" class="com.service.RegistrationService">

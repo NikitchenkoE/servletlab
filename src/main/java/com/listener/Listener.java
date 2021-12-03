@@ -33,7 +33,7 @@ public class Listener implements ServletContextListener {
 //        JdbcCartDao jdbcCartDao = new JdbcCartDao(dataSource);
         JdbcProductDao jdbcProductDao = new JdbcProductDao();
         jdbcProductDao.setDataSource(dataSource);
-        JdbcSessionDao jdbcSessionDao = new JdbcSessionDao(dataSource);
+//        JdbcSessionDao jdbcSessionDao = new JdbcSessionDao(dataSource);
 //        JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
 
         ServiceLocator.addDependency(ProductService.class, new ProductService());
@@ -41,7 +41,7 @@ public class Listener implements ServletContextListener {
 //        ServiceLocator.addDependency(SecurityService.class, new SecurityService(jdbcSessionDao, jdbcUserDao, Integer.parseInt(properties.getProperty("session.ExpirationDateInSeconds"))));
 //        ServiceLocator.addDependency(CartService.class, new CartService(jdbcCartDao, jdbcProductDao));
 
-        startScheduling(jdbcSessionDao, properties);
+//        startScheduling(jdbcSessionDao, properties);
     }
 
     @Override

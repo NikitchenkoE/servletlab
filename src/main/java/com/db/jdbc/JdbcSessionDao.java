@@ -24,12 +24,8 @@ public class JdbcSessionDao implements SessionDao {
     String SELECT_BY_TOKEN = "SELECT sessionId, token, userInSession, expireDate FROM sessions WHERE token=?";
     String SELECT_ALL_TOKENS = "SELECT sessionId, token, userInSession, expireDate FROM sessions";
 
-    private final DataSource dataSource;
+    private  DataSource dataSource;
     SessionMapper cookieMapper = new SessionMapper();
-
-    public JdbcSessionDao(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public void save(Session session) {
@@ -103,5 +99,9 @@ public class JdbcSessionDao implements SessionDao {
             exception.printStackTrace();
         }
         return sessions;
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }
