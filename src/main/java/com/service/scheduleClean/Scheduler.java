@@ -8,13 +8,13 @@ import org.quartz.impl.StdSchedulerFactory;
 @Slf4j
 public class Scheduler {
     private SessionDao sessionDao;
-    private long sessionLifeTimeInMilliseconds;
+    private long expirationDateInMilliSeconds;
 
     public void startScheduling() {
         try {
             JobDataMap jobDataMap = new JobDataMap();
             jobDataMap.put("jdbcCookieDao", sessionDao);
-            jobDataMap.put("cookieLifeTimeInMilliseconds", sessionLifeTimeInMilliseconds);
+            jobDataMap.put("cookieLifeTimeInMilliseconds", expirationDateInMilliSeconds);
 
             JobDetail jobDetail = JobBuilder.newJob(SessionCleaner.class)
                     .usingJobData(jobDataMap).build();
@@ -22,7 +22,7 @@ public class Scheduler {
             Trigger trigger = TriggerBuilder.newTrigger()
                     .withIdentity("CookieCleanerTrigger")
                     .startNow()
-                    .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMilliseconds(sessionLifeTimeInMilliseconds).repeatForever())
+                    .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMilliseconds(expirationDateInMilliSeconds).repeatForever())
                     .build();
 
             org.quartz.Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
@@ -38,7 +38,7 @@ public class Scheduler {
         this.sessionDao = sessionDao;
     }
 
-    public void setSessionLifeTimeInMilliseconds(long sessionLifeTimeInMilliseconds) {
-        this.sessionLifeTimeInMilliseconds = sessionLifeTimeInMilliseconds;
+    public void setExpirationDateInMilliSeconds(long expirationDateInSeconds) {
+        this.expirationDateInMilliSeconds = expirationDateInSeconds*1000;
     }
 }

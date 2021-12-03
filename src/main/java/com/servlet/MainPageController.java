@@ -26,8 +26,8 @@ public class MainPageController {
     }
 
     @GetMapping(path = {"/", "/products"})
-    protected String getMainPageWithAllProducts(@RequestAttribute Optional<Boolean> logged,
-                                                @RequestAttribute Optional<AuthorizedUserDto> authUser,
+    protected String getMainPageWithAllProducts(@RequestAttribute("isLogged") Optional<Boolean> logged,
+                                                @RequestAttribute("user") Optional<AuthorizedUserDto> authUser,
                                                 Model model) {
         AuthorizedUserDto user = authUser.orElse(AuthorizedUserDto.builder()
                 .id(1L)

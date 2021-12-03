@@ -13,13 +13,15 @@
 
     <context:component-scan base-package="com"/>
 
+    <context:property-placeholder location="classpath:application.properties"/>
+
     <mvc:annotation-driven/>
 
     <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
-        <property name="username" value="userPg"/>
-        <property name="password" value="userPg"/>
-        <property name="driverClassName" value="org.postgresql.Driver"/>
-        <property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/shopLab"/>
+        <property name="username" value="${db.User}"/>
+        <property name="password" value="${db.Password}"/>
+        <property name="driverClassName" value="${db.Driver}"/>
+        <property name="jdbcUrl" value="${db.Url}"/>
     </bean>
 
     <bean id="productDao" class="com.db.jdbc.JdbcProductDao">
@@ -49,7 +51,7 @@
     <bean id="securityService" class="com.service.SecurityService">
         <property name="sessionDao" ref="sessionDao"/>
         <property name="userDao" ref="userDao"/>
-        <property name="cookieExpirationDate" value="120"/>
+        <property name="cookieExpirationDate" value="${session.ExpirationDateInSeconds}"/>
     </bean>
 
     <bean id="registrationService" class="com.service.RegistrationService">
@@ -63,7 +65,7 @@
 
     <bean id="scheduller" class="com.service.scheduleClean.Scheduler">
         <property name="sessionDao" ref="sessionDao"/>
-        <property name="sessionLifeTimeInMilliseconds" value="100000"/>
+        <property name="expirationDateInMilliSeconds" value="${session.ExpirationDateInSeconds}"/>
     </bean>
 
     <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
