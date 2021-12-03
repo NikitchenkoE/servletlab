@@ -64,6 +64,19 @@ public class MainPageController {
         return "mainPage";
     }
 
+    @PostMapping("/cart")
+    protected String addProductToCart(@RequestParam("productId") String id,
+                               @RequestAttribute Optional<AuthorizedUserDto> authUser) {
+        AuthorizedUserDto user = authUser.orElse(AuthorizedUserDto.builder()
+                .id(1L)
+                .username("user")
+                .role("USER")
+                .build());
+        cartService.addProductToCart(user, id);
+
+        return "redirect:/";
+    }
+
     @GetMapping(path = "/products/add")
     protected String getAddProductPage() {
         return "addProductPage";

@@ -3,7 +3,7 @@ package com.service;
 import com.db.interfaces.CartDao;
 import com.db.interfaces.ProductDao;
 import com.entity.ProductInCart;
-import com.entity.User;
+import com.entity.dto.AuthorizedUserDto;
 import com.entity.dto.ProductInCartDto;
 import com.entity.mapper.MapToProductInCartDto;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class CartService {
 
 
 
-    public void addProductToCart(User user, String productId) {
+    public void addProductToCart(AuthorizedUserDto user, String productId) {
         cartDao.save(ProductInCart.builder()
                 .userId(user.getId())
                 .productId(Long.valueOf(productId))
@@ -37,7 +37,7 @@ public class CartService {
         cartDao.deleteByProductId(id);
     }
 
-    public List<ProductInCartDto> findAllProductInCart(User user) {
+    public List<ProductInCartDto> findAllProductInCartDto(AuthorizedUserDto user) {
         List<ProductInCartDto> productInCartList = new ArrayList<>();
         var userCart = cartDao.getCart(user.getId());
         for (ProductInCart productInCart : userCart) {
@@ -47,9 +47,9 @@ public class CartService {
         return productInCartList;
     }
 
-    public double sumAllProducts(User user) {
+    public double sumAllProducts(AuthorizedUserDto user) {
         double result = 0.0;
-        var products = findAllProductInCart(user);
+        var products = findAllProductInCartDto(user);
         for (ProductInCartDto product : products) {
             result += product.getProductPrice();
         }

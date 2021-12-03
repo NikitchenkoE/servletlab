@@ -7,7 +7,7 @@ import com.entity.Product;
 public class MapToProductInCartDto {
     public ProductInCartDto mapToProductInCart(ProductInCart cart, Product product) {
         return ProductInCartDto.builder()
-                .cartId(cart.getId())
+                .cartItemId(cart.getId())
                 .productName(product.getName())
                 .productPrice(product.getPrice())
                 .build();
