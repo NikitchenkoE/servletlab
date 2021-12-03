@@ -16,11 +16,11 @@ import java.util.Optional;
 
 @Slf4j
 public class JdbcUserDao implements UserDao {
-    String SELECT_USER_BY_ID = "SELECT userID, username, password, sole FROM users WHERE userID=?";
-    String SELECT_USER_BY_NAME = "SELECT userID, username, password, sole FROM users WHERE username=?";
-    String INSERT_INTO_TABLE = "INSERT INTO users(username, password, sole) VALUES (?,?,?)";
-    String SELECT_ALL_FROM_USERS = "SELECT userID, username, password, sole FROM users";
-    String UPDATE_BY_ID = "UPDATE users SET userID=?, username=?, password=?, sole=? WHERE userID=?";
+    String SELECT_USER_BY_ID = "SELECT userID, username, role, password, sole FROM users WHERE userID=?";
+    String SELECT_USER_BY_NAME = "SELECT userID, username, role, password, sole FROM users WHERE username=?";
+    String INSERT_INTO_TABLE = "INSERT INTO users(username, role, password, sole) VALUES (?,?,?,?)";
+    String SELECT_ALL_FROM_USERS = "SELECT userID, username, role, password, sole FROM users";
+    String UPDATE_BY_ID = "UPDATE users SET userID=?, username=?, role=?, password=?, sole=? WHERE userID=?";
     String DELETE_BY_ID = "DELETE FROM users WHERE userID=?";
     private DataSource dataSource;
     UserMapper userMapper = new UserMapper();
@@ -66,8 +66,9 @@ public class JdbcUserDao implements UserDao {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO_TABLE)) {
                 preparedStatement.setString(1, user.getUsername());
-                preparedStatement.setString(2, user.getSoledPassword());
-                preparedStatement.setString(3, user.getSole());
+                preparedStatement.setString(2, user.getRole().getName());
+                preparedStatement.setString(3, user.getSoledPassword());
+                preparedStatement.setString(4, user.getSole());
 
                 preparedStatement.executeUpdate();
             }
@@ -84,9 +85,10 @@ public class JdbcUserDao implements UserDao {
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BY_ID)) {
             preparedStatement.setLong(1, user.getId());
             preparedStatement.setString(2, user.getUsername());
-            preparedStatement.setString(3, user.getSoledPassword());
-            preparedStatement.setString(4, user.getSole());
-            preparedStatement.setLong(5, user.getId());
+            preparedStatement.setString(3, user.getRole().getName());
+            preparedStatement.setString(4, user.getSoledPassword());
+            preparedStatement.setString(5, user.getSole());
+            preparedStatement.setLong(6, user.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {

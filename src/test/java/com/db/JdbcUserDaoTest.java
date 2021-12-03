@@ -2,6 +2,7 @@ package com.db;
 
 import com.db.jdbc.JdbcUserDao;
 import com.entity.User;
+import com.entity.enums.Role;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,9 +21,9 @@ class JdbcUserDaoTest {
     Flyway flyway = Flyway.configure().dataSource("jdbc:h2:mem:testdb", "user", "user").load();
 
     JdbcUserDao jdbcUserDao = new JdbcUserDao();
-    User user1 = new User(1L, "user1", "soledPassword1", "sole1");
-    User user2 = new User(2L, "user2", "soledPassword2", "sole2");
-    User user3 = new User(3L, "user3", "soledPassword3", "sole3+");
+    User user1 = new User(1L, "user1", Role.USER, "soledPassword1", "sole1");
+    User user2 = new User(2L, "user2", Role.USER, "soledPassword2", "sole2");
+    User user3 = new User(3L, "user3", Role.USER, "soledPassword3", "sole3+");
 
     @BeforeEach
     void init() {
@@ -73,7 +74,7 @@ class JdbcUserDaoTest {
     @Test
     void update() {
         User beforeUpdate = jdbcUserDao.get(2).orElse(null);
-        User toUpdate = new User(2L, "newName", "newPassword", "newSole");
+        User toUpdate = new User(2L, "newName", Role.USER, "newPassword", "newSole");
         jdbcUserDao.update(toUpdate);
 
         User updatedUser = jdbcUserDao.get(2).orElse(null);

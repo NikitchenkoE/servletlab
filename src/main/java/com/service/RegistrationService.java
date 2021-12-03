@@ -2,6 +2,7 @@ package com.service;
 
 import com.db.interfaces.UserDao;
 import com.entity.User;
+import com.entity.enums.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -18,6 +19,7 @@ public class RegistrationService {
 
             userDao.save(User.builder()
                     .username(username)
+                    .role(Role.USER)
                     .soledPassword(soledPassword)
                     .sole(sole)
                     .build());

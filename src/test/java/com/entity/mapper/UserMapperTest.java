@@ -2,6 +2,7 @@ package com.entity.mapper;
 
 import com.db.mapper.UserMapper;
 import com.entity.User;
+import com.entity.enums.Role;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,10 +36,11 @@ class UserMapperTest {
     void mapCartEquals() throws SQLException {
         Mockito.when(resultSetMock.getLong("userID")).thenReturn(1L);
         Mockito.when(resultSetMock.getString("username")).thenReturn("username");
+        Mockito.when(resultSetMock.getString("role")).thenReturn("USER");
         Mockito.when(resultSetMock.getString("password")).thenReturn("password");
         Mockito.when(resultSetMock.getString("sole")).thenReturn("sole");
 
-        User user = new User(1L,"username","password", "sole");
+        User user = new User(1L, "username", Role.USER, "password", "sole");
         User userActual = userMapper.mapUser(resultSetMock);
         assertEquals(user.toString(), userActual.toString());
     }

@@ -12,6 +12,7 @@ CREATE TABLE users
 (
     userID   SERIAL NOT NULL PRIMARY KEY,
     username varchar,
+    role     varchar,
     password varchar,
     sole     varchar
 );

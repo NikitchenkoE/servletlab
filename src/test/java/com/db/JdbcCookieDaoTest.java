@@ -3,6 +3,7 @@ package com.db;
 import com.db.jdbc.JdbcSessionDao;
 import com.entity.Session;
 import com.entity.User;
+import com.entity.enums.Role;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,9 +22,9 @@ class JdbcCookieDaoTest {
     Flyway flyway = Flyway.configure().dataSource("jdbc:h2:mem:testdb", "user", "user").load();
 
     JdbcSessionDao jdbcSessionDao = new JdbcSessionDao(dataSourceFactory.getDataSource());
-    User user1 = new User(1L, "user1", "soledPassword1", "sole1");
-    User user2 = new User(2L, "user2", "soledPassword2", "sole2");
-    User user3 = new User(3L, "user3", "soledPassword3", "sole3+");
+    User user1 = new User(1L, "user1", Role.USER, "soledPassword1", "sole1");
+    User user2 = new User(2L, "user2", Role.USER, "soledPassword2", "sole2");
+    User user3 = new User(3L, "user3", Role.USER, "soledPassword3", "sole3+");
     Session cookie1 = new Session(1L, "cookie1", user1, 125);
     Session cookie2 = new Session(2L, "cookie2", user2, 126);
     Session cookie3 = new Session(3L, "cookie3", user3, 127);

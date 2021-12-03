@@ -3,6 +3,7 @@ package com.entity.mapper;
 import com.db.mapper.SessionMapper;
 import com.entity.Session;
 import com.entity.User;
+import com.entity.enums.Role;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -19,8 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class SessionMapperTest {
-    User user1 = new User(1L,"user1","soledPassword1","sole1");
-    User user2 = new User(2L,"user2","soledPassword2","sole2");
+    User user1 = new User(1L, "user1", Role.USER, "soledPassword1", "sole1");
+    User user2 = new User(2L, "user2", Role.USER, "soledPassword2", "sole2");
     @Mock
     ResultSet resultSetMock;
 
@@ -44,7 +45,7 @@ class SessionMapperTest {
         Mockito.when(resultSetMock.getString("userInSession")).thenReturn(new ObjectMapper().writeValueAsString(user1));
         Mockito.when(resultSetMock.getLong("expireDate")).thenReturn(1515284L);
 
-        Session cookieEntity = new Session(1L,"token",user1,1515284L);
+        Session cookieEntity = new Session(1L, "token", user1, 1515284L);
         Session cookieActual = cookieMapper.mapSession(resultSetMock);
         assertEquals(cookieEntity.toString(), cookieActual.toString());
     }
@@ -56,7 +57,7 @@ class SessionMapperTest {
         Mockito.when(resultSetMock.getString("userInSession")).thenReturn(new ObjectMapper().writeValueAsString(user2));
         Mockito.when(resultSetMock.getLong("expireDate")).thenReturn(25L);
 
-        Session session = new Session(2L,"cookie",user2,1515284L);
+        Session session = new Session(2L, "cookie", user2, 1515284L);
         Session actualSession = cookieMapper.mapSession(resultSetMock);
         assertNotEquals(session.toString(), actualSession.toString());
     }

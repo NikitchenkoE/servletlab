@@ -19,19 +19,18 @@ public class RegistrationController {
     }
 
     @GetMapping("/registration")
-    @ResponseBody
-    protected byte[] getRegistrationPage(){
-        return PageGenerator.init().writePage("registration.ftl");
+    protected String getRegistrationPage() {
+        return "registration";
     }
 
     @PostMapping("/registration")
     protected String doPost(@RequestParam("userName") String username, @RequestParam("password") String password) {
-            boolean isSaved = registrationService.saveUser(username, password);
-            if (isSaved) {
-                return "redirect:/login";
-            } else {
-                return "redirect:/registration";
-            }
+        boolean isSaved = registrationService.saveUser(username, password);
+        if (isSaved) {
+            return "redirect:/login";
+        } else {
+            return "redirect:/registration";
         }
     }
+}
 

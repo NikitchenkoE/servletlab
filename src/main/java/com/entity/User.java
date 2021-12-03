@@ -1,5 +1,6 @@
 package com.entity;
 
+import com.entity.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 public class User implements Serializable {
     private Long id;
     private String username;
+    private Role role;
     private String soledPassword;
     private String sole;
 }
