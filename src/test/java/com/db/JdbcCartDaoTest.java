@@ -25,8 +25,8 @@ class JdbcCartDaoTest {
 
     @BeforeEach
     void init() {
-        flyway.migrate();
         jdbcCartDao.setDataSource(dataSourceFactory.getDataSource());
+        flyway.migrate();
         jdbcCartDao.save(cart1);
         jdbcCartDao.save(cart2);
         jdbcCartDao.save(cart3);

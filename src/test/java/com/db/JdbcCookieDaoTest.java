@@ -21,7 +21,7 @@ class JdbcCookieDaoTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     Flyway flyway = Flyway.configure().dataSource("jdbc:h2:mem:testdb", "user", "user").load();
 
-    JdbcSessionDao jdbcSessionDao = new JdbcSessionDao(dataSourceFactory.getDataSource());
+    JdbcSessionDao jdbcSessionDao = new JdbcSessionDao();
     User user1 = new User(1L, "user1", Role.USER, "soledPassword1", "sole1");
     User user2 = new User(2L, "user2", Role.USER, "soledPassword2", "sole2");
     User user3 = new User(3L, "user3", Role.USER, "soledPassword3", "sole3+");
@@ -32,6 +32,7 @@ class JdbcCookieDaoTest {
 
     @BeforeEach
     void init() {
+        jdbcSessionDao.setDataSource(dataSourceFactory.getDataSource());
         flyway.migrate();
         jdbcSessionDao.save(cookie1);
         jdbcSessionDao.save(cookie2);
