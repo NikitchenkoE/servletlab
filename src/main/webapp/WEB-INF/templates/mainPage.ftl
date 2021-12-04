@@ -29,7 +29,10 @@
 </head>
 <body>
 <p hidden>${logged}</p>
-<p hidden>${user}</p>
+<#if logged == "true">
+    <p hidden>${user}</p>
+
+</#if>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Shop</a>
@@ -42,10 +45,12 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/products">All products</a>
                 </li>
+                <#if logged == "true">
                 <#if user.role == "ADMIN">
                     <li class="nav-item">
                         <a class="nav-link active" href="/products/add">Add Product</a>
                     </li>
+                </#if>
                 </#if>
                 <#if logged == "true">
                     <#if user.role == "USER">
@@ -123,7 +128,7 @@
                             </form>
                         </td>
                     </#if>
-                    <#if user.role == "ADMiN">
+                    <#if user.role == "ADMIN">
                         <td>
                             <a class="btn btn-outline-success" href='/products/update?idToUpdate=${product.id}'>Update
                             </a>

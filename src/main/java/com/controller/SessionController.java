@@ -1,4 +1,4 @@
-package com.servlet;
+package com.controller;
 
 import com.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;

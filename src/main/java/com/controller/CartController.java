@@ -1,4 +1,4 @@
-package com.servlet;
+package com.controller;
 
 import com.entity.dto.AuthorizedUserDto;
 import com.service.CartService;
