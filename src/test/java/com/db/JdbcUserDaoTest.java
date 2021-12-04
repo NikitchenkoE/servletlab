@@ -7,6 +7,7 @@ import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -27,7 +28,7 @@ class JdbcUserDaoTest {
 
     @BeforeEach
     void init() {
-        jdbcUserDao.setDataSource(dataSourceFactory.getDataSource());
+        jdbcUserDao.setJdbcTemplate(new JdbcTemplate(dataSourceFactory.getDataSource()));
         flyway.migrate();
         jdbcUserDao.save(user1);
         jdbcUserDao.save(user2);

@@ -6,6 +6,7 @@ import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ class ProductDaoTest {
 
     @BeforeEach
     void init() {
-        productDao.setDataSource(dataConnectionPull.getDataSource());
+        productDao.setJdbcTemplate(new JdbcTemplate(dataConnectionPull.getDataSource()));
         flyway.migrate();
         productDao.save(productEntity1);
         productDao.save(productEntity2);

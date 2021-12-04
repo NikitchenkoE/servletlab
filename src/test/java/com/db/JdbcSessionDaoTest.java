@@ -8,6 +8,7 @@ import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -17,7 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class JdbcCookieDaoTest {
+class JdbcSessionDaoTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     Flyway flyway = Flyway.configure().dataSource("jdbc:h2:mem:testdb", "user", "user").load();
 
@@ -32,7 +33,7 @@ class JdbcCookieDaoTest {
 
     @BeforeEach
     void init() {
-        jdbcSessionDao.setDataSource(dataSourceFactory.getDataSource());
+        jdbcSessionDao.setJdbcTemplate(new JdbcTemplate(dataSourceFactory.getDataSource()));
         flyway.migrate();
         jdbcSessionDao.save(cookie1);
         jdbcSessionDao.save(cookie2);

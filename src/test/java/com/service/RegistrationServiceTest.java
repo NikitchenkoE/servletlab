@@ -1,12 +1,13 @@
 package com.service;
 
 import com.db.DataSourceFactory;
-import com.db.jdbc.JdbcUserDao;
 import com.db.SqlQueries;
+import com.db.jdbc.JdbcUserDao;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,10 +21,11 @@ class RegistrationServiceTest {
     JdbcUserDao jdbcUserDao = new JdbcUserDao();
 
     @BeforeEach
-    void init(){
-        jdbcUserDao.setDataSource(dataSourceFactory.getDataSource());
+    void init() {
+        jdbcUserDao.setJdbcTemplate(new JdbcTemplate(dataSourceFactory.getDataSource()));
         flyway.migrate();
     }
+
     @AfterEach
     void dropTable() {
         try (Connection connection = dataSourceFactory.getDataSource().getConnection();

@@ -24,20 +24,24 @@
         <property name="jdbcUrl" value="${db.Url}"/>
     </bean>
 
-    <bean id="productDao" class="com.db.jdbc.JdbcProductDao">
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="productDao" class="com.db.jdbc.JdbcProductDao">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
 
     <bean id="cartDao" class="com.db.jdbc.JdbcCartDao">
-        <property name="dataSource" ref="dataSource"/>
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
 
     <bean id="userDao" class="com.db.jdbc.JdbcUserDao">
-        <property name="dataSource" ref="dataSource"/>
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
 
     <bean id="sessionDao" class="com.db.jdbc.JdbcSessionDao">
-        <property name="dataSource" ref="dataSource"/>
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
 
     <bean id="productService" class="com.service.ProductService">

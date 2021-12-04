@@ -6,6 +6,7 @@ import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -18,18 +19,18 @@ class JdbcCartDaoTest {
     DataSourceFactory dataSourceFactory = new DataSourceFactory("jdbc:h2:mem:testdb", "user", "user");
     Flyway flyway = Flyway.configure().dataSource("jdbc:h2:mem:testdb", "user", "user").load();
     JdbcCartDao jdbcCartDao = new JdbcCartDao();
-    ProductInCart cart1 = new ProductInCart(1L, 1L, 1L);
-    ProductInCart cart2 = new ProductInCart(2L, 1L, 2L);
-    ProductInCart cart3 = new ProductInCart(3L, 1L, 3L);
+    ProductInCart productInCart = new ProductInCart(1L, 1L, 1L);
+    ProductInCart productInCart2 = new ProductInCart(2L, 1L, 2L);
+    ProductInCart productInCart3 = new ProductInCart(3L, 1L, 3L);
 
 
     @BeforeEach
     void init() {
-        jdbcCartDao.setDataSource(dataSourceFactory.getDataSource());
+        jdbcCartDao.setJdbcTemplate(new JdbcTemplate(dataSourceFactory.getDataSource()));
         flyway.migrate();
-        jdbcCartDao.save(cart1);
-        jdbcCartDao.save(cart2);
-        jdbcCartDao.save(cart3);
+        jdbcCartDao.save(productInCart);
+        jdbcCartDao.save(productInCart2);
+        jdbcCartDao.save(productInCart3);
     }
 
     @AfterEach
@@ -47,13 +48,42 @@ class JdbcCartDaoTest {
     }
 
     @Test
-    void getCart() {
+    void testGetCartShouldReturnCartWithProducts() {
         var expected = new ArrayList<>();
-        expected.add(cart1);
-        expected.add(cart2);
-        expected.add(cart3);
+        expected.add(productInCart);
+        expected.add(productInCart2);
+        expected.add(productInCart3);
         var actual = jdbcCartDao.getCart(1L);
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    void testDeleteProductItemInCartById() {
+        var expected = new ArrayList<>();
+        expected.add(productInCart2);
+        expected.add(productInCart3);
+
+        jdbcCartDao.delete(1L);
+        var actual = jdbcCartDao.getCart(1L);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testDeleteAllProductsWithSameIdFromCart() {
+        ProductInCart productInCart = new ProductInCart(1L, 1L, 1L);
+        jdbcCartDao.save(productInCart);
+
+        var expected = new ArrayList<>();
+        expected.add(productInCart2);
+        expected.add(productInCart3);
+
+        jdbcCartDao.deleteByProductId(1L);
+        var actual = jdbcCartDao.getCart(1L);
+
+        assertEquals(expected, actual);
+    }
+
+
 }
