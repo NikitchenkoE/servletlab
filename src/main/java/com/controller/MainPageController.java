@@ -40,23 +40,23 @@ public class MainPageController {
     }
 
     @GetMapping("/productsById")
-    protected String getMainPageById(@RequestAttribute Optional<Boolean> logged,
+    protected String getMainPageById(@RequestAttribute("isLogged") boolean logged,
                                      @RequestParam("productId") String productId,
                                      @RequestAttribute("user") Optional<AuthorizedUserDto> authUser,
                                      Model model) {
         long id = Long.parseLong(productId);
         model.addAttribute("products", mainPageService.getDataById(id));
-        model.addAttribute("logged", String.valueOf(logged.orElse(true)));
+        model.addAttribute("logged", String.valueOf(logged));
         authUser.ifPresent(authorizedUserDto -> model.addAttribute("user", authorizedUserDto));
         return "mainPage";
     }
 
     @GetMapping("/productsByDescription")
-    protected String getMainPageByDescription(@RequestAttribute Optional<Boolean> logged,
+    protected String getMainPageByDescription(@RequestAttribute("isLogged") boolean logged,
                                               @RequestParam("productDescription") String productDescription,
                                               @RequestAttribute("user") Optional<AuthorizedUserDto> authUser,
                                               Model model) {
-        model.addAttribute("logged", String.valueOf(logged.orElse(true)));
+        model.addAttribute("logged", String.valueOf(logged));
         model.addAttribute("products", mainPageService.getDataByDescription(productDescription));
         authUser.ifPresent(authorizedUserDto -> model.addAttribute("user", authorizedUserDto));
         return "mainPage";

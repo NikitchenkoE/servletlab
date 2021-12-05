@@ -46,13 +46,11 @@
                     <a class="nav-link active" aria-current="page" href="/products">All products</a>
                 </li>
                 <#if logged == "true">
-                <#if user.role == "ADMIN">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/products/add">Add Product</a>
-                    </li>
-                </#if>
-                </#if>
-                <#if logged == "true">
+                    <#if user.role == "ADMIN">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/products/add">Add Product</a>
+                        </li>
+                    </#if>
                     <#if user.role == "USER">
                         <li class="nav-item">
                             <a class="nav-link active" href="/cart">My cart</a>
