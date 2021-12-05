@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:13.3
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: shopLabDocker
+      POSTGRES_USER: userPg
+      POSTGRES_PASSWORD: userPg
