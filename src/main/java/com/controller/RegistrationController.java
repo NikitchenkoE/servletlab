@@ -22,7 +22,11 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    protected String doPost(@RequestParam("userName") String username, @RequestParam("password") String password) {
+    protected String doPost(@RequestParam("userName") String username,
+                            @RequestParam("password") String password) {
+        if (username.isEmpty()||password.isEmpty()){
+            return "redirect:/registration";
+        }
         boolean isSaved = registrationService.saveUser(username, password);
         if (isSaved) {
             return "redirect:/login";

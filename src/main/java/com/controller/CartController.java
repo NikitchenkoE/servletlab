@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Optional;
-
 @Controller
 public class CartController {
     private final CartService cartService;
@@ -22,16 +20,10 @@ public class CartController {
     }
 
     @GetMapping("/cart")
-    protected String getCartPage(@RequestAttribute Optional<AuthorizedUserDto> authUser,
+    protected String getCartPage(@RequestAttribute("user") AuthorizedUserDto authUser,
                                  Model model) {
-        AuthorizedUserDto user = authUser.orElse(AuthorizedUserDto.builder()
-                .id(1L)
-                .username("user")
-                .role("USER")
-                .build());
-
-        model.addAttribute("products", cartService.findAllProductInCartDto(user));
-        model.addAttribute("total", cartService.sumAllProducts(user));
+        model.addAttribute("products", cartService.findAllProductInCartDto(authUser));
+        model.addAttribute("total", cartService.sumAllProducts(authUser));
 
         return "cart";
     }

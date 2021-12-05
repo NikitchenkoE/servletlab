@@ -42,32 +42,30 @@ public class MainPageController {
     @GetMapping("/productsById")
     protected String getMainPageById(@RequestAttribute Optional<Boolean> logged,
                                      @RequestParam("productId") String productId,
+                                     @RequestAttribute("user") Optional<AuthorizedUserDto> authUser,
                                      Model model) {
         long id = Long.parseLong(productId);
         model.addAttribute("products", mainPageService.getDataById(id));
         model.addAttribute("logged", String.valueOf(logged.orElse(true)));
+        authUser.ifPresent(authorizedUserDto -> model.addAttribute("user", authorizedUserDto));
         return "mainPage";
     }
 
     @GetMapping("/productsByDescription")
     protected String getMainPageByDescription(@RequestAttribute Optional<Boolean> logged,
                                               @RequestParam("productDescription") String productDescription,
+                                              @RequestAttribute("user") Optional<AuthorizedUserDto> authUser,
                                               Model model) {
         model.addAttribute("logged", String.valueOf(logged.orElse(true)));
         model.addAttribute("products", mainPageService.getDataByDescription(productDescription));
+        authUser.ifPresent(authorizedUserDto -> model.addAttribute("user", authorizedUserDto));
         return "mainPage";
     }
 
     @PostMapping("/cart")
     protected String addProductToCart(@RequestParam("productId") String id,
-                               @RequestAttribute Optional<AuthorizedUserDto> authUser) {
-        AuthorizedUserDto user = authUser.orElse(AuthorizedUserDto.builder()
-                .id(1L)
-                .username("user")
-                .role("USER")
-                .build());
-        cartService.addProductToCart(user, id);
-
+                                      @RequestAttribute("user") AuthorizedUserDto authUser) {
+        cartService.addProductToCart(authUser, id);
         return "redirect:/";
     }
 
