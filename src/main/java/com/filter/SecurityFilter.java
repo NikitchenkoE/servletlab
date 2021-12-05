@@ -1,5 +1,6 @@
 package com.filter;
 
+import com.entity.dto.AuthorizedUserDto;
 import com.entity.mapper.MapToAuthorizedUserDto;
 import com.service.SecurityService;
 
@@ -17,8 +18,16 @@ public class SecurityFilter implements Filter {
     private final String REGISTRATION_PATH = "/registration";
     private final String MAIN_PAGE_PATH = "/";
     private final String MAIN_PAGE_PATH2 = "/products";
+    private final String LOGOUT_PATH = "/logout";
+    private final String ADD_PRODUCT_PAGE = "/products/add";
+    private final String DELETE_PRODUCT_FROM_MAIN_PAGE = "/products/delete";
+    private final String DELETE_PRODUCT_FROM_CART = "/cart/deleteFromCart";
+    private final String UPDATE_PRODUCT_PAGE = "/products/update";
+    private final String CART_PAGE = "/cart";
     private final List<String> allowedPagesWithoutAuth = Arrays.asList(LOGIN_PATH, REGISTRATION_PATH, MAIN_PAGE_PATH, MAIN_PAGE_PATH2);
     private final List<String> forbiddenPagesToAuthUser = Arrays.asList(LOGIN_PATH, REGISTRATION_PATH);
+    private final List<String> allowedPagesToAdmin = Arrays.asList(MAIN_PAGE_PATH, MAIN_PAGE_PATH2, ADD_PRODUCT_PAGE, UPDATE_PRODUCT_PAGE, LOGOUT_PATH, DELETE_PRODUCT_FROM_MAIN_PAGE);
+    private final List<String> allowedPagesToUser = Arrays.asList(MAIN_PAGE_PATH, MAIN_PAGE_PATH2, CART_PAGE, LOGOUT_PATH, DELETE_PRODUCT_FROM_CART);
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -43,7 +52,14 @@ public class SecurityFilter implements Filter {
             httpResponse.sendError(403);
         } else {
             MapToAuthorizedUserDto mapper = new MapToAuthorizedUserDto();
-            servletRequest.setAttribute("user", mapper.mapToAuthorizedUserDto(securityService.getAuthUser(httpRequest.getCookies())));
+            AuthorizedUserDto userDto = mapper.mapToAuthorizedUserDto(securityService.getAuthUser(httpRequest.getCookies()));
+            if (userDto.getRole().equals("USER") && !allowedPagesToUser.contains(path) ||
+                    userDto.getRole().equals("ADMIN") && !allowedPagesToAdmin.contains(path)) {
+                httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                httpResponse.sendError(403);
+            } else {
+                servletRequest.setAttribute("user", userDto);
+            }
         }
 
         servletRequest.setAttribute("isLogged", isAuth);
