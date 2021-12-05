@@ -50,7 +50,9 @@ public class SecurityService {
         boolean auth = false;
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                auth = sessionDao.get(cookie.getValue()).isPresent();
+                if (cookie.getName().equalsIgnoreCase("user-token")) {
+                    auth = sessionDao.get(cookie.getValue()).isPresent();
+                }
             }
         }
         return auth;

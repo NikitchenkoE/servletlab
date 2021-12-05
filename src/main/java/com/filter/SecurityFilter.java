@@ -24,7 +24,8 @@ public class SecurityFilter implements Filter {
     private final String DELETE_PRODUCT_FROM_CART = "/cart/deleteFromCart";
     private final String UPDATE_PRODUCT_PAGE = "/products/update";
     private final String CART_PAGE = "/cart";
-    private final List<String> allowedPagesWithoutAuth = Arrays.asList(LOGIN_PATH, REGISTRATION_PATH, MAIN_PAGE_PATH, MAIN_PAGE_PATH2);
+    private final String FAVICON = "/favicon.ico";
+    private final List<String> allowedPagesWithoutAuth = Arrays.asList(LOGIN_PATH, REGISTRATION_PATH, MAIN_PAGE_PATH, MAIN_PAGE_PATH2, FAVICON);
     private final List<String> forbiddenPagesToAuthUser = Arrays.asList(LOGIN_PATH, REGISTRATION_PATH);
     private final List<String> allowedPagesToAdmin = Arrays.asList(MAIN_PAGE_PATH, MAIN_PAGE_PATH2, ADD_PRODUCT_PAGE, UPDATE_PRODUCT_PAGE, LOGOUT_PATH, DELETE_PRODUCT_FROM_MAIN_PAGE);
     private final List<String> allowedPagesToUser = Arrays.asList(MAIN_PAGE_PATH, MAIN_PAGE_PATH2, CART_PAGE, LOGOUT_PATH, DELETE_PRODUCT_FROM_CART);
@@ -55,6 +56,7 @@ public class SecurityFilter implements Filter {
             AuthorizedUserDto userDto = mapper.mapToAuthorizedUserDto(securityService.getAuthUser(httpRequest.getCookies()));
             if (userDto.getRole().equals("USER") && !allowedPagesToUser.contains(path) ||
                     userDto.getRole().equals("ADMIN") && !allowedPagesToAdmin.contains(path)) {
+
                 httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 httpResponse.sendError(403);
             } else {

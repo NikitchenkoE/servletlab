@@ -138,9 +138,9 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>8.1.0</version>
                 <configuration>
-                    <url>jdbc:postgresql://localhost:5432/shopLab</url>
-                    <user>userPg</user>
-                    <password>userPg</password>
+                    <url>jdbc:postgresql://localhost:5438/shop</url>
+                    <user>postgres</user>
+                    <password>postgres</password>
                 </configuration>
             </plugin>
             <plugin>
