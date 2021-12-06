@@ -1,4 +1,4 @@
-package com.filter;
+package com.web.filter;
 
 import com.entity.dto.AuthorizedUserDto;
 import com.entity.mapper.MapToAuthorizedUserDto;

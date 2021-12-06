@@ -1,4 +1,4 @@
-package com.controller;
+package com.web.controller;
 
 import com.entity.Product;
 import com.entity.dto.AuthorizedUserDto;

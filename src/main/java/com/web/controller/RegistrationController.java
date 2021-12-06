@@ -1,4 +1,4 @@
-package com.controller;
+package com.web.controller;
 
 import com.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;

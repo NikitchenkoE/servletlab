@@ -6,6 +6,7 @@ import com.entity.Session;
 import com.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.servlet.http.Cookie;
 import java.util.Date;
@@ -81,6 +82,12 @@ public class SecurityService {
             }
         }
         return user;
+    }
+
+    @Scheduled(fixedDelay =  60 * 1000)
+    public void schedule() {
+        log.info("Delete old sessions");
+        sessionDao.cleanExpiredCookie(new Date().getTime() - cookieExpirationDate * 1000L);
     }
 
     public void setSessionDao(SessionDao sessionDao) {
