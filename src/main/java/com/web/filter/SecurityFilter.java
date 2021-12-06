@@ -15,7 +15,7 @@ import java.util.List;
 
 @WebFilter("/*")
 public class SecurityFilter implements Filter {
-    private final List<String> allowedPagesWithoutAuth = Arrays.asList("/login", "/registration", "/", "/products", "/favicon.ico");
+    private final List<String> allowedPagesWithoutAuth = Arrays.asList("/login", "/registration", "/", "/products", "/favicon.ico", "/productsById", "/productsByDescription");
     private final List<String> allowedPagesToAdmin = Arrays.asList("/", "/products", "/products/add", "/products/update", "/logout", "/products/delete");
     private final List<String> allowedPagesToUser = Arrays.asList("/", "/products", "/cart", "/logout", "/cart/deleteFromCart");
 

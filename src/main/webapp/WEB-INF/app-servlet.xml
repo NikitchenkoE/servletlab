@@ -22,10 +22,10 @@
 
 
     <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
-        <property name="username" value="${db.User}"/>
-        <property name="password" value="${db.Password}"/>
-        <property name="driverClassName" value="${db.Driver}"/>
-        <property name="jdbcUrl" value="${db.Url}"/>
+        <property name="username" value="${db.user}"/>
+        <property name="password" value="${db.password}"/>
+        <property name="driverClassName" value="${db.driver}"/>
+        <property name="jdbcUrl" value="${db.url}"/>
     </bean>
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
@@ -52,18 +52,10 @@
         <property name="productDao" ref="productDao"/>
     </bean>
 
-    <bean id="mainPageService" class="com.service.MainPageService">
-        <property name="productService" ref="productService"/>
-    </bean>
-
     <bean id="securityService" class="com.service.SecurityService">
         <property name="sessionDao" ref="sessionDao"/>
         <property name="userDao" ref="userDao"/>
-        <property name="cookieExpirationDate" value="${session.ExpirationDateInSeconds}"/>
-    </bean>
-
-    <bean id="registrationService" class="com.service.RegistrationService">
-        <property name="userDao" ref="userDao"/>
+        <property name="cookieExpirationDate" value="${session.expirationDateInSeconds}"/>
     </bean>
 
     <bean id="cartService" class="com.service.CartService">

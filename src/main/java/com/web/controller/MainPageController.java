@@ -3,7 +3,6 @@ package com.web.controller;
 import com.entity.Product;
 import com.entity.dto.AuthorizedUserDto;
 import com.service.CartService;
-import com.service.MainPageService;
 import com.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,13 +14,11 @@ import java.util.Optional;
 @Controller
 public class MainPageController {
     private final ProductService productService;
-    private final MainPageService mainPageService;
     private final CartService cartService;
 
     @Autowired
-    public MainPageController(ProductService productService, MainPageService mainPageService, CartService cartService) {
+    public MainPageController(ProductService productService, CartService cartService) {
         this.productService = productService;
-        this.mainPageService = mainPageService;
         this.cartService = cartService;
     }
 
@@ -33,7 +30,7 @@ public class MainPageController {
         authUser.ifPresent(authorizedUserDto -> model.addAttribute("user", authorizedUserDto));
 
         var products = productService.getAll();
-        var productDtoList = mainPageService.mapToProductDtoList(products);
+        var productDtoList = productService.mapToProductDtoList(products);
         model.addAttribute("products", productDtoList);
 
         return "mainPage";
@@ -45,7 +42,7 @@ public class MainPageController {
                                      @RequestAttribute("user") Optional<AuthorizedUserDto> authUser,
                                      Model model) {
         long id = Long.parseLong(productId);
-        model.addAttribute("products", mainPageService.getDataById(id));
+        model.addAttribute("products", productService.getDataById(id));
         model.addAttribute("logged", String.valueOf(logged));
         authUser.ifPresent(authorizedUserDto -> model.addAttribute("user", authorizedUserDto));
         return "mainPage";
@@ -57,7 +54,7 @@ public class MainPageController {
                                               @RequestAttribute("user") Optional<AuthorizedUserDto> authUser,
                                               Model model) {
         model.addAttribute("logged", String.valueOf(logged));
-        model.addAttribute("products", mainPageService.getDataByDescription(productDescription));
+        model.addAttribute("products", productService.getDataByDescription(productDescription));
         authUser.ifPresent(authorizedUserDto -> model.addAttribute("user", authorizedUserDto));
         return "mainPage";
     }

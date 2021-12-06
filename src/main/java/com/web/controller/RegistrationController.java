@@ -1,20 +1,17 @@
 package com.web.controller;
 
-import com.service.RegistrationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.service.SecurityService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class RegistrationController {
-    private final RegistrationService registrationService;
+    private final SecurityService securityService;
 
-    @Autowired
-    public RegistrationController(RegistrationService registrationService) {
-        this.registrationService = registrationService;
+    public RegistrationController(SecurityService securityService) {
+        this.securityService = securityService;
     }
 
     @GetMapping("/registration")
@@ -24,17 +21,12 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     protected String doPost(@RequestParam("userName") String username,
-                            @RequestParam("password") String password,
-                            Model model) {
+                            @RequestParam("password") String password) {
         if (username.isEmpty()||password.isEmpty()){
             return "redirect:/registration";
         }
-        boolean isSaved = registrationService.saveUser(username, password);
-        if (isSaved) {
-            return "redirect:/login";
-        } else {
-            return "redirect:/registration";
-        }
+        securityService.saveUser(username, password);
+        return "redirect:/login";
     }
 }
 

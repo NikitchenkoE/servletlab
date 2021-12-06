@@ -4,6 +4,7 @@ import com.db.interfaces.SessionDao;
 import com.db.interfaces.UserDao;
 import com.entity.Session;
 import com.entity.User;
+import com.entity.enums.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -33,6 +34,24 @@ public class SecurityService {
         return loginAllowed;
     }
 
+    public void saveUser(String username, String password) {
+        if (userDao.findByUsername(username).isEmpty()) {
+            String sole = UUID.randomUUID().toString();
+            String soledPassword = DigestUtils.md5Hex(password + sole);
+
+            userDao.save(User.builder()
+                    .username(username)
+                    .role(Role.USER)
+                    .soledPassword(soledPassword)
+                    .sole(sole)
+                    .build());
+            log.info("{} successfully registered", username);
+        } else {
+            log.error("user with this nickname exist");
+            throw new RuntimeException("User exist");
+        }
+    }
+
     public Cookie getNewToken(String username) {
         log.info("Created new cookie in db for user {}", username);
         String token = UUID.randomUUID().toString();
@@ -53,6 +72,7 @@ public class SecurityService {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equalsIgnoreCase("user-token")) {
                     auth = sessionDao.get(cookie.getValue()).isPresent();
+                    break;
                 }
             }
         }
