@@ -45,7 +45,7 @@ class ProductMapperTest {
         Mockito.when(resultSetMock.getTimestamp("updateDate")).thenReturn(new Timestamp(dateForTest.getTime()));
 
         Product productExpected = new Product(1L, "test", 100.00, "description", dateForTest, dateForTest);
-        Product productActual = productMapper.mapProduct(resultSetMock);
+        Product productActual = productMapper.mapRow(resultSetMock,6);
         assertEquals(productExpected.toString(), productActual.toString());
     }
 
@@ -58,7 +58,7 @@ class ProductMapperTest {
         Mockito.when(resultSetMock.getTimestamp("updateDate")).thenReturn(new Timestamp(dateForTest.getTime()));
 
         Product productExpected = new Product(100L, "bedTest", 1000.00,"description", dateForTest, dateForTest);
-        Product productActual = productMapper.mapProduct(resultSetMock);
+        Product productActual = productMapper.mapRow(resultSetMock,6);
         assertNotEquals(productExpected.toString(), productActual.toString());
     }
 }

@@ -11,10 +11,10 @@ import java.util.List;
 @Slf4j
 public class JdbcCartDao implements CartDao {
     private JdbcTemplate jdbcTemplate;
-    private final String DELETE_BY_ID = "DELETE FROM cart WHERE cartItemId=?";
-    private final String DELETE_BY_PRODUCT_ID = "DELETE FROM cart WHERE productId=?";
-    private final String SAVE_TO_CART = "INSERT INTO cart (userId, productId) VALUES (?,?)";
-    private final String GET_ALL_BY_USER_ID = "SELECT cartItemId, userId, productId FROM cart WHERE userId=%s";
+    private static final String DELETE_BY_ID = "DELETE FROM cart WHERE cartItemId=?";
+    private static final String DELETE_BY_PRODUCT_ID = "DELETE FROM cart WHERE productId=?";
+    private static final String SAVE_TO_CART = "INSERT INTO cart (userId, productId) VALUES (?,?)";
+    private static final String GET_ALL_BY_USER_ID = "SELECT cartItemId, userId, productId FROM cart WHERE userId=?";
 
     @Override
     public void delete(long id) {
@@ -37,7 +37,7 @@ public class JdbcCartDao implements CartDao {
     @Override
     public List<ProductInCart> getCart(long userId) {
         log.info("Get user cart with id {}", userId);
-        return jdbcTemplate.query(String.format(GET_ALL_BY_USER_ID, userId), (rs, rowNum) -> new CartProductMapper().mapProductInCart(rs));
+        return jdbcTemplate.query(GET_ALL_BY_USER_ID, new CartProductMapper(), userId);
     }
 
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {

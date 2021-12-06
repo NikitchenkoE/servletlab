@@ -5,13 +5,14 @@ import com.entity.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Slf4j
-public class SessionMapper {
-    public Session mapSession(ResultSet resultSet){
+public class SessionMapper implements RowMapper<Session> {
+    public Session mapRow(ResultSet resultSet, int rowNum){
         try {
             return Session.builder()
                     .id(resultSet.getLong("sessionId"))

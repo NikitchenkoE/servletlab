@@ -38,7 +38,7 @@ class CartMapperTest {
         Mockito.when(resultSetMock.getLong("productId")).thenReturn(1L);
 
         ProductInCart cart = new ProductInCart(1L,1L,1L);
-        ProductInCart cartActual = cartMapper.mapProductInCart(resultSetMock);
+        ProductInCart cartActual = cartMapper.mapRow(resultSetMock,3);
         assertEquals(cart.toString(), cartActual.toString());
     }
 
@@ -49,7 +49,7 @@ class CartMapperTest {
         Mockito.when(resultSetMock.getLong("productId")).thenReturn(2L);
 
         ProductInCart cart = new ProductInCart(1L,1L,1L);
-        ProductInCart cartActual = cartMapper.mapProductInCart(resultSetMock);
+        ProductInCart cartActual = cartMapper.mapRow(resultSetMock,3);
         assertNotEquals(cart.toString(), cartActual.toString());
     }
 }

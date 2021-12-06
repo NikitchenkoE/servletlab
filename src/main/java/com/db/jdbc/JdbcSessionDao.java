@@ -6,21 +6,23 @@ import com.entity.Session;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 public class JdbcSessionDao implements SessionDao {
-    String INSERT_INTO_TABLE = "INSERT INTO sessions (token, userInSession, expireDate) VALUES (?,?,?)";
-    String DELETE_BY_TOKEN = "DELETE FROM sessions WHERE token='%s'";
-    String DELETE_ALL_THAT_EXPIRED = "DELETE FROM sessions WHERE expireDate<?";
-    String SELECT_BY_TOKEN = "SELECT sessionId, token, userInSession, expireDate FROM sessions WHERE token='%s'";
-    String SELECT_ALL_TOKENS = "SELECT sessionId, token, userInSession, expireDate FROM sessions";
-
+    private static final String INSERT_INTO_TABLE = "INSERT INTO sessions (token, userInSession, expireDate) VALUES (?,?,?)";
+    private static final String DELETE_BY_TOKEN = "DELETE FROM sessions WHERE token=:token";
+    private static final String DELETE_ALL_THAT_EXPIRED = "DELETE FROM sessions WHERE expireDate<?";
+    private static final String SELECT_BY_TOKEN = "SELECT sessionId, token, userInSession, expireDate FROM sessions WHERE token=:token";
+    private static final String SELECT_ALL_TOKENS = "SELECT sessionId, token, userInSession, expireDate FROM sessions";
     private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
     public void save(Session session) {
@@ -38,7 +40,7 @@ public class JdbcSessionDao implements SessionDao {
     @Override
     public void delete(String token) {
         log.info("Delete session with token {}", token);
-        jdbcTemplate.update(String.format(DELETE_BY_TOKEN, token));
+        namedParameterJdbcTemplate.update(DELETE_BY_TOKEN, Collections.singletonMap("token", token));
     }
 
     @Override
@@ -50,19 +52,21 @@ public class JdbcSessionDao implements SessionDao {
     @Override
     public Optional<Session> get(String token) {
         log.info("get session by {}", token);
-        return jdbcTemplate.query(String.format(SELECT_BY_TOKEN, token), resultSet -> {
-            if (resultSet.next()) {
-                return Optional.ofNullable(new SessionMapper().mapSession(resultSet));
-            } else return Optional.empty();
-        });
+        try {
+            return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(SELECT_BY_TOKEN, Collections.singletonMap("token", token), new SessionMapper()));
+        }catch (EmptyResultDataAccessException exception) {
+            log.info("No sessions found by id {}", token, exception);
+            return Optional.empty();
+        }
     }
 
     @Override
     public List<Session> getAllTokens() {
-        return jdbcTemplate.query(SELECT_ALL_TOKENS, (resultSet, rowNum) -> new SessionMapper().mapSession(resultSet));
+        return jdbcTemplate.query(SELECT_ALL_TOKENS, new SessionMapper());
     }
 
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
     }
 }

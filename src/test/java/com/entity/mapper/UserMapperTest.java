@@ -41,7 +41,7 @@ class UserMapperTest {
         Mockito.when(resultSetMock.getString("sole")).thenReturn("sole");
 
         User user = new User(1L, "username", Role.USER, "password", "sole");
-        User userActual = userMapper.mapUser(resultSetMock);
+        User userActual = userMapper.mapRow(resultSetMock,5);
         assertEquals(user.toString(), userActual.toString());
     }
 }
