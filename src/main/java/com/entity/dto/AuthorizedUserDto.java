@@ -1,5 +1,6 @@
 package com.entity.dto;
 
+import com.entity.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class AuthorizedUserDto {
     private Long id;
     private String username;
-    private String role;
+    private Role role;
 }

@@ -1,6 +1,7 @@
 package com.web.filter;
 
 import com.entity.dto.AuthorizedUserDto;
+import com.entity.enums.Role;
 import com.entity.mapper.MapToAuthorizedUserDto;
 import com.service.SecurityService;
 
@@ -14,21 +15,9 @@ import java.util.List;
 
 @WebFilter("/*")
 public class SecurityFilter implements Filter {
-    private final String LOGIN_PATH = "/login";
-    private final String REGISTRATION_PATH = "/registration";
-    private final String MAIN_PAGE_PATH = "/";
-    private final String MAIN_PAGE_PATH2 = "/products";
-    private final String LOGOUT_PATH = "/logout";
-    private final String ADD_PRODUCT_PAGE = "/products/add";
-    private final String DELETE_PRODUCT_FROM_MAIN_PAGE = "/products/delete";
-    private final String DELETE_PRODUCT_FROM_CART = "/cart/deleteFromCart";
-    private final String UPDATE_PRODUCT_PAGE = "/products/update";
-    private final String CART_PAGE = "/cart";
-    private final String FAVICON = "/favicon.ico";
-    private final List<String> allowedPagesWithoutAuth = Arrays.asList(LOGIN_PATH, REGISTRATION_PATH, MAIN_PAGE_PATH, MAIN_PAGE_PATH2, FAVICON);
-    private final List<String> forbiddenPagesToAuthUser = Arrays.asList(LOGIN_PATH, REGISTRATION_PATH);
-    private final List<String> allowedPagesToAdmin = Arrays.asList(MAIN_PAGE_PATH, MAIN_PAGE_PATH2, ADD_PRODUCT_PAGE, UPDATE_PRODUCT_PAGE, LOGOUT_PATH, DELETE_PRODUCT_FROM_MAIN_PAGE);
-    private final List<String> allowedPagesToUser = Arrays.asList(MAIN_PAGE_PATH, MAIN_PAGE_PATH2, CART_PAGE, LOGOUT_PATH, DELETE_PRODUCT_FROM_CART);
+    private final List<String> allowedPagesWithoutAuth = Arrays.asList("/login", "/registration", "/", "/products", "/favicon.ico");
+    private final List<String> allowedPagesToAdmin = Arrays.asList("/", "/products", "/products/add", "/products/update", "/logout", "/products/delete");
+    private final List<String> allowedPagesToUser = Arrays.asList("/", "/products", "/cart", "/logout", "/cart/deleteFromCart");
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -46,21 +35,19 @@ public class SecurityFilter implements Filter {
 
         if (!isAuth) {
             if (!allowedPagesWithoutAuth.contains(path)) {
-                httpResponse.sendRedirect(LOGIN_PATH);
+                httpResponse.sendRedirect("/login");
             }
-        } else if (forbiddenPagesToAuthUser.contains(path)) {
-            httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            httpResponse.sendError(403);
         } else {
             MapToAuthorizedUserDto mapper = new MapToAuthorizedUserDto();
             AuthorizedUserDto userDto = mapper.mapToAuthorizedUserDto(securityService.getAuthUser(httpRequest.getCookies()));
-            if (userDto.getRole().equals("USER") && !allowedPagesToUser.contains(path) ||
-                    userDto.getRole().equals("ADMIN") && !allowedPagesToAdmin.contains(path)) {
 
+            if (userDto.getRole().equals(Role.USER) && allowedPagesToUser.contains(path)) {
+                servletRequest.setAttribute("user", userDto);
+            } else if (userDto.getRole().equals(Role.ADMIN) && allowedPagesToAdmin.contains(path)) {
+                servletRequest.setAttribute("user", userDto);
+            } else {
                 httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 httpResponse.sendError(403);
-            } else {
-                servletRequest.setAttribute("user", userDto);
             }
         }
 

@@ -46,12 +46,12 @@
                     <a class="nav-link active" aria-current="page" href="/products">All products</a>
                 </li>
                 <#if logged == "true">
-                    <#if user.role == "ADMIN">
+                    <#if user.role.getName() == "ADMIN">
                         <li class="nav-item">
                             <a class="nav-link active" href="/products/add">Add Product</a>
                         </li>
                     </#if>
-                    <#if user.role == "USER">
+                    <#if user.role.getName()  == "USER">
                         <li class="nav-item">
                             <a class="nav-link active" href="/cart">My cart</a>
                         </li>
@@ -117,7 +117,7 @@
                 <td>${product.create}</td>
                 <td>${product.update}</td>
                 <#if logged == "true">
-                    <#if user.role == "USER">
+                    <#if user.role.getName()  == "USER">
                         <td>
                             <form action="/cart?productId=${product.id}" method="post">
                                 <button class="btn btn-outline-primary" type="submit" value="Add Product to cart">Add to
@@ -126,7 +126,7 @@
                             </form>
                         </td>
                     </#if>
-                    <#if user.role == "ADMIN">
+                    <#if user.role.getName()  == "ADMIN">
                         <td>
                             <a class="btn btn-outline-success" href='/products/update?idToUpdate=${product.id}'>Update
                             </a>

@@ -8,7 +8,7 @@ public class MapToAuthorizedUserDto {
         return AuthorizedUserDto.builder()
                 .id(user.getId())
                 .username(user.getUsername())
-                .role(user.getRole().getName())
+                .role(user.getRole())
                 .build();
     }
 }
