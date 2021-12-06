@@ -42,7 +42,7 @@ public class MainPageController {
                                      @RequestAttribute("user") Optional<AuthorizedUserDto> authUser,
                                      Model model) {
         long id = Long.parseLong(productId);
-        model.addAttribute("products", productService.getDataById(id));
+        model.addAttribute("products", productService.getProductsById(id));
         model.addAttribute("logged", String.valueOf(logged));
         authUser.ifPresent(authorizedUserDto -> model.addAttribute("user", authorizedUserDto));
         return "mainPage";
@@ -54,7 +54,7 @@ public class MainPageController {
                                               @RequestAttribute("user") Optional<AuthorizedUserDto> authUser,
                                               Model model) {
         model.addAttribute("logged", String.valueOf(logged));
-        model.addAttribute("products", productService.getDataByDescription(productDescription));
+        model.addAttribute("products", productService.getProductsByDescription(productDescription));
         authUser.ifPresent(authorizedUserDto -> model.addAttribute("user", authorizedUserDto));
         return "mainPage";
     }
@@ -80,7 +80,6 @@ public class MainPageController {
     @PostMapping("/products/delete")
     protected String deleteProduct(@RequestParam("idToDelete") Long id) {
         productService.delete(id);
-        cartService.deleteAllProductWithSameIdFromCart(id);
         return "redirect:/";
     }
 
@@ -89,9 +88,7 @@ public class MainPageController {
                                           Model model) {
         Product productToBeUpdated = productService.get(id).orElseThrow(() -> new RuntimeException("Impossible to update without id"));
         model.addAttribute("product", productToBeUpdated);
-
         return "updateProductPage";
-
     }
 
     @PostMapping("/products/update")

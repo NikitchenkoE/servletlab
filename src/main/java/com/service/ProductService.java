@@ -1,11 +1,11 @@
 package com.service;
 
+import com.db.interfaces.CartDao;
 import com.db.interfaces.ProductDao;
 import com.entity.Product;
 import com.entity.dto.ProductDto;
 import com.entity.mapper.MapToProductDto;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ProductService {
     private ProductDao productDao;
+    private CartDao cartDao;
 
     public void save(Product product) {
         productDao.save(createNewProduct(product));
@@ -23,6 +24,7 @@ public class ProductService {
 
     public void delete(long parseLong) {
         productDao.delete(parseLong);
+        cartDao.deleteByProductId(parseLong);
     }
 
     public List<Product> getAll() {
@@ -68,7 +70,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public List<ProductDto> getDataById(long id) {
+    public List<ProductDto> getProductsById(long id) {
         log.info("Get all data by id {}", id);
         List<Product> productList = new ArrayList<>();
         List<ProductDto> productDtoList = new ArrayList<>();
@@ -80,7 +82,7 @@ public class ProductService {
         return productDtoList;
     }
 
-    public List<ProductDto> getDataByDescription(String description) {
+    public List<ProductDto> getProductsByDescription(String description) {
         log.info("Get data by description {}", description);
         var products = getByDescription(description);
         return mapToProductDtoList(products);
@@ -88,5 +90,9 @@ public class ProductService {
 
     public void setProductDao(ProductDao productDao) {
         this.productDao = productDao;
+    }
+
+    public void setCartDao(CartDao cartDao) {
+        this.cartDao = cartDao;
     }
 }

@@ -30,8 +30,12 @@ public class SecurityFilter implements Filter {
         var httpRequest = (HttpServletRequest) servletRequest;
         var httpResponse = (HttpServletResponse) servletResponse;
         var path = httpRequest.getRequestURI();
+        var cookies = httpRequest.getCookies();
+        boolean isAuth = false;
 
-        boolean isAuth = securityService.isLogged(httpRequest.getCookies());
+        if (cookies != null) {
+            isAuth = securityService.isLogged(cookies);
+        }
 
         if (!isAuth) {
             if (!allowedPagesWithoutAuth.contains(path)) {
@@ -39,7 +43,7 @@ public class SecurityFilter implements Filter {
             }
         } else {
             MapToAuthorizedUserDto mapper = new MapToAuthorizedUserDto();
-            AuthorizedUserDto userDto = mapper.mapToAuthorizedUserDto(securityService.getAuthUser(httpRequest.getCookies()));
+            AuthorizedUserDto userDto = mapper.mapToAuthorizedUserDto(securityService.getAuthUser(cookies));
 
             if (userDto.getRole().equals(Role.USER) && allowedPagesToUser.contains(path)) {
                 servletRequest.setAttribute("user", userDto);

@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class CartService {
@@ -17,24 +18,16 @@ public class CartService {
     private ProductDao productDao;
     private final MapToProductInCartDto mapToProductInCartDto = new MapToProductInCartDto();
 
-
-
     public void addProductToCart(AuthorizedUserDto user, String productId) {
         cartDao.save(ProductInCart.builder()
                 .userId(user.getId())
                 .productId(Long.valueOf(productId))
                 .build());
-
     }
 
     public void deleteOneProductFromTheCart(long id) {
         log.info("Deleted item with id {}", id);
         cartDao.delete(id);
-    }
-
-    public void deleteAllProductWithSameIdFromCart(long id) {
-        log.info("deleted all items with id {}", id);
-        cartDao.deleteByProductId(id);
     }
 
     public List<ProductInCartDto> findAllProductInCartDto(AuthorizedUserDto user) {
@@ -48,12 +41,11 @@ public class CartService {
     }
 
     public double sumAllProducts(AuthorizedUserDto user) {
-        double result = 0.0;
-        var products = findAllProductInCartDto(user);
-        for (ProductInCartDto product : products) {
-            result += product.getProductPrice();
-        }
-        return result;
+        return findAllProductInCartDto(user).stream()
+                .map(ProductInCartDto::getProductPrice)
+                .collect(Collectors.toList())
+                .stream()
+                .reduce((double) 0, Double::sum);
     }
 
     public void setCartDao(CartDao cartDao) {

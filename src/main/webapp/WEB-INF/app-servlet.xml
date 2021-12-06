@@ -50,6 +50,7 @@
 
     <bean id="productService" class="com.service.ProductService">
         <property name="productDao" ref="productDao"/>
+        <property name="cartDao" ref="cartDao"/>
     </bean>
 
     <bean id="securityService" class="com.service.SecurityService">

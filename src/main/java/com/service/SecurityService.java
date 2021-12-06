@@ -10,9 +10,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.servlet.http.Cookie;
-import java.util.Date;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class SecurityService {
@@ -67,16 +66,11 @@ public class SecurityService {
     }
 
     public boolean isLogged(Cookie[] cookies) {
-        boolean auth = false;
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equalsIgnoreCase("user-token")) {
-                    auth = sessionDao.get(cookie.getValue()).isPresent();
-                    break;
-                }
-            }
-        }
-        return auth;
+        return Arrays.stream(cookies)
+                .filter(cookie -> cookie.getName().equalsIgnoreCase("user-token"))
+                .collect(Collectors.toList())
+                .stream()
+                .anyMatch(cookie -> sessionDao.get(cookie.getValue()).isPresent());
     }
 
     public Cookie logout(Cookie[] cookies) {
@@ -93,15 +87,12 @@ public class SecurityService {
     }
 
     public User getAuthUser(Cookie[] cookies) {
-        User user = new User();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                var session = sessionDao.get(cookie.getValue()).orElseThrow(() -> new RuntimeException("Cant find session with this token"));
-                user = session.getUser();
-                break;
-            }
-        }
-        return user;
+        return Arrays.stream(cookies)
+                .map(cookie -> sessionDao.get(cookie.getValue()).orElseThrow(() -> new RuntimeException("Cant find session with this token")))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Cant find session with this token"))
+                .getUser();
+
     }
 
     @Scheduled(fixedDelay = 60 * 60 * 1000)

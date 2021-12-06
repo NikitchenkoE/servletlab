@@ -20,9 +20,6 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/products">All products</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="/products/add">Add Product</a>
-                </li>
             </ul>
         </div>
     </div>
