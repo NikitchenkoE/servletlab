@@ -2,12 +2,12 @@ package com.web.listener;
 
 import com.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 
-@Component
+@Service
 public class SpringListener {
     private final ServletContext servletContext;
     private final SecurityService securityService;
