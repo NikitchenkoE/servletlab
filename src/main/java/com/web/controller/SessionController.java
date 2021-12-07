@@ -44,5 +44,20 @@ public class SessionController {
         resp.addCookie(logoutCookie);
         return "redirect:/";
     }
+
+    @GetMapping("/registration")
+    protected String getRegistrationPage() {
+        return "registration";
+    }
+
+    @PostMapping("/registration")
+    protected String doPost(@RequestParam("userName") String username,
+                            @RequestParam("password") String password) {
+        if (username.isEmpty()||password.isEmpty()){
+            return "redirect:/registration";
+        }
+        securityService.saveUser(username, password);
+        return "redirect:/login";
+    }
 }
 

@@ -25,7 +25,7 @@ public class SecurityService {
         Optional<User> userInDb = userDao.findByUsername(username);
         if (userInDb.isPresent()) {
             String sole = userInDb.get().getSole();
-            String soledPassword = DigestUtils.md5Hex(password + sole);
+            String soledPassword = solePassword(password, sole);
             if (soledPassword.equals(userInDb.get().getSoledPassword())) {
                 loginAllowed = true;
             }
@@ -36,7 +36,7 @@ public class SecurityService {
     public void saveUser(String username, String password) {
         if (userDao.findByUsername(username).isEmpty()) {
             String sole = UUID.randomUUID().toString();
-            String soledPassword = DigestUtils.md5Hex(password + sole);
+            String soledPassword = solePassword(password, sole);
 
             userDao.save(User.builder()
                     .username(username)
@@ -99,6 +99,10 @@ public class SecurityService {
     public void schedule() {
         log.info("Delete old sessions");
         sessionDao.cleanExpiredCookie(new Date().getTime() - cookieExpirationDate * 1000L);
+    }
+
+    private String solePassword(String password, String sole) {
+        return DigestUtils.md5Hex(password + sole);
     }
 
     public void setSessionDao(SessionDao sessionDao) {
