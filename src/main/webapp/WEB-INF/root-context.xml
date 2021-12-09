@@ -19,8 +19,6 @@
     <task:executor id="taskExecutor" pool-size="1" />
     <task:annotation-driven executor="taskExecutor" scheduler="taskScheduler" />
 
-
-
     <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
         <property name="username" value="${db.user}"/>
         <property name="password" value="${db.password}"/>
