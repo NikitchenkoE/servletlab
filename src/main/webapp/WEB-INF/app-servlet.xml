@@ -14,55 +14,6 @@
 
     <context:property-placeholder location="classpath:application.properties"/>
 
-    <mvc:annotation-driven/>
-    <task:scheduler id="taskScheduler" />
-    <task:executor id="taskExecutor" pool-size="1" />
-    <task:annotation-driven executor="taskExecutor" scheduler="taskScheduler" />
-
-
-
-    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
-        <property name="username" value="${db.user}"/>
-        <property name="password" value="${db.password}"/>
-        <property name="driverClassName" value="${db.driver}"/>
-        <property name="jdbcUrl" value="${db.url}"/>
-    </bean>
-
-    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
-
-    <bean id="productDao" class="com.db.jdbc.JdbcProductDao">
-        <property name="jdbcTemplate" ref="jdbcTemplate"/>
-    </bean>
-
-    <bean id="cartDao" class="com.db.jdbc.JdbcCartDao">
-        <property name="jdbcTemplate" ref="jdbcTemplate"/>
-    </bean>
-
-    <bean id="userDao" class="com.db.jdbc.JdbcUserDao">
-        <property name="jdbcTemplate" ref="jdbcTemplate"/>
-    </bean>
-
-    <bean id="sessionDao" class="com.db.jdbc.JdbcSessionDao">
-        <property name="jdbcTemplate" ref="jdbcTemplate"/>
-    </bean>
-
-    <bean id="productService" class="com.service.ProductService">
-        <property name="productDao" ref="productDao"/>
-        <property name="cartDao" ref="cartDao"/>
-    </bean>
-
-    <bean id="securityService" class="com.service.SecurityService">
-        <property name="sessionDao" ref="sessionDao"/>
-        <property name="userDao" ref="userDao"/>
-        <property name="cookieExpirationDate" value="${session.expirationDateInSeconds}"/>
-    </bean>
-
-    <bean id="cartService" class="com.service.CartService">
-        <property name="productDao" ref="productDao"/>
-        <property name="cartDao" ref="cartDao"/>
-    </bean>
 
     <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
         <property name="cache" value="true"/>
